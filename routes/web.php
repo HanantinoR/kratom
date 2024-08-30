@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
+use App\Http\Controllers\PerijinanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 // Packages
@@ -41,6 +42,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Users Module
     Route::resource('users', UserController::class);
+
+    Route::group(['prefix' => 'perijinan'], function(){
+        Route::get('daftar', [PerijinanController::class, 'daftar'])->name('perijinan.daftar');
+        Route::get('tambah', [PerijinanController::class, 'tambah'])->name('perijinan.tambah');
+        Route::post('store', [PerijinanController::class, 'store'])->name('perijinan.store');
+    });
 });
 
 //App Details Page => 'Dashboard'], function() {
@@ -116,6 +123,7 @@ Route::group(['prefix' => 'icons'], function() {
     Route::get('dualtone', [HomeController::class, 'dualtone'])->name('icons.dualtone');
     Route::get('colored', [HomeController::class, 'colored'])->name('icons.colored');
 });
+
 //Extra Page Routs
 Route::get('privacy-policy', [HomeController::class, 'privacypolicy'])->name('pages.privacy-policy');
 Route::get('terms-of-use', [HomeController::class, 'termsofuse'])->name('pages.term-of-use');
