@@ -19,6 +19,13 @@
 
 <link rel="stylesheet" href="{{asset('vendor/aos/dist/aos.css')}}" />
 
+<!-- Select2 -->
+<link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+
+<!-- Pengajuan -->
+<link rel="stylesheet" href="{{asset('css/pengajuan/tambah.css')}}">
+
+
 <style>
     th.hide-search input{
        display: none;

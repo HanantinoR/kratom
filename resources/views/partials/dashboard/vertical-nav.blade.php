@@ -137,7 +137,20 @@
         </a>
         <ul class="sub-nav collapse" id="document-pages" data-bs-parent="#document">
             <li class="nav-item">
-                <a class="nav-link {{activeRoute(route('special-pages.billing'))}}" href="{{route('special-pages.billing')}}">
+                <a class="nav-link {{activeRoute(route('pengajuan.index'))}}" href="{{route('pengajuan.index')}}">
+                    <i class="icon">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                              <g>
+                              <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                              </g>
+                          </svg>
+                      </i>
+                    <i class="sidenav-mini-icon"> D </i>
+                    <span class="item-name">Daftar</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{activeRoute(route('pengajuan.create'))}}" href="{{route('pengajuan.create')}}">
                     <i class="icon">
                           <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                               <g>
@@ -147,19 +160,6 @@
                       </i>
                     <i class="sidenav-mini-icon"> T </i>
                     <span class="item-name">Tambah</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{activeRoute(route('special-pages.billing'))}}" href="{{route('special-pages.billing')}}">
-                    <i class="icon">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                              <g>
-                              <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                              </g>
-                          </svg>
-                      </i>
-                    <i class="sidenav-mini-icon"> L </i>
-                    <span class="item-name">List</span>
                 </a>
             </li>
         </ul>

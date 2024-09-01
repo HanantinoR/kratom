@@ -2,6 +2,7 @@
 
 // Controllers
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
@@ -37,8 +38,22 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('permission',PermissionController::class);
     Route::resource('role', RoleController::class);
 
+
+
+
+
+
+
+
+
+
+
+
     // Dashboard Routes
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+
+    // Pengajuan Module
+    route::resource('pengajuan', PengajuanController::class);
 
     // Users Module
     Route::resource('users', UserController::class);
