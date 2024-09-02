@@ -2,7 +2,8 @@
 
 namespace App\DataTables;
 
-use App\Models\User;
+use Illuminate\Http\Request;
+use App\Models\PengajuanModel;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
@@ -15,49 +16,53 @@ class PengajuanDataTable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query, Request $request)
     {
+        // dd($request->all());
         return datatables()
             ->eloquent($query)
-            ->editColumn('userProfile.country', function($query) {
-                return $query->userProfile->country ?? '-';
-            })
-            ->editColumn('userProfile.company_name', function($query) {
-                return $query->userProfile->company_name ?? '-';
-            })
+            // ->editColumn('userProfile.country', function($query) {
+            //     return $query->userProfile->country ?? '-';
+            // })
+            // ->editColumn('userProfile.company_name', function($query) {
+            //     return $query->userProfile->company_name ?? '-';
+            // })
             ->editColumn('status', function($query) {
                 $status = 'warning';
-                switch ($query->status) {
+                switch ($query['status']) {
                     case 'active':
                         $status = 'primary';
                         break;
                     case 'inactive':
                         $status = 'danger';
                         break;
-                    case 'banned':
-                        $status = 'dark';
-                        break;
+                    // case 'banned':
+                    //     $status = 'dark';
+                    //     break;
                 }
-                return '<span class="text-capitalize badge bg-'.$status.'">'.$query->status.'</span>';
+                return '<span class="text-capitalize badge bg-'.$status.'">'.$query['status'].'</span>';
             })
-            ->editColumn('created_at', function($query) {
-                return date('Y/m/d',strtotime($query->created_at));
+            ->editColumn('pengajuan_date', function($query) {
+                return date('Y/m/d',strtotime($query['pengajuan_date']));
             })
-            ->filterColumn('full_name', function($query, $keyword) {
-                $sql = "CONCAT(users.first_name,' ',users.last_name)  like ?";
-                return $query->whereRaw($sql, ["%{$keyword}%"]);
+            ->filterColumn('pengajuan_code',function($query,$keyword){
+                return $query->where('pengajuan_code','like',"%{$keyword}%");
             })
-            ->filterColumn('userProfile.company_name', function($query, $keyword) {
-                return $query->orWhereHas('userProfile', function($q) use($keyword) {
-                    $q->where('company_name', 'like', "%{$keyword}%");
-                });
-            })
-            ->filterColumn('userProfile.country', function($query, $keyword) {
-                return $query->orWhereHas('userProfile', function($q) use($keyword) {
-                    $q->where('country', 'like', "%{$keyword}%");
-                });
-            })
-            ->addColumn('action', 'users.action')
+            // ->filterColumn('full_name', function($query, $keyword) {
+            //     $sql = "CONCAT(users.first_name,' ',users.last_name)  like ?";
+            //     return $query->whereRaw($sql, ["%{$keyword}%"]);
+            // })
+            // ->filterColumn('userProfile.company_name', function($query, $keyword) {
+            //     return $query->orWhereHas('userProfile', function($q) use($keyword) {
+            //         $q->where('company_name', 'like', "%{$keyword}%");
+            //     });
+            // })
+            // ->filterColumn('userProfile.country', function($query, $keyword) {
+            //     return $query->orWhereHas('userProfile', function($q) use($keyword) {
+            //         $q->where('country', 'like', "%{$keyword}%");
+            //     });
+            // })
+            ->addColumn('action', 'pengajuan.action')
             ->rawColumns(['action','status']);
     }
 
@@ -69,8 +74,19 @@ class PengajuanDataTable extends DataTable
      */
     public function query()
     {
-        $model = User::query()->with('userProfile');
-        return $this->applyScopes($model);
+        $model = PengajuanModel::query();
+        $query = $model->newQuery();
+        if ($search = request()->get('pengajuan_code_search')) {
+            $query->where('pengajuan_code', 'like', "%{$search}%");
+        }
+
+        if ($search = request()->get('company_name_search')) {
+            $query->where('company_name', 'like', "%{$search}%");
+        }
+
+
+        return $query;
+        // return $this->applyScopes($model);
     }
 
     /**
@@ -83,9 +99,17 @@ class PengajuanDataTable extends DataTable
         return $this->builder()
                     ->setTableId('dataTable')
                     ->columns($this->getColumns())
+                    // ->addAction(['width' => '60px'])
+                    ->ajax([
+                        'url' => route('pengajuan.index'),
+                        'type' => 'GET',
+                        'data' => 'function(d) {
+                            d.pengajuan_code_search = $("#pengajuan_code_search").val();
+                            d.company_name_search  = $("#company_name_search").val();
+                        }', // Add custom data here
+                    ])
                     ->minifiedAjax()
                     ->dom('<"row align-items-center"<"col-md-2" l><"col-md-6" B><"col-md-4"f>><"table-responsive my-3" rt><"row align-items-center" <"col-md-6" i><"col-md-6" p>><"clear">')
-
                     ->parameters([
                         "processing" => true,
                         "autoWidth" => false,
@@ -100,14 +124,14 @@ class PengajuanDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            ['data' => 'id', 'name' => 'id', 'title' => 'id'],
-            ['data' => 'full_name', 'name' => 'full_name', 'title' => 'FULL NAME', 'orderable' => false],
-            ['data' => 'phone_number', 'name' => 'phone_number', 'title' => 'Phone Number'],
-            ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
-            ['data' => 'userProfile.country', 'name' => 'userProfile.country', 'title' => 'Country'],
-            ['data' => 'status', 'name' => 'status', 'title' => 'Status'],
-            ['data' => 'userProfile.company_name', 'name' => 'userProfile.company_name', 'title' => 'Company'],
-            ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Join Date'],
+            ['data' => 'id', 'name' => 'id', 'title' => 'id','orderable' => false],
+            ['data' => 'status', 'name' => 'status', 'title' => 'Status','searchable'=>false],
+            ['data' => 'pengajuan_code', 'name' => 'pengajuan_code', 'title' => 'Nomor'],
+            ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Perusahaan','orderable' => false],
+            ['data' => 'pengajuan_date', 'name' => 'pengajuan_date', 'title' => 'Tanggal Pengajuan','searchable'=>false],
+            ['data' => 'office_inspection', 'name' => 'office_inspection', 'title' => 'Kantor Cabang','searchable'=>false],
+            // ['data' => 'userProfile.company_name', 'name' => 'userProfile.company_name', 'title' => 'Company'],
+            // ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Join Date'],
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
@@ -124,6 +148,6 @@ class PengajuanDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Users_' . date('YmdHis');
+        return 'Pengajuan_' . date('YmdHis');
     }
 }

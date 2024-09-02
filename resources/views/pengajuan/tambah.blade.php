@@ -7,6 +7,7 @@
             $date = ['WIB'=>'WIB','WITA'=>'WITA','WIT'=>'WIT'];
             $type = ['1' => 'FCL','2' => 'LCL','3' => 'KONV'];
             $size = ['20' => '20', '40' => '40'];
+            $type_kemasan = ['1'=>'BALE','2'=>'CARTON','3'=>'BUNDLE','4'=>'PALLET']
         ?>
         @if(isset($id))
             {!! Form::model($data, ['route' => ['pengajuan.update', $id], 'method' => 'patch' , 'enctype' => 'multipart/form-data']) !!}
@@ -139,7 +140,14 @@
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="total_kemasan">Total Kemasan: <span class="text-danger">*</span></label>
-                                {{ Form::text('total_kemasan', old('total_kemasan'), ['class' => 'form-control','id'=>'total_kemasan' ,'placeholder' => 'Total Kemasan', 'required']) }}
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        {{ Form::text('total_kemasan', old('total_kemasan'), ['class' => 'form-control','id'=>'total_kemasan' ,'placeholder' => 'Total Kemasan', 'required']) }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        {{ Form::select('fob_currency', $type_kemasan , null,  ['class' => 'form-control type_kemasan','id'=>'type_kemasan' ,'placeholder' => 'Pilih!', 'required']) }}
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="total_fob">Nilai FOB: <span class="text-danger">*</span></label>
@@ -161,6 +169,16 @@
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="tanggal_invoice">Tanggal Invoice: <span class="text-danger">*</span></label>
                                 {{ Form::text('tanggal_invoice', old('tanggal_invoice'), ['class' => 'form-control datePicker','id'=>'tanggal_invoice' ,'placeholder' => 'Tanggal Invoice', 'required']) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12">
+                                <label class="form-label" for="nomor_packing_list">Nomor Packing List <span class="text-danger">*</span></label>
+                                {{ Form::text('nomor_packing_list', old('nomor_packing_list'), ['class' => 'form-control','id'=>'nomor_packing_list' ,'placeholder' => 'Nomor Invoice', 'required']) }}
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12">
+                                <label class="form-label" for="tanggapacking_list">Tanggal Packing List <span class="text-danger">*</span></label>
+                                {{ Form::text('tanggapacking_list', old('tanggapacking_list'), ['class' => 'form-control datePicker','id'=>'tanggapacking_list' ,'placeholder' => 'Tanggal Invoice', 'required']) }}
                             </div>
                         </div>
                         <hr>
@@ -364,7 +382,17 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="button" class="btn btn-primary">Kirim Pengajuan</button>
+                        <div class="row justify-content-center">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-primary me-2">Kirim Pengajuan</button>
+                                <button type="button" class="btn btn-danger me-2">Kembali</button>
+                                <button type="button" class="btn btn-warning">Draft</button>
+                            </div>
+                            <div class="col-md-3">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -3,6 +3,7 @@
 // Controllers
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PengajuanController;
+use App\Http\Controllers\PenugasanController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
@@ -38,17 +39,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('permission',PermissionController::class);
     Route::resource('role', RoleController::class);
 
-
-
-
-
-
-
-
-
-
-
-
     // Dashboard Routes
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
@@ -62,6 +52,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('daftar', [PerijinanController::class, 'daftar'])->name('perijinan.daftar');
         Route::get('tambah', [PerijinanController::class, 'tambah'])->name('perijinan.tambah');
         Route::post('store', [PerijinanController::class, 'store'])->name('perijinan.store');
+    });
+
+    Route::group(['prefix' => 'penugasan'],function(){
+        route::get('index',[PenugasanController::class,'index'])->name('penugasan.index');
+        route::get('surat-tugas',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
     });
 });
 

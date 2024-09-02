@@ -2,6 +2,7 @@ $(document).ready(function(){
     $('.company_name').select2();
     $('.fob_currency').select2();
     $('.office_id').select2();
+    $('.type_kemasan').select2();
 
 });
 // querySelector('input[name="inspection_date"]');

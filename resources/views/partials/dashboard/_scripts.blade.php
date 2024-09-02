@@ -54,6 +54,12 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @if(in_array('pengajuan',$assets ?? []))
-<script src="{{asset('js/pengajuan/tambah.js')}}"></script>
+    <script src="{{asset('js/pengajuan/tambah.js')}}"></script>
 @endif
 
+{{-- @if(in_array('pengajuan_list',$assets ?? []))
+    <script>
+        var assets = 'pengajuan_list';
+    </script>
+    <script src="{{asset('js/global/table.js' )}}"></script>
+@endif --}}

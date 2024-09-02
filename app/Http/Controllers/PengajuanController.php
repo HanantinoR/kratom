@@ -18,7 +18,7 @@ class PengajuanController extends Controller
     {
         $pageTitle = trans('global-message.list_form_title',['form' => trans('pengajuan.title')] );
         $auth_user = AuthHelper::authSession();
-        $assets = ['data-table'];
+        $assets = ['data-table','pengajuan_list'];
         // $headerAction = '<a href="'.route('users.create').'" class="btn btn-sm btn-primary" role="button">Add UserS</a>';
         return $dataTable->render('global.datatable', compact('pageTitle','auth_user','assets'));
     }
