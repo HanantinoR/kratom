@@ -8,6 +8,7 @@ use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
 use App\Http\Controllers\PerijinanController;
+use App\Http\Controllers\InatradeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 // Packages
@@ -52,6 +53,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('daftar', [PerijinanController::class, 'daftar'])->name('perijinan.daftar');
         Route::get('tambah', [PerijinanController::class, 'tambah'])->name('perijinan.tambah');
         Route::post('store', [PerijinanController::class, 'store'])->name('perijinan.store');
+    });
+
+    Route::group(['prefix' => 'inatrade'], function(){
+        Route::get('daftar', [InatradeController::class, 'daftar'])->name('inatrade.daftar');
+        Route::get('edit', [InatradeController::class, 'edit'])->name('inatrade.edit');
+        Route::post('store', [InatradeController::class, 'store'])->name('inatrade.store');
     });
 
     Route::group(['prefix' => 'penugasan'],function(){

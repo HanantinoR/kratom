@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <div class="header-title">
-                            <h4 class="card-title">{{ $pageTitle ?? 'List'}}</h4>
+                            <h4 class="card-title">{{ $tableTitle ?? 'List'}}</h4>
                         </div>
                         <div class="card-action">
 
@@ -16,14 +16,29 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-4">
-                                <label for="pengajuan_code" class="form-label">Nomor Pengajuan:</label>
-                                {{Form::search('pengajuan_code_search',null,["class"=>"form-control form-control-sm","id"=>"pengajuan_code_search","aria-controls"=>"dataTable"])}}
-                            </div>
-                            <div class="col-md-4">
-                                <label for="pengajuan_code" class="form-label">Nama Perusahaan:</label>
-                                {{Form::search('company_name_search',null,["class"=>"form-control form-control-sm","id"=>"company_name_search","aria-controls"=>"dataTable"])}}
-                            </div>
+                            @if($assets[1] == 'pengajuan_list')
+                                <div class="col-md-4">
+                                    <label for="pengajuan_code" class="form-label">Nomor Pengajuan:</label>
+                                    {{Form::search('pengajuan_code_search',null,["class"=>"form-control form-control-sm","id"=>"pengajuan_code_search","aria-controls"=>"dataTable"])}}
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="pengajuan_code" class="form-label">Nama Perusahaan:</label>
+                                    {{Form::search('company_name_search',null,["class"=>"form-control form-control-sm","id"=>"company_name_search","aria-controls"=>"dataTable"])}}
+                                </div>
+                            @elseif($assets[1] == 'inatrade_list')
+                                <div class="col-md-3">
+                                    <label for="ppbe_search" class="form-label">Nomor PPBE</label>
+                                    {{Form::search('ppbe_search',null,["class"=>"form-control form-control-sm","id"=>"ppbe_search","aria-controls"=>"dataTable"])}}
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="company_name_search" class="form-label">Nama Perusahaan:</label>
+                                    {{Form::search('company_name_search',null,["class"=>"form-control form-control-sm","id"=>"company_name_search","aria-controls"=>"dataTable"])}}
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="ls_search" class="form-label">Nomor LS</label>
+                                    {{ Form::search('ls_search',null, ["class" => "form-control form-control-sm", "id" => 'ls_search', 'aria-conntrols' => 'dataTable']) }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -32,7 +47,6 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <div class="header-title">
-                            <h4 class="card-title">{{ $tableTitle ?? 'List'}}</h4>
                         </div>
                         <div class="card-action">
                             {!! $headerAction ?? '' !!}
@@ -50,7 +64,6 @@
 </x-app-layout>
 <script>
 $(document).ready(function(){
-    // console.log($assets);
     if ($.fn.DataTable.isDataTable('#dataTable')) {
         // DataTable is already initialized
         // You might want to destroy it before reinitializing
@@ -80,11 +93,39 @@ $(document).ready(function(){
             ]
         });
     }
+    else if('{{$assets[1]}}' == 'inatrade_list')
+    {
+        var table = $('#dataTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('inatrade.daftar') }}",
+                data: function(d) {
+                    d.ppbe_search  = $('#ppbe_search').val();
+                    d.company_name_search  = $('#company_name_search').val();
+                    d.ls_search = $('#ls_search').val();
+                }
+            },
+            columns:[
+                {data: 'id', name: 'id'},
+                {data: 'company_name', name: 'company_name'},
+                {data: 'status', name: 'status'},
+                {data: 'ls_number', name: 'ls_number'},
+                {data: 'ls_publish_date', name: 'ls_publish_date'},
+                {data: 'ppbe_number', name: 'ppbe_number'},
+                {data: 'ppbe_publish_date', name: 'ppbe_publish_date', orderable: false, searchable: false },
+                {data: 'action', name:'action'}
+            ]
+        });
+    }
 
-    $("#pengajuan_code_search").on("keyup", function(e) {
+    $("#ppbe_search").on("keyup", function(e) {
         table.draw();
     });
     $("#company_name_search").on("keyup", function(e) {
+        table.draw();
+    });
+    $("#ls_search").on("keyup", function(e) {
         table.draw();
     });
 });
