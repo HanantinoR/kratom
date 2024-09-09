@@ -6,5 +6,8 @@ use Illuminate\Http\Request;
 
 class PenugasanController extends Controller
 {
-    //
+    public function index()
+    {
+
+    }
 }

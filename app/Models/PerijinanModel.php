@@ -9,15 +9,35 @@ class PerijinanModel extends Model
 {
     use HasFactory;
 
+    protected $table = 'company';
     protected $fillable = [
-        'status',
         'nib',
-        'nama_perusahaan',
-        'provinsi',
-        'kota',
-        'jenis_usaha',
-        'kategori_ijin',
-        'tanggal_nib',
-        'status_ijin',
+        'nomor_et',
+        'nomor_pe',
+        'date_nib',
+        'date_et',
+        'date_pe',
+        'company_name',
+        'company_quota',
+        'company_provincy',
+        'company_city',
+        'company_address',
+        'company_factory',
+        'company_inspection_office',
+        'company_pic',
+        'company_position',
+        'company_npwp',
+        'company_telp',
+        'company_hp',
+        'company_email',
+        'status',
+        'file_et',
+        'file_pe',
     ];
+
+    public function histories()
+    {
+        return $this->hasMany(PerijinanHistoryModel::class);
+    }
+
 }

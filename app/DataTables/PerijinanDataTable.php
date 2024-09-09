@@ -2,9 +2,11 @@
 
 namespace App\DataTables;
 
+use Illuminate\Http\Request;
 use App\Models\Perijinan;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use App\Models\PerijinanModel;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
@@ -17,24 +19,37 @@ class PerijinanDataTable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query, Request $request)
     {
-        return datatables($query)
+        return datatables()
+        ->eloquent($query)
         ->editColumn('status', function($query) {
-            $stutas = 'warning';
+            $statusColor = 'warning';
             switch ($query['status']) {
-                case 'aktif':
-                    $stutas = 'primary';
+                case '1':
+                    $statusColor = 'primary';
                     break;
-                case 'tidak aktif':
-                    $stutas = 'danger';
+                case '0':
+                    $statusColor = 'danger';
                     break;
             }
-            return '<span class="text-capitalize badge bg-'.$stutas.'">'.$query['status'].'</span>';
+            switch($query['status']){
+                case '1':
+                    $status = "Aktif";
+                    break;
+                case '0';
+                    $status = "Tidak Aktif";
+                    break;
+            }
+            return '<span class="text-capitalize badge bg-'.$statusColor.'">'.$status.'</span>';
         })
-        ->addColumn('action', function($row) {
-            return '<a href="#" class="btn btn-sm btn-primary">Edit</a>';
+        ->editColumn('pengajuan_date', function($query) {
+            return date('Y/m/d',strtotime($query['pengajuan_date']));
         })
+        ->filterColumn('pengajuan_code',function($query,$keyword){
+            return $query->where('pengajuan_code','like',"%{$keyword}%");
+        })
+        ->addColumn('action', 'perijinan.action')
         ->rawColumns(['action', 'status']);
     }
 
@@ -45,12 +60,19 @@ class PerijinanDataTable extends DataTable
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query()
-    {   
-        return collect([
-            ['id' => 1, 'status' => 'aktif', 'nib' => '324877849', 'nama_perusahaan' => 'Wadidaw', 'provinsi' => 'Jawa Timur', 'kota' => 'Surabaya', 'jenis_usaha' => 'Kecil AF', 'kategori' => 'WF', 'tanggal_nib' => '12-07-2002', 'history' => 'Datataes'],
-            ['id' => 2, 'status' => 'aktif', 'nib' => '128309183', 'nama_perusahaan' => 'Wadadiw', 'provinsi' => 'Jawa Barat', 'kota' => 'Banten', 'jenis_usaha' => 'Biasa aja', 'kategori' => 'GB', 'tanggal_nib' => '12-08-2022', 'history' => 'Kurang Aseli'],
-            ['id' => 3, 'status' => 'tidak aktif', 'nib' => '724389827', 'nama_perusahaan' => 'Wadudiw', 'provinsi' => 'Jawa Tengah', 'kota' => 'Semarang', 'jenis_usaha' => 'Gede AF', 'kategori' => 'BI', 'tanggal_nib' => '21-01-2012', 'history' => 'Penyelundupan Illegal'],
-        ]);
+    {
+        $model = PerijinanModel::query();
+        $query = $model->newQuery();
+        if ($search = request()->get('pengajuan_code_search')) {
+            $query->where('pengajuan_code', 'like', "%{$search}%");
+        }
+
+        if ($search = request()->get('company_name_search')) {
+            $query->where('company_name', 'like', "%{$search}%");
+        }
+
+
+        return $query;
     }
 
     /**
@@ -63,7 +85,8 @@ class PerijinanDataTable extends DataTable
         return $this->builder()
                     ->setTableId('dataTable')
                     ->columns($this->getColumns())
-                    ->addAction(['width' => '60px'])
+
+                    // ->addAction(['width' => '60px'])
                     ->minifiedAjax()
                     ->dom('<"row align-items-center"<"col-md-2" l><"col-md-6" B><"col-md-4"f>><"table-responsive my-3" rt><"row align-items-center" <"col-md-6" i><"col-md-6" p>><"clear">')
                     ->parameters([
@@ -82,19 +105,19 @@ class PerijinanDataTable extends DataTable
         return [
             ['data' => 'id', 'name' => 'id', 'title' => 'id'],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status Perijinan', 'orderable' => false],
-            ['data' => 'nama_perusahaan', 'name' => 'nama_perusahaan', 'title' => 'Nama Perusahaan'],
-            ['data' => 'provinsi', 'name' => 'provinsi', 'title' => 'Provinsi'],
-            ['data' => 'kota', 'name' => 'kota', 'title' => 'Kota'],
-            ['data' => 'jenis_usaha', 'name' => 'jenis_usaha', 'title' => 'Jenis Usaha'],
-            ['data' => 'kategori', 'name' => 'kategori', 'title' => 'Kategori Ijin'],
-            ['data' => 'tanggal_nib', 'name' => 'tanggal_nib', 'title' => 'Tanggal NIB'],
-            ['data' => 'status', 'name' => 'status', 'title' => 'Status Ijin'],
-            // Column::computed('action')
-            //       ->exportable(false)
-            //       ->printable(false)
-            //       ->searchable(false)
-            //       ->width(60)
-            //       ->addClass('text-center hide-search'),
+            ['data' => 'nib', 'name' => 'nib', 'title' => 'NIB'],
+            ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Nama Perusahaan'],
+            ['data' => 'nomor_et', 'name' => 'nomor_et', 'title' => 'Nomor ET'],
+            ['data' => 'nomor_pe', 'name' => 'nomor_pe', 'title' => 'Nomor PE'],
+            ['data' => 'company_npwp', 'name' => 'company_npwp', 'title' => 'NPWP'],
+            ['data' => 'date_nib', 'name' => 'date_nib', 'title' => 'Tanggal NIB'],
+            ['data' => 'company_email', 'name' => 'company_email', 'title' => 'E-mail'],
+            Column::computed('action')
+                  ->exportable(false)
+                  ->printable(false)
+                  ->searchable(false)
+                  ->width(60)
+                  ->addClass('text-center hide-search'),
         ];
     }
 

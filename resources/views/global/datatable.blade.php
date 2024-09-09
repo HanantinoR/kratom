@@ -11,7 +11,6 @@
                             <h4 class="card-title">{{ $pageTitle ?? 'List'}}</h4>
                         </div>
                         <div class="card-action">
-
                         </div>
                     </div>
                     <div class="card-body">
@@ -81,6 +80,34 @@ $(document).ready(function(){
         });
     }
 
+    if('{{$assets[1]}}' == 'perijinan_list')
+    {
+        var table = $('#dataTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('perijinan.index') }}",
+                data: function(d) {
+                    // d.pengajuan_code_search  = $('#pengajuan_code_search').val();
+                    d.company_name_search  = $('#company_name_search').val();
+                }
+            },
+            columns:[
+                {data : 'id', name : 'id'},
+                {data : 'status', name : 'status'},
+                {data : 'nib', name : 'nib'},
+                {data : 'company_name', name : 'company_name'},
+                {data : 'nomor_et', name : 'nomor_et'},
+                {data : 'nomor_pe', name : 'nomor_pe'},
+                {data : 'company_npwp', name : 'company_npwp'},
+                {data : 'date_nib', name : 'date_nib'},
+                {data : 'company_email', name : 'company_email'},
+                {data : 'action', name : 'action'},
+            ]
+        });
+
+
+    }
     $("#pengajuan_code_search").on("keyup", function(e) {
         table.draw();
     });
@@ -88,4 +115,41 @@ $(document).ready(function(){
         table.draw();
     });
 });
+    function deleteData(id){
+
+        // var itemId = $id;
+        var deleteform = $('#form-'+id);
+        var urlDelete = deleteform.attr('action');
+        // console.log(urlDelete);
+        Swal.fire({
+            icon: "warning",
+            text: "Apakah Anda Yakin Akan Hapus Data ini?",
+            title: "Perhatian",
+            showCancelButton: true,
+            confirmButtonText: "Delete",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url:urlDelete,
+                    type : 'DELETE',
+                    data: {
+                        _token : "{{ csrf_token() }}",
+                        id : id,
+                    },
+                    cache : false,
+                    success : function(respond){
+                        swal.fire({
+                            icon: "success",
+                            text: "Data Berhasil diHapus",
+                            title: "Hapus",
+                        }).then((result)=>{
+                            if(result.isConfirmed){
+                                location.reload();
+                            }
+                        });
+                    }
+                })
+            }
+        });
+    }
 </script>

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Helpers\AuthHelper;
 use Spatie\Permission\Models\Role;
 use App\DataTables\PengajuanDataTable;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\View;
 
 class PengajuanController extends Controller
 {
@@ -89,5 +91,27 @@ class PengajuanController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function pdf_export($id)
+    {
+        $data =[
+            'title' => 'test',
+            'contetnt' =>'coba'
+        ];
+        $documentPDF = View::make('pengajuan.pdf',['data'=>$data])->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($documentPDF);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        return $dompdf->stream('pengajuan.pdf',['Attachment'=>false]);
+
     }
 }

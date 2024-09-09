@@ -8,6 +8,7 @@
             $type = ['1' => 'FCL','2' => 'LCL','3' => 'KONV'];
             $size = ['20' => '20', '40' => '40'];
             $type_kemasan = ['1'=>'BALE','2'=>'CARTON','3'=>'BUNDLE','4'=>'PALLET']
+            dd($id);
         ?>
         @if(isset($id))
             {!! Form::model($data, ['route' => ['pengajuan.update', $id], 'method' => 'patch' , 'enctype' => 'multipart/form-data']) !!}
@@ -47,8 +48,16 @@
                                     {{ Form::select('company[name]', $roles , old('company[name]') ? old('company[name]') : $data->user_type ?? 'user', ['class' => 'form-control company_name', 'placeholder' => 'Select Company Name']) }}
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company[category]">Kategory: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company[category]', old('company[category]'), ['class' => 'form-control','id'=>'company[category]' ,'placeholder' => 'Kategory', 'readonly']) }}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="company[kuota]">Kuota Pemakaian: <span class="text-danger">*</span></label>
+                                            {{ Form::text('company[kuota]', old('company[kuota]'), ['class' => 'form-control','id'=>'company[kuota]' ,'placeholder' => 'Kuota Pemakaian', 'readonly']) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="company[kuota]">Sisa Kuota: <span class="text-danger">*</span></label>
+                                    {{ Form::text('company[kuota]', old('company[kuota]'), ['class' => 'form-control','id'=>'company[kuota]' ,'placeholder' => 'Kuota Sisa', 'readonly']) }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -76,6 +85,27 @@
                                 <div class="form-group col-md-6 col-sm-12">
                                     <label class="form-label" for="company[tanggal_nib]">Tanggal NIB: <span class="text-danger">*</span></label>
                                     {{ Form::text('company[tanggal_nib]', old('company[tanggal_nib]'), ['class' => 'form-control','id'=>'company[tanggal_nib]' ,'placeholder' => 'Tanggal NIB', 'readonly']) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6 col-sm-12">
+                                    <label class="form-label" for="company[et]">Nomor ET: <span class="text-danger">*</span></label>
+                                    {{ Form::text('company[et]', old('company[et]'), ['class' => 'form-control','id'=>'company[et]' ,'placeholder' => 'ET', 'readonly']) }}
+                                </div>
+                                <div class="form-group col-md-6 col-sm-12">
+                                    <label class="form-label" for="company[tanggal_et]">Tanggal ET: <span class="text-danger">*</span></label>
+                                    {{ Form::text('company[tanggal_et]', old('company[tanggal_et]'), ['class' => 'form-control','id'=>'company[tanggal_et]' ,'placeholder' => 'Tanggal NIB', 'readonly']) }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6 col-sm-12">
+                                    <label class="form-label" for="company[pe]">Nomor PE: <span class="text-danger">*</span></label>
+                                    {{ Form::text('company[pe]', old('company[pe]'), ['class' => 'form-control','id'=>'company[pe]' ,'placeholder' => 'PE', 'readonly']) }}
+                                </div>
+                                <div class="form-group col-md-6 col-sm-12">
+                                    <label class="form-label" for="company[tanggal_pe]">Tanggal PE: <span class="text-danger">*</span></label>
+                                    {{ Form::text('company[tanggal_pe]', old('company[tanggal_pe]'), ['class' => 'form-control','id'=>'company[tanggal_pe]' ,'placeholder' => 'Tanggal NIB', 'readonly']) }}
                                 </div>
                             </div>
                             <div class="row">
@@ -369,7 +399,7 @@
                         <div class="row">
                             <div class="col-md-4 mb-4">
                                 <label for="other_reason" class="form-label">Catatan Lain</label>
-                                {{Form::text('other_reason',old('other_reason'),['class'=>'form-control','id'=>'other_reason','placeholder'=>'Catatan'])}}
+                                {{Form::textarea('other_reason',old('other_reason'),['class'=>'form-control','id'=>'other_reason','placeholder'=>'Catatan','rows'=>'3'])}}
                             </div>
                         </div>
                         <div class="checkbox mb-4">
@@ -397,5 +427,6 @@
                 </div>
             </div>
         </div>
+        {!! Form::close() !!}
     </div>
 </x-app-layout>

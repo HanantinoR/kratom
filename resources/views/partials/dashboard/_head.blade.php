@@ -22,6 +22,16 @@
 <!-- Select2 -->
 <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
 
+<!-- Dropify -->
+<link rel="stylesheet" href="{{asset('css/dropify.css')}}">
+<link rel="stylesheet" href="{{asset('fonts/dropify.ttf')}}">
+<link rel="stylesheet" href="{{asset('fonts/dropify.woff')}}">
+<link rel="stylesheet" href="{{asset('fonts/dropify.eot')}}">
+<link rel="stylesheet" href="{{asset('fonts/dropify.svg')}}">
+
+<!-- Pengajuan -->
+<link rel="stylesheet" href="{{asset('css/perijinan/tambah.css')}}">
+
 <!-- Pengajuan -->
 <link rel="stylesheet" href="{{asset('css/pengajuan/tambah.css')}}">
 
