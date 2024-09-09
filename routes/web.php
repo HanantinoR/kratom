@@ -9,9 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
-use App\Http\Controllers\PerijinanController;
 use App\Http\Controllers\InatradeController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 // Packages
 use Illuminate\Support\Facades\Route;
