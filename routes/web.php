@@ -9,6 +9,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
+use App\Http\Controllers\PerijinanController;
+use App\Http\Controllers\InatradeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 // Packages
 use Illuminate\Support\Facades\Route;
@@ -44,17 +47,28 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Pengajuan Module
     route::resource('pengajuan', PengajuanController::class);
+
+    //penugasan Module
+    Route::group(['prefix' => 'penugasan'],function(){
+        route::get('index',[PenugasanController::class,'index'])->name('penugasan.index');
+        route::get('surat-tugas',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
+    });
+
     route::group(['prefix'=>'pengajuan'],function(){
         Route::get('pdf_export/{id}',[PengajuanController::class,'pdf_export'])->name('pengajuan.pdf');
     });
 
     // Users Module
     Route::resource('users', UserController::class);
+
+    //perijinan Module
     Route::resource('perijinan',PerijinanController::class);
 
-    Route::group(['prefix' => 'penugasan'],function(){
-        route::get('index',[PenugasanController::class,'index'])->name('penugasan.index');
-        route::get('surat-tugas',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
+    //Inatrade Module
+    Route::group(['prefix' => 'inatrade'], function(){
+        Route::get('daftar', [InatradeController::class, 'daftar'])->name('inatrade.daftar');
+        Route::get('edit', [InatradeController::class, 'edit'])->name('inatrade.edit');
+        Route::post('store', [InatradeController::class, 'store'])->name('inatrade.store');
     });
 });
 
