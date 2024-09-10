@@ -3,12 +3,12 @@
 namespace App\DataTables;
 
 use Illuminate\Http\Request;
-use App\Models\PengajuanModel;
+use App\Models\PPBEModel;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class PengajuanDataTable extends DataTable
+class PPBEDataTable extends DataTable
 {
         /**
      * Build DataTable class.
@@ -62,7 +62,7 @@ class PengajuanDataTable extends DataTable
             //         $q->where('country', 'like', "%{$keyword}%");
             //     });
             // })
-            ->addColumn('action', 'pengajuan.action')
+            ->addColumn('action', 'ppbe.action')
             ->rawColumns(['action','status']);
     }
 
@@ -74,7 +74,7 @@ class PengajuanDataTable extends DataTable
      */
     public function query()
     {
-        $model = PengajuanModel::query();
+        $model = PPBEModel::query();
         $query = $model->newQuery();
         if ($search = request()->get('pengajuan_code_search')) {
             $query->where('pengajuan_code', 'like', "%{$search}%");
@@ -101,7 +101,7 @@ class PengajuanDataTable extends DataTable
                     ->columns($this->getColumns())
                     // ->addAction(['width' => '60px'])
                     ->ajax([
-                        'url' => route('pengajuan.index'),
+                        'url' => route('ppbe.index'),
                         'type' => 'GET',
                         'data' => 'function(d) {
                             d.pengajuan_code_search = $("#pengajuan_code_search").val();
@@ -128,7 +128,7 @@ class PengajuanDataTable extends DataTable
             ['data' => 'status', 'name' => 'status', 'title' => 'Status','searchable'=>false],
             ['data' => 'pengajuan_code', 'name' => 'pengajuan_code', 'title' => 'Nomor'],
             ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Perusahaan','orderable' => false],
-            ['data' => 'pengajuan_date', 'name' => 'pengajuan_date', 'title' => 'Tanggal Pengajuan','searchable'=>false],
+            ['data' => 'pengajuan_date', 'name' => 'pengajuan_date', 'title' => 'Tanggal PPBE','searchable'=>false],
             ['data' => 'office_inspection', 'name' => 'office_inspection', 'title' => 'Kantor Cabang','searchable'=>false],
             // ['data' => 'userProfile.company_name', 'name' => 'userProfile.company_name', 'title' => 'Company'],
             // ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Join Date'],
@@ -148,6 +148,6 @@ class PengajuanDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Pengajuan_' . date('YmdHis');
+        return 'PPBE_' . date('YmdHis');
     }
 }

@@ -32,7 +32,7 @@ class PerijinanController extends Controller
      */
     public function create()
     {
-        $assets = ['perijinan'];
+        $assets = ['perijinan','file'];
         $roles = Role::where('status',1)->get()->pluck('title', 'id');
 
         return view('perijinan.tambah', compact('roles','assets'));
@@ -78,14 +78,14 @@ class PerijinanController extends Controller
         {
             // dd('a');
             $file1 = $request->file('file_et');
-            $file1Name = time() . '_file_et.' . $file1->getClientOriginalName();
+            $file1Name = time() . '_file_et_' . $file1->getClientOriginalName();
             $file1Path = $file1->storeAs($path, $file1Name, 'local');
         }
         if($request->hasFile('file_pe'))
         {
             // dd('b');
             $file2 = $request->file('file_pe');
-            $file2Name = time() . '_file_pe.' . $file2->getClientOriginalName();
+            $file2Name = time() . '_file_pe_' . $file2->getClientOriginalName();
             $file2Path = $file2->storeAs($path, $file2Name, 'local');
         }
 
@@ -136,13 +136,11 @@ class PerijinanController extends Controller
      */
     public function edit($id)
     {
-        $assets = ['perijinan'];
+        $assets = ['perijinan','file'];
         $data = PerijinanModel::findOrFail($id);
-
-        $filePath1 = 'perijinan/'. $data->file_et;
-        // $dataFile = Storage::response($filePath1);
-        // dd($dataFile);
-        return view('perijinan.tambah', compact('data','id','assets'));
+        $data_history = PerijinanHistoryModel::where('company_id',$id)->get();
+        // dd($data_history);
+        return view('perijinan.tambah', compact('data','id','assets','data_history'));
     }
 
     /**
@@ -209,10 +207,10 @@ class PerijinanController extends Controller
             return redirect()->route('perijinan.index')->with('info', 'Tidak ada data yang berubah.');
         }
         foreach ($changes as $change) {
-            dd($change);
+            // dd($change);
             PerijinanHistoryModel::create([
                 'company_id' => $oldData->id,
-                'field' => $change['field'],
+                'field' => $change['field_name'],
                 'old_value' => $change['old_value'],
                 'new_value' => $change['new_value'],
             ]);

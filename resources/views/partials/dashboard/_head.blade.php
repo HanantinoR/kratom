@@ -29,11 +29,11 @@
 <link rel="stylesheet" href="{{asset('fonts/dropify.eot')}}">
 <link rel="stylesheet" href="{{asset('fonts/dropify.svg')}}">
 
-<!-- Pengajuan -->
+<!-- PPBE -->
 <link rel="stylesheet" href="{{asset('css/perijinan/tambah.css')}}">
 
-<!-- Pengajuan -->
-<link rel="stylesheet" href="{{asset('css/pengajuan/tambah.css')}}">
+<!-- PPBE -->
+<link rel="stylesheet" href="{{asset('css/ppbe/tambah.css')}}">
 
 
 <style>

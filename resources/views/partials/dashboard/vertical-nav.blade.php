@@ -121,7 +121,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#document-pages" role="button"  aria-expanded="false" aria-controls="document-pages">
+        <a class="nav-link" data-bs-toggle="collapse" href="#ppbe-pages" role="button"  aria-expanded="false" aria-controls="ppbe-pages">
             <i class="icon">
                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path opacity="0.4" d="M16.191 2H7.81C4.77 2 3 3.78 3 6.83V17.16C3 20.26 4.77 22 7.81 22H16.191C19.28 22 21 20.26 21 17.16V6.83C21 3.78 19.28 2 16.191 2Z" fill="currentColor"></path>
@@ -135,9 +135,9 @@
                 </svg>
             </i>
         </a>
-        <ul class="sub-nav collapse" id="document-pages" data-bs-parent="#document">
+        <ul class="sub-nav collapse" id="ppbe-pages" data-bs-parent="#ppbe">
             <li class="nav-item">
-                <a class="nav-link {{activeRoute(route('pengajuan.index'))}}" href="{{route('pengajuan.index')}}">
+                <a class="nav-link {{activeRoute(route('ppbe.index'))}}" href="{{route('ppbe.index')}}">
                     <i class="icon">
                           <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                               <g>
@@ -146,11 +146,11 @@
                           </svg>
                       </i>
                     <i class="sidenav-mini-icon"> LP </i>
-                    <span class="item-name">List Pengajuan</span>
+                    <span class="item-name">List PPBE</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{activeRoute(route('pengajuan.create'))}}" href="{{route('pengajuan.create')}}">
+                <a class="nav-link {{activeRoute(route('ppbe.create'))}}" href="{{route('ppbe.create')}}">
                     <i class="icon">
                           <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                               <g>
@@ -159,7 +159,7 @@
                           </svg>
                       </i>
                     <i class="sidenav-mini-icon"> TP </i>
-                    <span class="item-name">Tambah Pengajuan</span>
+                    <span class="item-name">Tambah PPBE</span>
                 </a>
             </li>
         </ul>

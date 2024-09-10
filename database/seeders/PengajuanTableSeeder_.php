@@ -38,7 +38,7 @@ class PengajuanTableSeeder extends Seeder
             ],
         ];
         foreach ($pengajuans as $key => $value) {
-            $pengajuan = PengajuanModel::create($value);
+            $PPBE = PengajuanModel::create($value);
         }
     }
 }

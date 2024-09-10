@@ -153,8 +153,8 @@
                                 <br>
                                 <i class="text-danger">Ekstensi File : .pdf, .jpeg, .jpg, .png</i>
                             </h6>
-                            <div class="row">
-                                @if(isset($id))
+                            @if(isset($id))
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group row">
                                             <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_et">ET: </label>
@@ -179,7 +179,7 @@
                                             <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_pe">PE: </label>
                                             <div class="col-md-6 col-sm-9">
                                                 <div class="row mb-4">
-                                                    <a href="{{url('perijinan/'.    $data->file_pe)}}" target="_blank" class="me-2">
+                                                    <a href="{{asset('perijinan/'.    $data->file_pe)}}" target="_blank" class="me-2">
                                                         <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
                                                         </svg>
@@ -193,7 +193,49 @@
                                             </div>
                                         </div>
                                     </div>
-                                @else
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_et">ET: </label>
+                                            <div class="col-md-6 col-sm-9">
+                                                <div class="row mb-4">
+                                                <a href="{{url('perijinan/'.$data->file_et)}}" target="_blank" class="me-2 text-left">
+                                                        <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
+                                                        </svg>
+                                                        Download File ET
+                                                    </a>
+                                                </div>
+                                                <div class="row">
+                                                    <i class="text-danger text-sm-left">Unggah File jika Anda ingin Merubah</i>
+                                                    {{ Form::file('file_et',['class' => 'dropify', 'id'=>'file_et','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ]) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_pe">PE: </label>
+                                            <div class="col-md-6 col-sm-9">
+                                                <div class="row mb-4">
+                                                    <a href="{{asset('perijinan/'.    $data->file_pe)}}" target="_blank" class="me-2">
+                                                        <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
+                                                        </svg>
+                                                        Download File PE
+                                                    </a>
+                                                </div>
+                                                <div class="row">
+                                                    <i class="text-danger text-sm-left">Unggah File jika Anda ingin Merubah</i>
+                                                    {{ Form::file('file_pe',['class' => 'dropify', 'id'=>'file_pe','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ]) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="row mb-2">
                                     <div class="col-md-6">
                                         <div class="fom-group row">
                                             <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_et">ET: </label>
@@ -210,8 +252,44 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endif
-                            </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <div class="fom-group row">
+                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_nib">NIB: </label>
+                                            <div class="col-md-6 col-sm-9">
+                                                {{ Form::file('file_nib',['class' => 'dropify', 'id'=>'file_nib','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" , 'required']) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="fom-group row">
+                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_npwp">NPWP: </label>
+                                            <div class="col-md-6 col-sm-9">
+                                                {{ Form::file('file_npwp',['class' => 'dropify', 'id'=>'file_npwp','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" , 'required']) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="fom-group row">
+                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_ktp">KTP: </label>
+                                            <div class="col-md-6 col-sm-9">
+                                                {{ Form::file('file_ktp',['class' => 'dropify', 'id'=>'file_ktp','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" , 'required']) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="col-md-6">
+                                        <div class="fom-group row">
+                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_ktp">Alasan: </label>
+                                            <div class="col-md-6 col-sm-9">
+                                                {{ Form::file('file_ktp',['class' => 'dropify', 'id'=>'file_ktp','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" , 'required']) }}
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="card-footer">
@@ -250,8 +328,93 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>KATEGORY</th>
+                                                <th>DATA SEBELUM PERUBAHAN</th>
+                                                <th>DATA SETELAH PERUBAHAN</th>
                                             </tr>
                                         </thead>
+                                        <tbody>
+                                            <?php $no= 1; ?>
+                                                @foreach ($data_history as $item)
+                                                    <tr>
+                                                        <td>{{$no}}</td>
+                                                        <td>
+                                                            @switch($item->field)
+                                                            @case('nib')
+                                                                NIB
+                                                                @break
+                                                            @case('nomor_et')
+                                                                Nomor ET
+                                                                @break
+                                                            @case('nomor_pe')
+                                                                NOMOR PE
+                                                                @break
+                                                            @case('date_nib')
+                                                                Tanggal NIB
+                                                                @break
+                                                            @case('date_et')
+                                                                Tanggal ET
+                                                                @break
+                                                            @case('date_pe')
+                                                                Tanggal PE
+                                                                @break
+                                                            @case('company_name')
+                                                                Nama Perusahaan
+                                                                @break
+                                                            @case('company_quota')
+                                                                Kuota
+                                                                @break
+                                                            @case('company_address')
+                                                                Alamat Kantor
+                                                                @break
+                                                            @case('company_provincy')
+                                                                Provinsi
+                                                                @break
+                                                            @case('company_city')
+                                                                Kabupaten
+                                                                @break
+                                                            @case('company_factory')
+                                                                Alamat Pabrik
+                                                                @break
+                                                            @case('company_inspection_office')
+                                                                Alamat Pabrik
+                                                                @break
+                                                            @case('company_pic')
+                                                                Alamat Pabrik
+                                                                @break
+                                                            @case('company_position')
+                                                                Alamat Pabrik
+                                                                @break
+                                                            @case('company_npwp')
+                                                                Alamat Pabrik
+                                                                @break
+                                                            @case('company_telp')
+                                                                Alamat Pabrik
+                                                                @break
+                                                            @case('company_hp')
+                                                                Alamat Pabrik
+                                                                @break
+                                                            @case('company_email')
+                                                                Alamat Pabrik
+                                                                @break
+                                                            @case('status')
+                                                                Alamat Pabrik
+                                                                @break
+                                                            @case('file_et')
+                                                                Alamat Pabrik
+                                                                @break
+                                                            @case('file_pe')
+                                                                Alamat Pabrik
+                                                                @break
+
+                                                            @endswitch
+                                                        </td>
+                                                        <td>{{$item->old_value}}</td>
+                                                        <td>{{$item->new_value}}</td>
+                                                    </tr>
+                                                    <?php $no++;?>
+                                                @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>

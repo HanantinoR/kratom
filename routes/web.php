@@ -2,14 +2,16 @@
 
 // Controllers
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PengajuanController;
+use App\Http\Controllers\PPBEController;
 use App\Http\Controllers\PenugasanController;
+use App\Http\Controllers\HPLPSController;
 use App\Http\Controllers\PerijinanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
 use App\Http\Controllers\InatradeController;
+use App\Http\Controllers\MasterCompanyController;
 use Illuminate\Support\Facades\Artisan;
 // Packages
 use Illuminate\Support\Facades\Route;
@@ -43,8 +45,11 @@ Route::group(['middleware' => 'auth'], function () {
     // Dashboard Routes
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-    // Pengajuan Module
-    route::resource('pengajuan', PengajuanController::class);
+    // PPBE Module
+    route::resource('ppbe', PPBEController::class);
+    route::group(['prefix'=>'ppbe'],function(){
+        Route::get('pdf_export/{id}',[PPBEController::class,'pdf_export'])->name('ppbe.pdf');
+    });
 
     //penugasan Module
     Route::group(['prefix' => 'penugasan'],function(){
@@ -52,8 +57,9 @@ Route::group(['middleware' => 'auth'], function () {
         route::get('surat-tugas',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
     });
 
-    route::group(['prefix'=>'pengajuan'],function(){
-        Route::get('pdf_export/{id}',[PengajuanController::class,'pdf_export'])->name('pengajuan.pdf');
+
+    Route::group(['prefix' => 'pemeriksaan'], function(){
+        route::get('daftar', [HPLPSController::class,'index'])->name('hpl.daftar');
     });
 
     // Users Module
@@ -61,6 +67,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //perijinan Module
     Route::resource('perijinan',PerijinanController::class);
+    Route::get('data_company/{id}',[MasterCompanyController::class,'getCompany'])->name('data.company');
 
     //Inatrade Module
     Route::group(['prefix' => 'inatrade'], function(){

@@ -8,6 +8,7 @@
       @else
       {!! Form::open(['route' => ['users.store'], 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
       @endif
+      {{dd($roles)}}
       <div class="row">
          <div class="col-xl-3 col-lg-4">
             <div class="card">

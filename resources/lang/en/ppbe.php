@@ -13,6 +13,6 @@ return [
     |
     */
     'title' => 'Daftar',
-    'store' => 'User info added successfully!',
-    'update' => 'User info updated successfully!',
+    'store' => 'PBBE added successfully!',
+    'update' => 'PBBE updated successfully!',
 ];

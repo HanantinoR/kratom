@@ -5,22 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Helpers\AuthHelper;
 use Spatie\Permission\Models\Role;
-use App\DataTables\PengajuanDataTable;
+use App\DataTables\PPBEDataTable;
+use App\Models\PerijinanModel;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\View;
 
-class PengajuanController extends Controller
+class PPBEController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(PengajuanDataTable $dataTable)
+    public function index(PPBEDataTable $dataTable)
     {
-        $pageTitle = trans('global-message.list_form_title',['form' => trans('pengajuan.title')] );
+        $pageTitle = trans('global-message.list_form_title',['form' => trans('ppbe.title')] );
         $auth_user = AuthHelper::authSession();
-        $assets = ['data-table','pengajuan_list'];
+        $assets = ['data-table','ppbe_list'];
         // $headerAction = '<a href="'.route('users.create').'" class="btn btn-sm btn-primary" role="button">Add UserS</a>';
         return $dataTable->render('global.datatable', compact('pageTitle','auth_user','assets'));
     }
@@ -32,9 +33,10 @@ class PengajuanController extends Controller
      */
     public function create()
     {
-        $assets = ['pengajuan'];
+        $assets = ['ppbe','file'];
         $roles = Role::where('status',1)->get()->pluck('title', 'id');
-        return view('pengajuan.tambah',compact('roles','assets'));
+        $data_company = PerijinanModel::get();
+        return view('ppbe.tambah',compact('roles','assets','data_company'));
     }
 
     /**
@@ -99,7 +101,7 @@ class PengajuanController extends Controller
             'title' => 'test',
             'contetnt' =>'coba'
         ];
-        $documentPDF = View::make('pengajuan.pdf',['data'=>$data])->render();
+        $documentPDF = View::make('ppbe.pdf',['data'=>$data])->render();
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml($documentPDF);
@@ -111,7 +113,7 @@ class PengajuanController extends Controller
         $dompdf->render();
 
         // Output the generated PDF to Browser
-        return $dompdf->stream('pengajuan.pdf',['Attachment'=>false]);
+        return $dompdf->stream('ppbe.pdf',['Attachment'=>false]);
 
     }
 }

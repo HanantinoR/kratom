@@ -67,7 +67,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
-        public_path('perijinan') => storage_path('app/perijinan'),
+        public_path('perijinan_file') => storage_path('app/perijinan_file'),
     ],
 
 ];

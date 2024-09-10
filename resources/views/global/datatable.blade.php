@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <div class="header-title">
-                            <h4 class="card-title">{{ $tableTitle ?? 'List'}}</h4>
+                            <h4 class="card-title">{{ $pageTitle  ?? 'List'}}</h4>
                         </div>
                         <div class="card-action">
                         </div>
@@ -17,11 +17,25 @@
                         <div class="row">
                             @if($assets[1] == 'pengajuan_list')
                                 <div class="col-md-4">
-                                    <label for="pengajuan_code" class="form-label">Nomor Pengajuan:</label>
+                                    <label for="pengajuan_code" class="form-label">Nomor PPBE:</label>
                                     {{Form::search('pengajuan_code_search',null,["class"=>"form-control form-control-sm","id"=>"pengajuan_code_search","aria-controls"=>"dataTable"])}}
                                 </div>
                                 <div class="col-md-4">
                                     <label for="pengajuan_code" class="form-label">Nama Perusahaan:</label>
+                                    {{Form::search('company_name_search',null,["class"=>"form-control form-control-sm","id"=>"company_name_search","aria-controls"=>"dataTable"])}}
+                                </div>
+                            @elseif($assets[1] == 'penugasan_list')
+                                <div class="col-md-3">
+                                    <label for="ppbe_search" class="form-label">Nomor PPBE</label>
+                                    {{Form::search('ppbe_search',null,["class"=>"form-control form-control-sm","id"=>"ppbe_search","aria-controls"=>"dataTable"])}}
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="company_name_search" class="form-label">Nama Perusahaan:</label>
+                                    {{Form::search('company_name_search',null,["class"=>"form-control form-control-sm","id"=>"company_name_search","aria-controls"=>"dataTable"])}}
+                                </div>
+                            @elseif($assets[1] == 'perijinan_list')
+                                <div class="col-md-3">
+                                    <label for="company_name_search" class="form-label">Nama Perusahaan:</label>
                                     {{Form::search('company_name_search',null,["class"=>"form-control form-control-sm","id"=>"company_name_search","aria-controls"=>"dataTable"])}}
                                 </div>
                             @elseif($assets[1] == 'inatrade_list')
@@ -69,13 +83,13 @@ $(document).ready(function(){
         $('#dataTable').DataTable().destroy();
     }
 
-    if('{{$assets[1]}}' == 'pengajuan_list')
+    if('{{$assets[1]}}' == 'ppbe_list')
     {
         var table = $('#dataTable').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('pengajuan.index') }}",
+                url: "{{ route('ppbe.index') }}",
                 data: function(d) {
                     d.pengajuan_code_search  = $('#pengajuan_code_search').val();
                     d.company_name_search  = $('#company_name_search').val();
