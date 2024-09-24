@@ -44,20 +44,7 @@
                                     <label class="form-label" for="date_et">Tanggal ET <span class="text-danger">*</span></label>
                                     {{ Form::text('date_et', old('date_et'), ['class' => 'form-control text-black form_date_picker', 'id' => 'date_et', 'placeholder' => '' ,'required']) }}
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="nomor_pe">Nomor PE: <span class="text-danger">*</span></label>
-                                    {{ Form::text('nomor_pe', old('nomor_pe'), ['class' => 'form-control text-black', 'id' => 'nomor_pe', 'placeholder' => 'Nomor PE', 'required']) }}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="date_pe">Tanggal PE <span class="text-danger">*</span></label>
-                                    {{ Form::text('date_pe', old('date_pe'), ['class' => 'form-control text-black form_date_picker', 'id' => 'date_pe', 'placeholder' => '' ,'required']) }}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="company_name">Nama Perusahaan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_name', old('company_name'), ['class' => 'form-control text-black', 'id' => 'company_name', 'placeholder' => 'Nama Perusahaan','required']) }}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <div class="row">
+
                                         {{-- <div class="col-md-4">
                                             <label class="form-label" for="used_quota">Kuota Pemakaian: <span class="text-danger">*</span></label>
                                             {{ Form::text('used_quota', old('',$data), ['class' => 'form-control text-black', 'id' => 'used_quota', 'placeholder' => 'Kuota Pemakaian']) }}
@@ -66,11 +53,21 @@
                                             <label class="form-label" for="remaining_quota">Sisa Kuota: <span class="text-danger">*</span></label>
                                             {{ Form::text('remaining_quota', null, ['class' => 'form-control text-black', 'id' => 'remaining_quota', 'placeholder' => 'Kuota Sisa']) }}
                                         </div> --}}
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="company_quota">Kuota: <span class="text-danger">*</span></label>
-                                            {{ Form::text('company_quota', old('company_quota'), ['class' => 'form-control text-black', 'id' => 'company_quota', 'placeholder' => 'Kuota', 'required']) }}
-                                        </div>
-                                    </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label" for="nomor_pe">Nomor PE: <span class="text-danger">*</span></label>
+                                    {{ Form::text('nomor_pe', old('nomor_pe'), ['class' => 'form-control text-black', 'id' => 'nomor_pe', 'placeholder' => 'Nomor PE', 'required']) }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label" for="date_pe">Tanggal PE <span class="text-danger">*</span></label>
+                                    {{ Form::text('date_pe', old('date_pe'), ['class' => 'form-control text-black form_date_picker', 'id' => 'date_pe', 'placeholder' => '' ,'required']) }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="company_quota">Kuota: <span class="text-danger">*</span></label>
+                                    {{ Form::text('company_quota', old('company_quota'), ['class' => 'form-control text-black', 'id' => 'company_quota', 'placeholder' => 'Kuota', 'required']) }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label" for="company_name">Nama Perusahaan: <span class="text-danger">*</span></label>
+                                    {{ Form::text('company_name', old('company_name'), ['class' => 'form-control text-black', 'id' => 'company_name', 'placeholder' => 'Nama Perusahaan','required']) }}
                                 </div>
                                 {{-- <div class="form-group col-md-8">
                                     <label class="form-label" for="add2">Jenis Usaha: </label>
@@ -160,7 +157,7 @@
                                             <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_et">ET: </label>
                                             <div class="col-md-6 col-sm-9">
                                                 <div class="row mb-4">
-                                                <a href="{{url('perijinan/'.$data->file_et)}}" target="_blank" class="me-2 text-left">
+                                                <a href="{{url('perijinan_file/'.$data->file_et)}}" target="_blank" class="me-2 text-left">
                                                         <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
                                                         </svg>
@@ -179,7 +176,7 @@
                                             <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_pe">PE: </label>
                                             <div class="col-md-6 col-sm-9">
                                                 <div class="row mb-4">
-                                                    <a href="{{asset('perijinan/'.    $data->file_pe)}}" target="_blank" class="me-2">
+                                                    <a href="{{asset('perijinan_file/'.    $data->file_pe)}}" target="_blank" class="me-2">
                                                         <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
                                                         </svg>
@@ -197,39 +194,68 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group row">
-                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_et">ET: </label>
+                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_nib">NIB: </label>
                                             <div class="col-md-6 col-sm-9">
                                                 <div class="row mb-4">
-                                                <a href="{{url('perijinan/'.$data->file_et)}}" target="_blank" class="me-2 text-left">
+                                                <a href="{{url('perijinan_file/'.$data->file_nib)}}" target="_blank" class="me-2 text-left">
                                                         <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
                                                         </svg>
-                                                        Download File ET
+                                                        Download File NIB
                                                     </a>
                                                 </div>
                                                 <div class="row">
                                                     <i class="text-danger text-sm-left">Unggah File jika Anda ingin Merubah</i>
-                                                    {{ Form::file('file_et',['class' => 'dropify', 'id'=>'file_et','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ]) }}
+                                                    {{ Form::file('file_nib',['class' => 'dropify', 'id'=>'file_nib','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ]) }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row">
-                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_pe">PE: </label>
+                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_npwp">NPWP: </label>
                                             <div class="col-md-6 col-sm-9">
                                                 <div class="row mb-4">
-                                                    <a href="{{asset('perijinan/'.    $data->file_pe)}}" target="_blank" class="me-2">
+                                                    <a href="{{asset('perijinan_file/'.    $data->file_npwp)}}" target="_blank" class="me-2">
                                                         <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
                                                         </svg>
-                                                        Download File PE
+                                                        Download File NPWP
                                                     </a>
                                                 </div>
                                                 <div class="row">
                                                     <i class="text-danger text-sm-left">Unggah File jika Anda ingin Merubah</i>
-                                                    {{ Form::file('file_pe',['class' => 'dropify', 'id'=>'file_pe','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ]) }}
+                                                    {{ Form::file('file_npwp',['class' => 'dropify', 'id'=>'file_npwp','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ]) }}
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_ktp">KTP: </label>
+                                            <div class="col-md-6 col-sm-9">
+                                                <div class="row mb-4">
+                                                    <a href="{{asset('perijinan_file/'.    $data->file_ktp)}}" target="_blank" class="me-2">
+                                                        <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
+                                                        </svg>
+                                                        Download File KTP
+                                                    </a>
+                                                </div>
+                                                <div class="row">
+                                                    <i class="text-danger text-sm-left">Unggah File jika Anda ingin Merubah</i>
+                                                    {{ Form::file('file_ktp',['class' => 'dropify', 'id'=>'file_ktp','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ]) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="perijinan_notes">Alasan: </label>
+                                            <div class="col-md-8 col-sm-9">
+                                                {{ Form::textarea('perijinan_notes',null,['class' => 'form-control text-black', 'id'=>'perijinan_notes','placeholder' => 'Alasan Perubahan', 'rows'=>'4']) }}
                                             </div>
                                         </div>
                                     </div>
@@ -280,14 +306,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-md-6">
-                                        <div class="fom-group row">
-                                            <label class="form-label control-label col-sm-3 align-self-center mb-0" for="file_ktp">Alasan: </label>
-                                            <div class="col-md-6 col-sm-9">
-                                                {{ Form::file('file_ktp',['class' => 'dropify', 'id'=>'file_ktp','placeholder' => 'input', "data-height"=>'110',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" , 'required']) }}
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                 </div>
                             @endif
                         </div>
@@ -301,7 +319,7 @@
                                 @else
                                     <button type="submit" class="btn btn-primary" id="TambahBtn">Tambah Perijinan</button>
                                 @endif
-                                    <button type="button" class="btn btn-danger" id="backBtn">kembali</button>
+                                    <a href="{{route('perijinan.index')}}" type="button" class="btn btn-danger" id="backBtn">kembali</a>
                             </div>
                             <div class="col-md-4"></div>
                         </div>
@@ -312,32 +330,32 @@
         {!! Form::close() !!}
 
         @if(isset($id))
-        <div class="row">
-            <div class="col-xl-12 col-lg-10">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <div class="header-title">
-                            <h4 class="card-title">History Perijinan</h4>
+            <div class="row">
+                <div class="col-xl-12 col-lg-10">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="header-title">
+                                <h4 class="card-title">History Perijinan</h4>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>KATEGORY</th>
-                                                <th>DATA SEBELUM PERUBAHAN</th>
-                                                <th>DATA SETELAH PERUBAHAN</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $no= 1; ?>
-                                                @foreach ($data_history as $item)
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>KATEGORY</th>
+                                                    <th>DATA SEBELUM PERUBAHAN</th>
+                                                    <th>DATA SETELAH PERUBAHAN</th>
+                                                    <th>KETERANGAN</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($data_history as $index => $item)
                                                     <tr>
-                                                        <td>{{$no}}</td>
+                                                        <td>{{$index+1}}</td>
                                                         <td>
                                                             @switch($item->field)
                                                             @case('nib')
@@ -377,61 +395,130 @@
                                                                 Alamat Pabrik
                                                                 @break
                                                             @case('company_inspection_office')
-                                                                Alamat Pabrik
+                                                                Kantor Cabang
                                                                 @break
                                                             @case('company_pic')
-                                                                Alamat Pabrik
+                                                                PIC
                                                                 @break
                                                             @case('company_position')
-                                                                Alamat Pabrik
+                                                                Jabatan
                                                                 @break
                                                             @case('company_npwp')
-                                                                Alamat Pabrik
+                                                                NPWP
                                                                 @break
                                                             @case('company_telp')
-                                                                Alamat Pabrik
+                                                                Nomor Telp
                                                                 @break
                                                             @case('company_hp')
-                                                                Alamat Pabrik
+                                                                Nomor Hp
                                                                 @break
                                                             @case('company_email')
-                                                                Alamat Pabrik
+                                                                Email
                                                                 @break
                                                             @case('status')
-                                                                Alamat Pabrik
+                                                                Status
                                                                 @break
                                                             @case('file_et')
-                                                                Alamat Pabrik
+                                                                File ET
                                                                 @break
                                                             @case('file_pe')
-                                                                Alamat Pabrik
+                                                                File PE
                                                                 @break
-
+                                                            @case('file_nib')
+                                                                File PE
+                                                                @break
+                                                            @case('file_npwp')
+                                                                File PE
+                                                                @break
+                                                            @case('file_ktp')
+                                                                File PE
+                                                                @break
                                                             @endswitch
                                                         </td>
-                                                        <td>{{$item->old_value}}</td>
-                                                        <td>{{$item->new_value}}</td>
+                                                        <td>@if($item->field === 'status')
+                                                                @if($item->old_value === '0')
+                                                                    Tidak Aktif
+                                                                @else
+                                                                    Aktif
+                                                                @endif
+                                                            @else
+                                                                {{$item->old_value}}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                        @if($item->field === 'status')
+                                                            @if($item->new_value === '0')
+                                                                Tidak Aktif
+                                                            @else
+                                                                Aktif
+                                                            @endif
+                                                        @else
+                                                            {{$item->new_value}}
+                                                        @endif
+                                                            </td>
+                                                        <td>{{$item->notes}}</td>
                                                     </tr>
-                                                    <?php $no++;?>
                                                 @endforeach
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-10">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="header-title">
+                                <div class="card-title">
+                                    <h4>History Pemakaian Kuota PE</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            Batas Pemakaian PE Maksimal Tanggal ........ <i class="text-small text-danger"> harap rubah PE</i>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <td>NO</td>
+                                                    <td>Nomor PE</td>
+                                                    <td>Tanggal PE</td>
+                                                    <td>Kuota</td>
+                                                    <td>Kuota Pemakaian</td>
+                                                    <td>Kuota sisa</td>
+                                                    <td>Status</td>
+                                                    <td>Keterangan</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($data_history_quota as $index => $kuota)
+                                                    <tr>
+                                                        <td>{{$index+1}}</td>
+                                                        <td>{{$kuota->nomor_pe}}</td>
+                                                        <td>{{$kuota->date_pe}}</td>
+                                                        <td>{{$kuota->company_quota}}</td>
+                                                        <td>{{$kuota->company_quota_used}}</td>
+                                                        <td>{{$kuota->company_quota_remaining}}</td>
+                                                        <td>{{$kuota->status_quota}}</td>
+                                                        <td>{{$kuota->notes}}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
     </div>
- </x-app-layout>
 
-
-
-{{--
-request akses GIT
-untuk kebutuhan vepik
-helpdesk isb@sucofindo.com
-
---}}
+</x-app-layout>

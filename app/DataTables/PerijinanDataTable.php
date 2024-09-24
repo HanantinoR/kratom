@@ -7,6 +7,7 @@ use App\Models\Perijinan;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use App\Models\PerijinanModel;
+use App\Models\PerijinanPEModel;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
@@ -63,9 +64,6 @@ class PerijinanDataTable extends DataTable
     {
         $model = PerijinanModel::query();
         $query = $model->newQuery();
-        if ($search = request()->get('pengajuan_code_search')) {
-            $query->where('pengajuan_code', 'like', "%{$search}%");
-        }
 
         if ($search = request()->get('company_name_search')) {
             $query->where('company_name', 'like', "%{$search}%");
@@ -103,7 +101,7 @@ class PerijinanDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            ['data' => 'id', 'name' => 'id', 'title' => 'id'],
+            ['data' => 'id', 'name' => 'id', 'title' => 'Number'],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status Perijinan', 'orderable' => false],
             ['data' => 'nib', 'name' => 'nib', 'title' => 'NIB'],
             ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Nama Perusahaan'],

@@ -16,9 +16,10 @@ class CreateCompanyHistoryTable extends Migration
         Schema::create('company_history', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->constrained('company')->onDelete('cascade');
-            $table->string('field');
-            $table->string('old_value');
-            $table->string('new_value');
+            $table->string('field')->nullable();
+            $table->string('old_value')->nullable();
+            $table->string('new_value')->nullable();
+            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }

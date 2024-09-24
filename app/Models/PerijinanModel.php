@@ -33,11 +33,26 @@ class PerijinanModel extends Model
         'status',
         'file_et',
         'file_pe',
+        'file_nib',
+        'file_npwp',
+        'file_ktp',
+        'created_by',
+        'updated_by',
     ];
 
     public function histories()
     {
-        return $this->hasMany(PerijinanHistoryModel::class);
+        return $this->hasMany(PerijinanHistoryModel::class,'company_id');
+    }
+
+    public function kuota()
+    {
+        return $this->hasMany(HistoryQuotaModel::class,'company_id');
     }
 
 }
+
+
+//PR dinamis PE menggunakan modal dimana isinya Nomor PE, Tanggal PE, Kuota, File PE
+//PR history PE yang isinya Nomor PE tanggal PE Kuota, Kuota Pemakaian, Kuota Sisa, status (aktif, expired, pengurangan),keterangan (awal, update, pengajuan - Nomor ppbe - tanggal)
+//created_by dan updated_by pada table company_pe

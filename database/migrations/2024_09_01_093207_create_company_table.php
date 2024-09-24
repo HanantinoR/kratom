@@ -37,6 +37,11 @@ class CreateCompanyTable extends Migration
             $table->string('status')->nullable();
             $table->string('file_et')->nullable();
             $table->string('file_pe')->nullable();
+            $table->string('file_nib')->nullable();
+            $table->string('file_npwp')->nullable();
+            $table->string('file_ktp')->nullable();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

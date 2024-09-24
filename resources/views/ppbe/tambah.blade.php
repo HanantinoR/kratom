@@ -2,22 +2,18 @@
     <div class="">
         <?php
             $id = $id ?? null;
-            $currency = ['USD','IDR',"JPY"];
+            $currency = ['1'=>'USD','2'=>'IDR','3'=>"JPY"];
             $office = ["JAKARTA"=>'Jakarta',"BANDUNG"=>'BANDUNG',"CIREBON"=>'CIREBON'];
+            $pemeriksaan = ["PONTIANAK"=>'PONTIANAK','SEMARANG'=>'SEMARANG'];
+            $stuffing = ["JAKARTA"=>'JAKARTA','SURABAYA' => 'SURABAYA'];
             $date = ['WIB'=>'WIB','WITA'=>'WITA','WIT'=>'WIT'];
             $type = ['1' => 'FCL','2' => 'LCL','3' => 'KONV'];
             $size = ['20' => '20', '40' => '40'];
-            $type_kemasan = ['1'=>'BALE','2'=>'CARTON','3'=>'BUNDLE','4'=>'PALLET']
+            $type_kemasan = ['1'=>'BALE','2'=>'CARTON','3'=>'BUNDLE','4'=>'PALLET'];
+            $skenario = ['1' => '1', '2' => '2','3'=>'3'];
 
         ?>
-        @if(isset($id))
-            {!! Form::model($data, ['route' => ['ppbe.update', $id], 'method' => 'patch' , 'enctype' => 'multipart/form-data']) !!}
-        @else
-            {!! Form::open(['route' => ['ppbe.store'], 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
-        @endif
-        {{-- @foreach ($data_company as $key => $company)
-            {{dd($company->company_name)}}
-        @endforeach --}}
+        {!! Form::open(['route' => ['ppbe.store'],'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12">
                 <div class="card">
@@ -39,20 +35,20 @@
                                     {{ Form::text('nomor_penganjuan', old('nomor_penganjuan'), ['class' => 'form-control','id'=>'nomor_pengajuan' ,'placeholder' => 'Nomor PPBE', 'readonly']) }}
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="tanggal_pengajuan">Tanggal PPBE: <span class="text-danger">*</span></label>
-                                    {{ Form::text('tanggal_pengajuan', old('tanggal_pengajuan'), ['class' => 'form-control datePicker','id'=>'tanggal_pengajuan' ,'placeholder' => 'Tanggal PPBE', 'required']) }}
+                                    <label class="form-label" for="date">Tanggal Pengajuan PPBE: <span class="text-danger">*</span></label>
+                                    {{ Form::text('date', old('date'), ['class' => 'form-control datePicker text-black','id'=>'date' ,'placeholder' => 'Tanggal PPBE', 'required']) }}
                                 </div>
                             </div>
                             <hr>
                             <h5 class="mb-4 text-secondary">DATA PEMOHON</h5>
                             <div class="row">
                                 <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_name">Nama Perusahaan: <span class="text-danger">*</span></label>
-                                    {{-- {{ Form::select('company[name]', $data_company , old('company[name]') ? old('company[name]') : $data->user_type ?? 'user', ['class' => 'form-control company_name', 'placeholder' => 'Select Company Name']) }} --}}
-                                    <select name="company_name" class="form-control company_name" id="company_name" placeholder="Select Company Name">
+                                    <label class="form-label" for="company_id">Nama Perusahaan: <span class="text-danger">*</span></label>
+                                    {{-- {{ Form::select('company[name]', $data_company , old('company[name]') ? old('company[name]') : $data ?? 'user', ['class' => 'form-control company_id', 'placeholder' => 'Select Company Name']) }} --}}
+                                    <select name="company_id" class="form-control company_id" id="company_id" placeholder="Select Company Name">
                                         <option value="">Select Company Name</option>
                                         @foreach($data_company as $key => $company)
-                                            <option value="{{ $company->id }}" {{ (old('company_name') ?? old('company_name')) == $company->id ? 'selected' : '' }}>
+                                            <option value="{{ $company->id }}" {{ old('company_id') === $company->id ? 'selected' : '' }}>
                                                 {{ $company->company_name }}
                                             </option>
                                         @endforeach
@@ -166,10 +162,10 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ Form::text('barang[0][nomor_hs]', old('barang[0][nomor_hs]'), ['class' => 'form-control','id'=>'barang[0][nomor_hs]' ,'placeholder' => 'Nomor HS', 'required']) }}</td>
-                                            <td>{{ Form::text('barang[0][uraian]', old('barang[0][uraian]'), ['class' => 'form-control','id'=>'barang[0][uraian]' ,'placeholder' => 'Uraian', 'required']) }}</td>
-                                            <td>{{ Form::text('barang[0][jumlah_total]', old('barang[0][jumlah_total]'), ['class' => 'form-control','id'=>'barang[0][jumlah_total]' ,'placeholder' => 'Jumlah Total', 'required']) }}</td>
-                                            <td>{{ Form::text('barang[0][nilai_fob]', old('barang[0][nilai_fob]'), ['class' => 'form-control','id'=>'barang[0][nilai_fob]' ,'placeholder' => 'FOB', 'required']) }}</td>
+                                            <td>{{ Form::text('barang[0][nomor_hs]', old('barang[0][nomor_hs]'), ['class' => 'form-control text-black','id'=>'barang[0][nomor_hs]' ,'placeholder' => 'Nomor HS', 'required']) }}</td>
+                                            <td>{{ Form::text('barang[0][uraian]', old('barang[0][uraian]'), ['class' => 'form-control text-black','id'=>'barang[0][uraian]' ,'placeholder' => 'Uraian', 'required']) }}</td>
+                                            <td>{{ Form::text('barang[0][jumlah_total]', old('barang[0][jumlah_total]'), ['class' => 'form-control text-black','id'=>'barang[0][jumlah_total]' ,'placeholder' => 'Jumlah Total', 'required']) }}</td>
+                                            <td>{{ Form::text('barang[0][nilai_fob]', old('barang[0][nilai_fob]'), ['class' => 'form-control text-black calculateFOB','id'=>'barang[0][nilai_fob]' ,'placeholder' => 'FOB', 'required']) }}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-icon btn-success btn_tambah" id="tambah_row" type="button">
                                                     <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -182,84 +178,84 @@
                                 </table>
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="merek_kemasan">Merek & Nomor Kemasan : <span class="text-danger">*</span></label>
-                                {{ Form::textarea('merek_kemasan', old('merek_kemasan'), ['class' => 'form-control','id'=>'merek_kemasan' ,'placeholder' => 'Merek dan Nomor Kemasan', 'required', 'rows'=>'2']) }}
+                                <label class="form-label" for="merk">Merek & Nomor Kemasan : <span class="text-danger">*</span></label>
+                                {{ Form::textarea('merk', old('merk'), ['class' => 'form-control text-black','id'=>'merk' ,'placeholder' => 'Merek dan Nomor Kemasan', 'required', 'rows'=>'2']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="total_kemasan">Total Kemasan: <span class="text-danger">*</span></label>
+                                <label class="form-label" for="packing_total">Total Kemasan: <span class="text-danger">*</span></label>
                                 <div class="row">
                                     <div class="col-md-8">
-                                        {{ Form::text('total_kemasan', old('total_kemasan'), ['class' => 'form-control','id'=>'total_kemasan' ,'placeholder' => 'Total Kemasan', 'required']) }}
+                                        {{ Form::text('packing_total', old('packing_total'), ['class' => 'form-control text-black','id'=>'packing_total' ,'placeholder' => 'Total Kemasan', 'required']) }}
                                     </div>
                                     <div class="col-md-4">
-                                        {{ Form::select('fob_currency', $type_kemasan , null,  ['class' => 'form-control type_kemasan','id'=>'type_kemasan' ,'placeholder' => 'Pilih!', 'required']) }}
+                                        {{ Form::select('packing_type', $type_kemasan , old('packing_type'),  ['class' => 'form_select2 form-control text-black packing_type','id'=>'packing_type' ,'placeholder' => 'Pilih!', 'required']) }}
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="total_fob">Nilai FOB: <span class="text-danger">*</span></label>
+                                <label class="form-label" for="fob_total">Nilai FOB: <span class="text-danger">*</span></label>
                                 <div class="row">
                                     <div class="col-md-8">
-                                        {{ Form::text('total_fob', old('total_fob'), ['class' => 'form-control','id'=>'total_fob' ,'placeholder' => 'Nilai FOB', 'readonly']) }}
+                                        {{ Form::text('fob_total', old('fob_total'), ['class' => 'form-control text-black text-black','id'=>'fob_total' ,'placeholder' => 'Nilai FOB', 'readonly']) }}
                                     </div>
                                     <div class="col-md-4">
-                                        {{ Form::select('fob_currency', $currency , old('company[name]'),  ['class' => 'form-control fob_currency','id'=>'fob_currency' ,'placeholder' => 'Pilih FOB', 'required']) }}
+                                        {{ Form::select('fob_currency', $currency , old('fob_currency'),  ['class' => 'form_select2 form-control text-black fob_currency','id'=>'fob_currency' ,'placeholder' => 'Pilih FOB', 'required']) }}
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="nomor_invoice">Nomor Invoice: <span class="text-danger">*</span></label>
-                                {{ Form::text('nomor_invoice', old('nomor_invoice'), ['class' => 'form-control','id'=>'nomor_invoice' ,'placeholder' => 'Nomor Invoice', 'required']) }}
+                                <label class="form-label" for="invoice_number">Nomor Invoice: <span class="text-danger">*</span></label>
+                                {{ Form::text('invoice_number', old('invoice_number'), ['class' => 'form-control text-black','id'=>'invoice_number' ,'placeholder' => 'Nomor Invoice', 'required']) }}
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="tanggal_invoice">Tanggal Invoice: <span class="text-danger">*</span></label>
-                                {{ Form::text('tanggal_invoice', old('tanggal_invoice'), ['class' => 'form-control datePicker','id'=>'tanggal_invoice' ,'placeholder' => 'Tanggal Invoice', 'required']) }}
+                                <label class="form-label" for="invoice_date">Tanggal Invoice: <span class="text-danger">*</span></label>
+                                {{ Form::text('invoice_date', old('invoice_date'), ['class' => 'form-control text-black datePicker','id'=>'invoice_date' ,'placeholder' => 'Tanggal Invoice', 'required']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="nomor_packing_list">Nomor Packing List <span class="text-danger">*</span></label>
-                                {{ Form::text('nomor_packing_list', old('nomor_packing_list'), ['class' => 'form-control','id'=>'nomor_packing_list' ,'placeholder' => 'Nomor Invoice', 'required']) }}
+                                <label class="form-label" for="packing_list_number">Nomor Packing List <span class="text-danger">*</span></label>
+                                {{ Form::text('packing_list_number', old('packing_list_number'), ['class' => 'form-control text-black','id'=>'packing_list_number' ,'placeholder' => 'Nomor Invoice', 'required']) }}
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="tanggapacking_list">Tanggal Packing List <span class="text-danger">*</span></label>
-                                {{ Form::text('tanggapacking_list', old('tanggapacking_list'), ['class' => 'form-control datePicker','id'=>'tanggapacking_list' ,'placeholder' => 'Tanggal Invoice', 'required']) }}
+                                <label class="form-label" for="packing_list_date">Tanggal Packing List <span class="text-danger">*</span></label>
+                                {{ Form::text('packing_list_date', old('packing_list_date'), ['class' => 'form-control text-black datePicker','id'=>'packing_list_date' ,'placeholder' => 'Tanggal Invoice', 'required']) }}
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="buyer_name">Nama Pembeli: <span class="text-danger">*</span></label>
-                                {{ Form::text('buyer_name', old('buyer_name'), ['class' => 'form-control','id'=>'buyer_name' ,'placeholder' => 'Nama Pembeli', 'required']) }}
+                                {{ Form::text('buyer_name', old('buyer_name'), ['class' => 'form-control text-black','id'=>'buyer_name' ,'placeholder' => 'Nama Pembeli', 'required']) }}
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="buyer_address">Alamat Pembeli: <span class="text-danger">*</span></label>
-                                {{ Form::textarea('buyer_address', old('buyer_address'), ['class' => 'form-control','id'=>'buyer_address' ,'placeholder' => 'Alamat Pembeli', 'required', 'rows'=>'2']) }}
+                                {{ Form::textarea('buyer_address', old('buyer_address'), ['class' => 'form-control text-black','id'=>'buyer_address' ,'placeholder' => 'Alamat Pembeli', 'required', 'rows'=>'2']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="loading_port">Pelabuhan Muat: <span class="text-danger">*</span></label>
-                                {{ Form::text('loading_port', old('loading_port'), ['class' => 'form-control','id'=>'loading_port' ,'placeholder' => 'Pelabuhan Muat', 'required']) }}
+                                <label class="form-label" for="loading_port_id">Pelabuhan Muat: <span class="text-danger">*</span></label>
+                                {{ Form::text('loading_port_id', old('loading_port_id'), ['class' => 'form-control text-black','id'=>'loading_port_id' ,'placeholder' => 'Pelabuhan Muat', 'required']) }}
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="country_id">Negara Tujuan: <span class="text-danger">*</span></label>
                                 <small class="text-info text-6">(tercantum di LS)</small>
-                                {{ Form::text('country_id', old('country_id'), ['class' => 'form-control','id'=>'country_id' ,'placeholder' => 'Negara Tujuan', 'required']) }}
+                                {{ Form::text('country_id', old('country_id'), ['class' => 'form-control text-black','id'=>'country_id' ,'placeholder' => 'Negara Tujuan', 'required']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="country_destination_port">Negara Tujuan : <span class="text-danger">*</span></label>
-                                {{ Form::text('country_destination_port', old('country_destination_port'), ['class' => 'form-control','id'=>'country_destination_port' ,'placeholder' => 'Negara Tujuan', 'required']) }}
+                                <label class="form-label" for="country_destination_id">Negara Tujuan : <span class="text-danger">*</span></label>
+                                {{ Form::text('country_destination_id', old('country_destination_id'), ['class' => 'form-control text-black','id'=>'country_destination_id' ,'placeholder' => 'Negara Tujuan', 'required']) }}
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
-                                <label for="" class="form-label">Pelabuhan Tujuan</label>
-                                {{ Form::text('destination_port', old('destination_port'), ['class' => 'form-control','id'=>'destination_port' ,'placeholder' => 'Pelabuhan Tujuan', 'required']) }}
+                                <label for="destination_port_id" class="form-label">Pelabuhan Tujuan</label>
+                                {{ Form::text('destination_port_id', old('destination_port_id'), ['class' => 'form-control text-black','id'=>'destination_port_id' ,'placeholder' => 'Pelabuhan Tujuan', 'required']) }}
                             </div>
                         </div>
                     </div>
@@ -283,7 +279,7 @@
                                     <div class="col-md-3">
                                         <div class="grid" style="--bs-gap: 1rem">
                                             <div class="form-check g-col-6">
-                                                {{ Form::radio('status', 'pabrik',old('status') || true, ['class' => 'form-check-input', 'id' => 'gudang-pabrik']); }}
+                                                {{ Form::radio('goods_storage', 'pabrik',old('goods_storage') || true, ['class' => 'form-check-input', 'id' => 'gudang-pabrik']); }}
                                                 <label class="form-check-label" for="gudang-pabrik">
                                                     Gudang Pabrik
                                                 </label>
@@ -293,7 +289,7 @@
                                     <div class="col-md-3">
                                         <div class="grid" style="--bs-gap: 1rem">
                                             <div class="form-check g-col-6">
-                                                {{ Form::radio('status', 'konsolidator',old('status') || true, ['class' => 'form-check-input', 'id' => 'gudang-konsolidator']); }}
+                                                {{ Form::radio('goods_storage', 'konsolidator',old('goods_storage') || true, ['class' => 'form-check-input', 'id' => 'gudang-konsolidator']); }}
                                                 <label class="form-check-label" for="gudang-konsolidator">
                                                     Gudang Konsolidator
                                                 </label>
@@ -306,67 +302,67 @@
                         <label for="" class="col-lg-12">Barang tersebut telah siap diekspor dan pemeriksaan diminta pada:</label>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="inspection_office">Kantor Pemeriksaan: <span class="text-danger">*</span></label>
-                                {{ Form::select('inspection_office', $office ,old('inspection_office'), ['class' => 'form-control inspection_office','id'=>'inspection_office' ,'placeholder' => 'Kantor Pemeriksaan', 'required']) }}
+                                <label class="form-label" for="inspection_office_id">Kantor Pemeriksaan: <span class="text-danger">*</span></label>
+                                {{ Form::select('inspection_office_id', $pemeriksaan ,old('inspection_office_id'), ['class' => 'form-control form_select2 text-black inspection_office_id','id'=>'inspection_office' ,'placeholder' => 'Kantor Pemeriksaan', 'required']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="inspection_address">Alamat: <span class="text-danger">*</span></label>
-                                {{ Form::textarea('inspection_address', old('inspection_address'), ['class' => 'form-control','id'=>'inspection_address' ,'placeholder' => 'Alamat',"rows"=>'2' ,'required']) }}
+                                {{ Form::textarea('inspection_address', old('inspection_address'), ['class' => 'form-control text-black','id'=>'inspection_address' ,'placeholder' => 'Alamat',"rows"=>'2' ,'required']) }}
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="inspection_address">Tanggal: <span class="text-danger">*</span></label>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {{ Form::text('inspection_date', old('inspection_date'), ['class' => 'form-control datePicker','id'=>'inspection_date' ,'placeholder' => 'Tanggal' ,'required']) }}
+                                        {{ Form::text('inspection_date', old('inspection_date'), ['class' => 'form-control text-black datePicker','id'=>'inspection_date' ,'placeholder' => 'Tanggal' ,'required']) }}
                                     </div>
                                     <div class="col-md-3">
-                                        {{ Form::select('date_type', $date ,old('date_type'), ['class' => 'form-control date_type','id'=>'date_type' ,'placeholder' => 'WAKTU', 'required']) }}
+                                        {{ Form::select('inspection_timezone', $date ,old('inspection_timezone'), ['class' => 'form-control form_select2 text-black','id'=>'inspection_timezone' ,'placeholder' => 'WAKTU', 'required']) }}
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="provincy_inspection">Provinsi: <span class="text-danger">*</span></label>
-                                {{ Form::text('provincy_inspection', old('provincy_inspection'), ['class' => 'form-control','id'=>'provincy_inspection' ,'placeholder' => 'Provinsi', 'required']) }}
+                                <label class="form-label" for="inspection_province_id">Provinsi: <span class="text-danger">*</span></label>
+                                {{ Form::text('inspection_province_id', old('inspection_province_id'), ['class' => 'form-control text-black','id'=>'inspection_province_id' ,'placeholder' => 'Provinsi', 'required']) }}
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="district_inspection">Kabupaten: <span class="text-danger">*</span></label>
-                                {{ Form::text('district_inspection', old('district_inspection'), ['class' => 'form-control','id'=>'district_inspection' ,'placeholder' => 'Kabupaten', 'required']) }}
+                                <label class="form-label" for="inspection_city_id">Kabupaten: <span class="text-danger">*</span></label>
+                                {{ Form::text('inspection_city_id', old('inspection_city_id'), ['class' => 'form-control text-black','id'=>'inspection_city_id' ,'placeholder' => 'Kabupaten', 'required']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="inspection_pic_name">Nama Petugas: <span class="text-danger">*</span></label>
-                                {{ Form::text('inspection_pic_name', old('inspection_pic_name'), ['class' => 'form-control','id'=>'inspection_pic_name' ,'placeholder' => 'Provinsi', 'required']) }}
+                                {{ Form::text('inspection_pic_name', old('inspection_pic_name'), ['class' => 'form-control text-black','id'=>'inspection_pic_name' ,'placeholder' => 'Provinsi', 'required']) }}
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="inspection_pic_number">No HP Petugas: <span class="text-danger">*</span></label>
-                                {{ Form::text('inspection_pic_number', old('inspection_pic_number'), ['class' => 'form-control','id'=>'inspection_pic_number' ,'placeholder' => 'Provinsi', 'required']) }}
+                                <label class="form-label" for="inspection_pic_phone">No HP Petugas: <span class="text-danger">*</span></label>
+                                {{ Form::text('inspection_pic_phone', old('inspection_pic_phone'), ['class' => 'form-control text-black','id'=>'inspection_pic_phone' ,'placeholder' => 'Provinsi', 'required']) }}
                             </div>
                         </div>
                         <label for="" class="col-lg-12">Tanggal dan Tempat Pelaksanaan Stuffing :</label>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="inspection_office">Kantor Pengawasan Stuffing: <span class="text-danger">*</span></label>
-                                {{ Form::select('inspection_office', $office ,old('inspection_office'), ['class' => 'form-control inspection_office','id'=>'inspection_office' ,'placeholder' => 'Kantor Pemeriksaan', 'required']) }}
+                                <label class="form-label" for="stuffing_office_id">Kantor Pengawasan Stuffing: <span class="text-danger">*</span></label>
+                                {{ Form::select('stuffing_office_id', $stuffing ,old('stuffing_office_id'), ['class' => 'form-control text-black form_select2','id'=>'stuffing_office_id' ,'placeholder' => 'Kantor Pemeriksaan', 'required']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="inspection_address">Alamat: <span class="text-danger">*</span></label>
-                                {{ Form::textarea('inspection_address', old('inspection_address'), ['class' => 'form-control','id'=>'inspection_address' ,'placeholder' => 'Alamat',"rows"=>'2' ,'required']) }}
+                                <label class="form-label" for="stuffing_address">Alamat: <span class="text-danger">*</span></label>
+                                {{ Form::textarea('stuffing_address', old('stuffing_address'), ['class' => 'form-control text-black','id'=>'stuffing_address' ,'placeholder' => 'Alamat',"rows"=>'2' ,'required']) }}
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
-                                <label class="form-label" for="inspection_address">Tanggal: <span class="text-danger">*</span></label>
+                                <label class="form-label" for="stuffing_address">Tanggal: <span class="text-danger">*</span></label>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {{ Form::text('inspection_date', old('inspection_date'), ['class' => 'form-control datePicker','id'=>'inspection_date' ,'placeholder' => 'Tanggal' ,'required']) }}
+                                        {{ Form::text('stuffing_date', old('stuffing_date'), ['class' => 'form-control text-black datePicker','id'=>'stuffing_date' ,'placeholder' => 'Tanggal' ,'required']) }}
                                     </div>
                                     <div class="col-md-3">
-                                        {{ Form::select('date_type', $date ,old('date_type'), ['class' => 'form-control date_type','id'=>'date_type' ,'placeholder' => 'WAKTU', 'required']) }}
+                                        {{ Form::select('stuffing_timezone', $date ,old('stuffing_timezone'), ['class' => 'form-control text-black form_select2','id'=>'stuffing_timezone' ,'placeholder' => 'WAKTU', 'required']) }}
                                     </div>
                                 </div>
                             </div>
@@ -385,16 +381,16 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3">
-                                {{ Form::select('memorize_type', $type ,old('memorize_type'), ['class' => 'form-control','id'=>'memorize_type' ,'placeholder' => 'Type Pengapalan', 'required']) }}
+                                {{ Form::select('memorize_type', $type ,old('memorize_type'), ['class' => 'form-control text-black','id'=>'memorize_type' ,'placeholder' => 'Type Pengapalan', 'required']) }}
                             </div>
                             <div class="col-md-3">
-                                {{ Form::select('memorize_size', $size ,old('memorize_size'), ['class' => 'form-control','id'=>'memorize_size' ,'placeholder' => 'Ukuran Pengapalan', 'required']) }}
+                                {{ Form::select('memorize_size', $size ,old('memorize_size'), ['class' => 'form-control text-black','id'=>'memorize_size' ,'placeholder' => 'Ukuran Pengapalan', 'required']) }}
                             </div>
                             <div class="col-md-3">
-                                {{ Form::text('memorize_total', old('memorize_total'), ['class' => 'form-control','id'=>'memorize_total' ,'placeholder' => 'Total' ,'required']) }}
+                                {{ Form::text('memorize_total', old('memorize_total'), ['class' => 'form-control text-black','id'=>'memorize_total' ,'placeholder' => 'Total' ,'required']) }}
                             </div>
                             <div class="col-md-3">
-                                {{ Form::text('memorize_skenario', old('memorize_skenario'), ['class' => 'form-control','id'=>'memorize_skenario' ,'placeholder' => 'Skenario' ,'required']) }}
+                                {{ Form::select('memorize_skenario', $skenario ,old('memorize_skenario'), ['class' => 'form-control text-black','id'=>'memorize_skenario' ,'placeholder' => 'Ukuran Pengapalan', 'required']) }}
                             </div>
                         </div>
                         <hr>
@@ -413,10 +409,10 @@
                                 <label class="form-label" for="file_packing_list">Paking List: <span class="text-danger">*</span></label>
                                 {{ Form::file('file_packing_list',['class' => 'dropify', 'id'=>'file_packing_list','placeholder' => 'input', 'required']) }}
                             </div>
-                            <div class="col-6 mb-3">
+                            {{-- <div class="col-6 mb-3">
                                 <label class="form-label" for="file_invoice">ET & PE: <span class="text-danger">*</span></label>
                                 {{ Form::file('file_invoice',['class' => 'dropify', 'id'=>'file_invoice','placeholder' => 'input' ,'required']) }}
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-4">
@@ -438,9 +434,9 @@
                             <div class="col-md-3">
                             </div>
                             <div class="col-md-6">
-                                <button type="button" class="btn btn-primary me-2">Kirim PPBE</button>
-                                <button type="button" class="btn btn-danger me-2">Kembali</button>
-                                <button type="button" class="btn btn-warning">Draft</button>
+                                <button type="submit" class="btn btn-primary me-2" name="save_btn" value="" id="btn-send"disabled>Kirim PPBE</button>
+                                <button type="submit" class="btn btn-warning me-2" name="save_btn" value="draft">Draft</button>
+                                <a href="{{route('ppbe.index')}}" type="button" class="btn btn-danger me-2">Kembali</a>
                             </div>
                             <div class="col-md-3">
                             </div>

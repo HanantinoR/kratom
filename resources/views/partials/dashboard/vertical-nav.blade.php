@@ -198,7 +198,7 @@
         </ul>
         <ul class="sub-nav collapse" id="penugasan-pages" data-bs-parent="#penugasan">
             <li class="nav-item">
-                <a class="nav-link {{activeRoute(route('penugasan.surat_tugas'))}}" href="{{route('penugasan.surat_tugas')}}">
+                {{-- <a class="nav-link {{activeRoute(route('penugasan.surat_tugas'))}}" href="{{route('penugasan.surat_tugas')}}">
                     <i class="icon">
                           <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                               <g>
@@ -208,7 +208,7 @@
                       </i>
                     <i class="sidenav-mini-icon"> ST </i>
                     <span class="item-name">Surat Tugas</span>
-                </a>
+                </a> --}}
             </li>
         </ul>
     </li>
@@ -234,7 +234,7 @@
         </a>
         <ul class="sub-nav collapse" id="hpl-pages" data-bs-parent="#hpl">
             <li class="nav-item">
-                <a class="nav-link {{activeRoute(route('special-pages.billing'))}}" href="{{route('special-pages.billing')}}">
+                <a class="nav-link {{activeRoute(route('hplps.daftar'))}}" href="{{route('hplps.daftar')}}">
                     <i class="icon">
                           <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                               <g>

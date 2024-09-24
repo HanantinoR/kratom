@@ -33,6 +33,26 @@ $(document).ready(function(){
             });
         }
      });
+
+    $('#btn_pe').on('click',function(){
+        var dataId = $(this).data('id');
+
+        // $('#exampleModal').show();
+
+        $('#id_company').val(dataId);
+
+    });
+
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        // $('#date_modal_pe').each(function(index, element){
+        //     let datepicker = new Datepicker(element,{
+        //         format:"yyyy-mm-dd",
+        //         todayHighLight:true,
+        //         autohide:true,
+        //         showOnFocus:true,
+        //     });
+        // });
+    });
 });
 
 let listwaktu = document.getElementsByClassName('form_date_picker');

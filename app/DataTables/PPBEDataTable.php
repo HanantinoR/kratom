@@ -18,7 +18,7 @@ class PPBEDataTable extends DataTable
      */
     public function dataTable($query, Request $request)
     {
-        // dd($request->all());
+
         return datatables()
             ->eloquent($query)
             // ->editColumn('userProfile.country', function($query) {
@@ -28,19 +28,72 @@ class PPBEDataTable extends DataTable
             //     return $query->userProfile->company_name ?? '-';
             // })
             ->editColumn('status', function($query) {
-                $status = 'warning';
-                switch ($query['status']) {
-                    case 'active':
-                        $status = 'primary';
-                        break;
-                    case 'inactive':
-                        $status = 'danger';
-                        break;
-                    // case 'banned':
-                    //     $status = 'dark';
-                    //     break;
+                // dd($query->approved_date);
+                $status = $query->status;
+                $status_draft = '';
+                $status_submitted = '';
+                $status_verified = '';
+                $merk_status="";
+
+
+                $info = '<span class="text-capitalize badge bg-info mb-2">';
+                $success = '<span class="text-capitalize badge bg-success mb-2">';
+                $secondary = '<span class="text-capitalize badge bg-secondary mb-2">';
+                $info_icon =    '<i class="icon me-2">'.
+                                    '<svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">'.
+                                        '<path fill-rule="evenodd" clip-rule="evenodd" d="M16.334 2.75H7.665C4.644 2.75 2.75 4.889 2.75 7.916V16.084C2.75 19.111 4.635 21.25 7.665 21.25H16.333C19.364 21.25 21.25 19.111 21.25 16.084V7.916C21.25 4.889 19.364 2.75 16.334 2.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>'.
+                                        '<path d="M11.9946 16V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>'.
+                                        '<path d="M11.9896 8.2041H11.9996" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>'.
+                                    '</svg>'.
+                                '</i>';
+
+                $success_icon = '<i class="icon me-2">'.
+                                    '<svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">'.
+                                        '<path fill-rule="evenodd" clip-rule="evenodd" d="M16.3345 2.75024H7.66549C4.64449 2.75024 2.75049 4.88924 2.75049 7.91624V16.0842C2.75049 19.1112 4.63549 21.2502 7.66549 21.2502H16.3335C19.3645 21.2502 21.2505 19.1112 21.2505 16.0842V7.91624C21.2505 4.88924 19.3645 2.75024 16.3345 2.75024Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>'.
+                                        '<path d="M8.43994 12.0002L10.8139 14.3732L15.5599 9.6272" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>'.
+                                    '</svg> '.
+                                '</i>';
+
+                if($status == 'draft'){
+                    $status_draft = '<span class="text-capitalize badge bg-warning mb-2">'.
+                                    '<i class="icon me-2">'.
+                                        '<svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">'.
+                                            '<path fill-rule="evenodd" clip-rule="evenodd" d="M16.334 2.75H7.665C4.644 2.75 2.75 4.889 2.75 7.916V16.084C2.75 19.111 4.635 21.25 7.665 21.25H16.333C19.364 21.25 21.25 19.111 21.25 16.084V7.916C21.25 4.889 19.364 2.75 16.334 2.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>'.
+                                            '<path d="M11.9946 16V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>'.
+                                            '<path d="M11.9896 8.2041H11.9996" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>'.
+                                        '</svg>'.
+                                    '</i>'.
+                                    'Draft '.date("d-m-Y H:i:s", strtotime($query['created_at'])).'</span><br>';
+                    $merk_status .= $status_draft;
+                } else {
+                    if(!empty($query->submitted_date))
+                    {
+                        $status_submitted = 'Pengajuan '.date("d-m-Y", strtotime($query->submitted_date));
+                        $merk_status .= $info.$info_icon.$status_submitted.'</span><br>';
+                    }
+
+                    if(!empty($query->approved_date))
+                    {
+                        $status_verified = 'Terverifikasi '.date("d-m-Y", strtotime($query->approved_date));
+                        $merk_status .= $success.$info_icon.$status_verified.'</span><br>';
+                    } else if($query->status != 'rejected') {
+                        $status_verified = 'Menunggu Verifikasi oleh Pendok';
+                        $merk_status .= $secondary.$info_icon.$status_verified.'</span><br>';
+                    }
+
+                    if(!empty($query->assignment_date))
+                    {
+                        $status_assignment = 'Penugasan '.date("d-m-Y", strtotime($query->assignment_date));
+                        $merk_status .= $success.$success_icon.$status_assignment.'</span><br>';
+                    }else {
+                        $status_assignment = 'Menunggu Penugasan oleh Pendok';
+                        $merk_status .=  $secondary.$info_icon.$status_assignment.'</span><br>';
+                    }
+
                 }
-                return '<span class="text-capitalize badge bg-'.$status.'">'.$query['status'].'</span>';
+
+                    // dd($merk_status);
+                return $merk_status;
             })
             ->editColumn('pengajuan_date', function($query) {
                 return date('Y/m/d',strtotime($query['pengajuan_date']));
@@ -74,19 +127,20 @@ class PPBEDataTable extends DataTable
      */
     public function query()
     {
-        $model = PPBEModel::query();
+        $model = PPBEModel::join('company','company.id','=','ppbe.company_id')
+                        ->select('ppbe.id','ppbe.code','ppbe.date','company.company_name','ppbe.inspection_office_id','ppbe.status','ppbe.created_at');
         $query = $model->newQuery();
-        if ($search = request()->get('pengajuan_code_search')) {
-            $query->where('pengajuan_code', 'like', "%{$search}%");
+        if ($search = request()->get('ppbe_search')) {
+            $query->where('ppbe.code', 'like', "%{$search}%");
         }
 
         if ($search = request()->get('company_name_search')) {
-            $query->where('company_name', 'like', "%{$search}%");
+            $query->where('company.company_name', 'like', "%{$search}%");
         }
 
-
-        return $query;
-        // return $this->applyScopes($model);
+        // dd()
+        // return $query;
+        return $this->applyScopes($model);
     }
 
     /**
@@ -104,7 +158,7 @@ class PPBEDataTable extends DataTable
                         'url' => route('ppbe.index'),
                         'type' => 'GET',
                         'data' => 'function(d) {
-                            d.pengajuan_code_search = $("#pengajuan_code_search").val();
+                            d.ppbe_search = $("#ppbe_search").val();
                             d.company_name_search  = $("#company_name_search").val();
                         }', // Add custom data here
                     ])
@@ -126,10 +180,10 @@ class PPBEDataTable extends DataTable
         return [
             ['data' => 'id', 'name' => 'id', 'title' => 'id','orderable' => false],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status','searchable'=>false],
-            ['data' => 'pengajuan_code', 'name' => 'pengajuan_code', 'title' => 'Nomor'],
+            ['data' => 'code', 'name' => 'code', 'title' => 'Nomor PPBE'],
+            ['data' => 'date', 'name' => 'date', 'title' => 'Tanggal PPBE','searchable'=>false],
             ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Perusahaan','orderable' => false],
-            ['data' => 'pengajuan_date', 'name' => 'pengajuan_date', 'title' => 'Tanggal PPBE','searchable'=>false],
-            ['data' => 'office_inspection', 'name' => 'office_inspection', 'title' => 'Kantor Cabang','searchable'=>false],
+            ['data' => 'inspection_office_id', 'name' => 'inspection_office_id', 'title' => 'Kantor Cabang','searchable'=>false],
             // ['data' => 'userProfile.company_name', 'name' => 'userProfile.company_name', 'title' => 'Company'],
             // ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Join Date'],
             Column::computed('action')

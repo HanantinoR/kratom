@@ -9,12 +9,14 @@ class PenugasanModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'penugasan_assignment';
+    protected $table = 'ppbe_assignment';
 
     protected $fillable = [
-        "surveyor_id", //
-        "invervention_type",
+        "surveyor_id",
+        "intervention_type",
         "letter_number",
-        "ppbe_id"
+        "ppbe_id",
+        "created_by",
+        "updated_by"
     ];
 }

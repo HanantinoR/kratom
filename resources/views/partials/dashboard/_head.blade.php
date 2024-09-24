@@ -35,6 +35,13 @@
 <!-- PPBE -->
 <link rel="stylesheet" href="{{asset('css/ppbe/tambah.css')}}">
 
+<!-- HPLPS -->
+<link rel="stylesheet" href="{{asset('css/hplps/edit.css')}}">
+
+<!-- Dropzone -->
+<link rel="stylesheet" href="{{asset('css/dropzone.css')}}">
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" /> --}}
+
 
 <style>
     th.hide-search input{

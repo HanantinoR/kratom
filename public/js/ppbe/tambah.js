@@ -1,24 +1,24 @@
 $(document).ready(function(){
-    $('.company_name').select2();
+    $('.company_id').select2();
     $('.fob_currency').select2();
     $('.office_id').select2();
     $('.type_kemasan').select2();
-
+    $('.form_select2').select2();
     $('.dropify').dropify({
         messages: {
-            'default': 'Drag and drop a file here or click',
+            'default': '',
             'replace': 'Drag and drop or click to replace',
         },
     });
 
-    $('#company_name').change(function(){
+    $('#company_id').change(function(){
         const company_id = $(this).find(":selected").val();
         $.ajax({
             url:"/data_company/"+company_id,
             method:"GET",
             data:company_id,
             success:function(response){
-                console.log(response.company.company_quota);
+                $('#company_id').val(response.company.id);
                 $('#nib').val(response.company.nib);
                 $('#nomor_et').val(response.company.nomor_et);
                 $('#nomor_pe').val(response.company.nomor_pe);
@@ -32,6 +32,9 @@ $(document).ready(function(){
                 $('#company_address').text(response.company.company_address);
                 $('#company_pic').val(response.company.company_pic);
                 $('#company_position').val(response.company.company_position);
+                $('#company_quota_remaining').val(response.quota.company_quota_remaining);
+                $('#company_quota_used').val(response.quota.company_quota_used);
+
             },
         });
     });
@@ -40,10 +43,10 @@ $(document).ready(function(){
         count = count+1;
         $("#form_barang tbody").append(`
             <tr>
-                <td> <input type="text" name="barang[`+count+ `][nomor_hs]" class="form-control" id="barang[`+count+`][nomor_hs]" placeholder="Nomor HS" required></td>
-                <td> <input type="text" name="barang[`+count+ `][uraian]" class="form-control" id="barang[`+count+`][uraian]" placeholder="Nomor HS" required></td>
-                <td> <input type="text" name="barang[`+count+ `][jumlah_total]" class="form-control" id="barang[`+count+`][jumlah_total]" placeholder="Nomor HS" required></td>
-                <td> <input type="text" name="barang[`+count+ `][nilai_fob]" class="form-control" id="barang[`+count+`][nilai_fob]" placeholder="Nomor HS" required></td>
+                <td> <input type="text" name="barang[`+count+ `][nomor_hs]" class="form-control text-black " id="barang[`+count+`][nomor_hs]" placeholder="Nomor HS" required></td>
+                <td> <input type="text" name="barang[`+count+ `][uraian]" class="form-control text-black " id="barang[`+count+`][uraian]" placeholder="Uraian" required></td>
+                <td> <input type="text" name="barang[`+count+ `][jumlah_total]" class="form-control text-black " id="barang[`+count+`][jumlah_total]" placeholder="Jumlah Total" required></td>
+                <td> <input type="text" name="barang[`+count+ `][nilai_fob]" class="form-control text-black calculateFOB" id="barang[`+count+`][nilai_fob]" placeholder="Nilai FOB" required></td>
                 <td>
                     <button class="btn btn-sm btn-icon btn-danger rmv_tambah" id="" type="button">
                         <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -57,22 +60,55 @@ $(document).ready(function(){
 
     $("#form_barang").on('click', '.rmv_tambah', function() {
         $(this).parent().parent().remove();
+
+        loopCalculateFOB();
+    });
+
+
+    $("#form_barang").on('change','.calculateFOB',function(){
+        loopCalculateFOB();
+    });
+
+    function  loopCalculateFOB()
+    {
+        let totalFOB = 0;
+        $('.calculateFOB').each(function(){
+            const valueFOB = $(this).val() ? parseFloat($(this).val().replace(/[^\d.]+/g, '')) : 0
+            totalFOB = totalFOB + valueFOB
+        });
+        $('#fob_total').val(totalFOB);
+    }
+
+    $('#flexCheckDefault3').on('change',function(){
+        if($(this).is(':checked')){
+            $('#btn-send').removeAttr('disabled');
+        } else {
+            $('#btn-send').attr('disabled','disabled');
+        }
+    });
+
+    $('#send_btn').on('click',function(e){
+        $('#update_btn').attr("disabled",false);
+        e.preventDefault();
+        Swal.fire({
+            title: 'Apakah Anda Yakin',
+            text: "Anda ingin mengajukan Form Ini?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, submit it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#form_edit').submit();
+            }
+        });
     });
 });
+
+
 // querySelector('input[name="inspection_date"]');
     let listwaktu = document.getElementsByClassName('datePicker');
-
-    // for(let waktu of listwaktu)
-    // {
-    //     console.log(waktu);
-        // let datepicker = new Datepicker(waktu,{
-        //     format:"yyyy-mm-dd",
-        //     todayHighLight:true,
-        //     autohide:true,
-        //     showOnFocus:true,
-        // });
-    // }
-
     $('.datePicker').each(function(index, element){
         let datepicker = new Datepicker(element,{
             format:"yyyy-mm-dd",

@@ -26,7 +26,6 @@ function openModal(app_title = '',app_size,app_icon = 'assignment',url,render,_t
 
     $.get(url, function (data) {
         var html = data.data;
-        console.log(html,data)
         if (render !== undefined && render !== '' && render !== null){
             $('.'+render).html(html);
         } else{

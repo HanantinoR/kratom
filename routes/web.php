@@ -48,18 +48,24 @@ Route::group(['middleware' => 'auth'], function () {
     // PPBE Module
     route::resource('ppbe', PPBEController::class);
     route::group(['prefix'=>'ppbe'],function(){
+        Route::post('draft',[PPBEController::class,'save_draft'])->name('ppbe.draft');
+        Route::get('verify/{id}',[PPBEController::class,'verify_ppbe'])->name('ppbe.verify');
         Route::get('pdf_export/{id}',[PPBEController::class,'pdf_export'])->name('ppbe.pdf');
     });
 
     //penugasan Module
     Route::group(['prefix' => 'penugasan'],function(){
         route::get('index',[PenugasanController::class,'index'])->name('penugasan.index');
-        route::get('surat-tugas',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
+        // route::get('surat-tugas',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
+        Route::post('save',[PenugasanController::class,'save'])->name('penugasan.save');
+        Route::get('data_ppbe/{id}',[PenugasanController::class,'getDataPpbe'])->name('ppbe.assignment');
     });
 
 
     Route::group(['prefix' => 'pemeriksaan'], function(){
-        route::get('daftar', [HPLPSController::class,'index'])->name('hpl.daftar');
+        route::get('daftar', [HPLPSController::class,'index'])->name('hplps.daftar');
+        route::get('edit/{id}', [HPLPSController::class,'edit'])->name('hplps.edit');
+        route::post('save', [HPLPSController::class,'save'])->name('hplps.save');
     });
 
     // Users Module
@@ -67,14 +73,16 @@ Route::group(['middleware' => 'auth'], function () {
 
     //perijinan Module
     Route::resource('perijinan',PerijinanController::class);
+    route::post('update/pe/{id}',[PerijinanController::class,'modal_update'])->name('perijinan.update_pe');
     Route::get('data_company/{id}',[MasterCompanyController::class,'getCompany'])->name('data.company');
-
     //Inatrade Module
     Route::group(['prefix' => 'inatrade'], function(){
         Route::get('daftar', [InatradeController::class, 'daftar'])->name('inatrade.daftar');
         Route::get('edit', [InatradeController::class, 'edit'])->name('inatrade.edit');
         Route::post('store', [InatradeController::class, 'store'])->name('inatrade.store');
     });
+
+    Route::post('/upload', [HPLPSController::class, 'uploadFile'])->name('upload');
 });
 
 //App Details Page => 'Dashboard'], function() {

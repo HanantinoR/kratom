@@ -14,6 +14,7 @@ class PerijinanHistoryModel extends Model
         'company_id',
         'field',
         'old_value',
-        'new_value'
+        'new_value',
+        'notes'
     ];
 }

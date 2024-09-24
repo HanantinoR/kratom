@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PerijinanModel;
-use App\Models\PengajuanModel;
+use App\Models\HistoryQuotaModel;
 
 class MasterCompanyController extends Controller
 {
@@ -12,17 +12,11 @@ class MasterCompanyController extends Controller
     {
         // dd($id);
         $company = PerijinanModel::where('id',$id)->first();
-        // dd($company->id);
-        $pengajuan_perusahaan = PengajuanModel::query()->where('company_id',$company);
-        if(!empty($pengajuan_perusahaan)){
-            $quota_used = $pengajuan_perusahaan->join('pengajuan_barang','PPBE.id','=','pengajuan_barang.pengajuan_id')
-                                        ->sum('pengajuan_baran.total');
-        } else {
-            $quota_used = 0;
-        }
+        $check_kuota = HistoryQuotaModel::where('company_id',$id)->orderBy('created_at','desc')->first();
+
         return response()->json([
             'company' => $company,
-            'quota_used' => $quota_used
+            'quota' => $check_kuota
         ],200);
     }
 }
