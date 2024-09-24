@@ -2,8 +2,20 @@
     {{ $dataTable->scripts() }}
 @endpush
 <style>
-    .dataTables_filter{
+    .dataTables_filter, .dataTables_info {
         display:none;
+    }
+    .bcops-header{
+        padding:3% !important;
+    }
+    .form-bcops-adjust{
+        padding:1% !important
+    }
+    .fs-14{
+        font-size:14px !important;
+    }
+    .field-bcops-adjust{
+        padding: 0.5rem 0.3rem !important;
     }
 </style>
 <x-app-layout :assets="$assets ?? []">
@@ -20,13 +32,13 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            @if($assets[1] == 'pengajuan_list')
+                            @if($assets[1] == 'ppbe_list')
                                 <div class="col-md-4">
                                     <label for="pengajuan_code" class="form-label">Nomor PPBE:</label>
                                     {{Form::search('ppbe_search',null,["class"=>"form-control form-control-sm","id"=>"ppbe_search","aria-controls"=>"dataTable"])}}
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="pengajuan_code" class="form-label">Nama Perusahaan:</label>
+                                    <label for="company_name_search" class="form-label">Nama Perusahaan:</label>
                                     {{Form::search('company_name_search',null,["class"=>"form-control form-control-sm","id"=>"company_name_search","aria-controls"=>"dataTable"])}}
                                 </div>
                             @elseif($assets[1] == 'penugasan_list')
@@ -56,6 +68,107 @@
                                     <label for="ls_search" class="form-label">Nomor LS</label>
                                     {{ Form::search('ls_search',null, ["class" => "form-control form-control-sm", "id" => 'ls_search', 'aria-conntrols' => 'dataTable']) }}
                                 </div>
+                            @elseif($assets[1] == 'bcops_list')
+                                {!! Form::open(['route' => ['bcops.tambah'], 'method' => 'post', 'enctype' => 'multipart/form-data', 'novalidate', 'class' => 'needs-validation',"id"=>"bcopsAdd"]) !!}
+                                    <div class="row">
+                                        <p>Input BCOPS Baru:</p>
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-header text-white text-center bg-danger bcops-header">TPS Merah</div>
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <div class="row fs-14">
+                                                            <div class="col-md-3 form-bcops-adjust">
+                                                                <label class="form-label" for="merah_seri">Seri<span class="text-danger">*</span></label>
+                                                                {{ Form::text('merah_seri',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'merah_seri', 'placeholder' => 'No. Seri' ,'required']) }}
+                                                            </div>
+                                                            <div class="col-md-6 form-bcops-adjust">
+                                                                <label class="form-label" for="merah_nomor_urut">No. Urut Awal<span class="text-danger">*</span></label>
+                                                                {{ Form::text('merah_nomor_urut',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'merah_nomor_urut', 'placeholder' => 'No. Urut Awal' ,'required']) }}
+                                                            </div>
+                                                            <div class="col-md-3 form-bcops-adjust">
+                                                                <label class="form-label" for="merah_jumlah">Jumlah<span class="text-danger">*</span></label>
+                                                                {{ Form::text('merah_jumlah',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'merah_jumlah', 'placeholder' => 'Jumlah ' ,'required']) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-header text-white text-center bg-success bcops-header">TPS Hijau</div>
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <div class="row fs-14">
+                                                            <div class="col-md-3 form-bcops-adjust">
+                                                                <label class="form-label" for="hijau_seri">Seri<span class="text-danger">*</span></label>
+                                                                {{ Form::text('hijau_seri',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'hijau_seri', 'placeholder' => 'No. Seri' ,'required']) }}
+                                                            </div>
+                                                            <div class="col-md-6 form-bcops-adjust">
+                                                                <label class="form-label" for="hijau_nomor_awal">No. Urut Awal<span class="text-danger">*</span></label>
+                                                                {{ Form::text('hijau_nomor_awal',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'hijau_nomor_awal', 'placeholder' => 'No. Urut Awal' ,'required']) }}
+                                                            </div>
+                                                            <div class="col-md-3 form-bcops-adjust">
+                                                                <label class="form-label" for="hijau_jumlah">Jumlah<span class="text-danger">*</span></label>
+                                                                {{ Form::text('hijau_jumlah',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'hijau_jumlah', 'placeholder' => 'Jumlah ' ,'required']) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-header text-center text-white bg-info bcops-header">Lock Seal</div>
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <div class="row fs-14">
+                                                            <div class="col-md-3 form-bcops-adjust">
+                                                                <label class="form-label" for="lock_seri">Seri<span class="text-danger">*</span></label>
+                                                                {{ Form::text('lock_seri',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'lock_seri', 'placeholder' => 'No. Seri' ,'required']) }}
+                                                            </div>
+                                                            <div class="col-md-6 form-bcops-adjust">
+                                                                <label class="form-label" for="lock_no_urut">No. Urut Awal<span class="text-danger">*</span></label>
+                                                                {{ Form::text('lock_no_urut',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'lock_no_urut', 'placeholder' => 'No. Urut Awal' ,'required']) }}
+                                                            </div>
+                                                            <div class="col-md-3 form-bcops-adjust">
+                                                                <label class="form-label" for="lock_jumlah">Jumlah<span class="text-danger">*</span></label>
+                                                                {{ Form::text('lock_jumlah',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'lock_jumlah', 'placeholder' => 'Jumlah ' ,'required']) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-header text-center bg-info text-white bcops-header">Thread Seal</div>
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <div class="row fs-14">
+                                                            <div class="col-md-3 form-bcops-adjust">
+                                                                <label class="form-label" for="thread_seri">Seri<span class="text-danger">*</span></label>
+                                                                {{ Form::text('thread_seri',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'thread_seri', 'placeholder' => 'No. Seri' ,'required']) }}
+                                                            </div>
+                                                            <div class="col-md-6 form-bcops-adjust">
+                                                                <label class="form-label" for="thread_no_urut">No. Urut Awal<span class="text-danger">*</span></label>
+                                                                {{ Form::text('thread_no_urut',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'thread_no_urut', 'placeholder' => 'No. Urut Awal' ,'required']) }}
+                                                            </div>
+                                                            <div class="col-md-3 form-bcops-adjust">
+                                                                <label class="form-label" for="thread_jumlah">Jumlah<span class="text-danger">*</span></label>
+                                                                {{ Form::text('thread_jumlah',null, ['class' => 'form-control text-black field-bcops-adjust', 'id' => 'thread_jumlah', 'placeholder' => 'Jumlah ' ,'required']) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align:right !important">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                {!! Form::close() !!}
                             @endif
                         </div>
                     </div>

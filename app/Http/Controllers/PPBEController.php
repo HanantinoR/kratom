@@ -509,11 +509,31 @@ class PPBEController extends Controller
         //
     }
 
+    public function ppbe($id){
+        $data =[
+            'title' => 'Test PPBE',
+            'content' =>'ISIPPBE'
+        ];
+        $documentPDF = View::make('ppbe.export',['data'=>$data])->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($documentPDF);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        return $dompdf->stream('ppbe.export',['Attachment'=>false]);
+    }
+
     public function pdf_export($id)
     {
         $data =[
             'title' => 'test',
-            'contetnt' =>'coba'
+            'content' =>'coba'
         ];
         $documentPDF = View::make('ppbe.pdf',['data'=>$data])->render();
 
@@ -531,4 +551,23 @@ class PPBEController extends Controller
 
     }
 
+    public function ls_pdf($id){
+        $data =[
+            'title' => 'test',
+            'content' =>'coba'
+        ];
+        $documentPDF = View::make('ppbe.ls',['data'=>$data])->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($documentPDF);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        return $dompdf->stream('ppbe.ls',['Attachment'=>false]);
+    }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
 use App\Http\Controllers\InatradeController;
+use App\Http\Controllers\BcopsController;
 use App\Http\Controllers\MasterCompanyController;
 use Illuminate\Support\Facades\Artisan;
 // Packages
@@ -50,7 +51,12 @@ Route::group(['middleware' => 'auth'], function () {
     route::group(['prefix'=>'ppbe'],function(){
         Route::post('draft',[PPBEController::class,'save_draft'])->name('ppbe.draft');
         Route::get('verify/{id}',[PPBEController::class,'verify_ppbe'])->name('ppbe.verify');
+        Route::get('export/{id}',[PPBEController::class,'ppbe'])->name('ppbe.export');
         Route::get('pdf_export/{id}',[PPBEController::class,'pdf_export'])->name('ppbe.pdf');
+        Route::get('ls/{id}', [PPBEController::class, 'ls_pdf'])->name('ppbe.ls_pdf');
+        // Route::get('ls/{id}', function(){
+        //     return view('ppbe.ls');
+        // });
     });
 
     //penugasan Module
@@ -59,6 +65,8 @@ Route::group(['middleware' => 'auth'], function () {
         // route::get('surat-tugas',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
         Route::post('save',[PenugasanController::class,'save'])->name('penugasan.save');
         Route::get('data_ppbe/{id}',[PenugasanController::class,'getDataPpbe'])->name('ppbe.assignment');
+        route::get('surat-tugas',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
+        route::get('surat-penugasan',[PenugasanController::class,'surat_penugasan'])->name('penugasan.surat-penugasan');
     });
 
 
@@ -66,6 +74,11 @@ Route::group(['middleware' => 'auth'], function () {
         route::get('daftar', [HPLPSController::class,'index'])->name('hplps.daftar');
         route::get('edit/{id}', [HPLPSController::class,'edit'])->name('hplps.edit');
         route::post('save', [HPLPSController::class,'save'])->name('hplps.save');
+    });
+
+    Route::group(['prefix'=>'pengajuan'],function(){
+        Route::get('pdf_export/{id}',[PengajuanController::class,'pdf_export'])->name('pengajuan.pdf');
+        Route::get('ppbe/{id}', [PengajuanController::class, 'ppbe'])->name('pengajuan.ppbe');
     });
 
     // Users Module
@@ -83,6 +96,10 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::post('/upload', [HPLPSController::class, 'uploadFile'])->name('upload');
+    Route::group(['prefix' => 'bcops'], function(){
+        Route::get('daftar', [BcopsController::class, 'daftar'])->name('bcops.daftar');
+        Route::post('tambah', [BcopsController::class, 'tambah'])->name('bcops.tambah');
+    });
 });
 
 //App Details Page => 'Dashboard'], function() {

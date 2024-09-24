@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\PPBEModel;
 use App\Models\PenugasanModel;
 use App\Models\PpbeHistoryModel;
+use Illuminate\Support\Facades\View;
+use Dompdf\Dompdf;
 
 class PenugasanController extends Controller
 {
@@ -17,7 +19,7 @@ class PenugasanController extends Controller
         $pageTitle = trans('global-message.list_form_title',['form' => trans('penugasan.title')] );
         $auth_user = AuthHelper::authSession();
         $assets = ['data-table','penugasan_list'];
-        $headerAction = '<a href="" class="btn btn-sm btn-primary me-2" role="button">Print Penugasan</a><a class="btn btn-sm btn-warning me-2" role="button">Print Surat Tugas</a>';
+        $headerAction = '<a href="surat-penugasan" class="btn btn-sm btn-primary me-2" role="button">Print Surat Penugasan</a><a href="surat-tugas" class="btn btn-sm btn-warning me-2" role="button">Print Surat Tugas</a>';
         return $dataTable->render('global.datatable', compact('pageTitle','auth_user','assets','headerAction'));
     }
 
@@ -86,5 +88,45 @@ class PenugasanController extends Controller
         return response()->json([
             'ppbe' => $ppbe,
         ],200);
+    }
+    
+    public function surat_tugas(){
+        $data =[
+            'title' => 'Surat Tugas',
+            'content' =>'Penugasan'
+        ];
+        $documentPDF = View::make('penugasan.surat-tugas',['data'=>$data])->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($documentPDF);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        return $dompdf->stream('penugasan.surat-tugas',['Attachment'=>false]);
+    }
+
+    public function surat_penugasan(){
+        $data =[
+            'title' => 'Surat Penugasan',
+            'content' =>'Penugasan'
+        ];
+        $documentPDF = View::make('penugasan.surat-penugasan',['data'=>$data])->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($documentPDF);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        return $dompdf->stream('penugasan.surat-penugasan',['Attachment'=>false]);
     }
 }
