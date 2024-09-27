@@ -13,7 +13,7 @@
             $skenario = ['1' => '1', '2' => '2','3'=>'3'];
 
         ?>
-        {!! Form::open(['route' => ['ppbe.store'],'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+        {!! Form::open(['route' => ['ppbe.store'],'method' => 'post', 'enctype' => 'multipart/form-data','novalidate', 'class' => 'needs-validation']) !!}
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12">
                 <div class="card">
@@ -390,24 +390,24 @@
                                 {{ Form::text('memorize_total', old('memorize_total'), ['class' => 'form-control text-black','id'=>'memorize_total' ,'placeholder' => 'Total' ,'required']) }}
                             </div>
                             <div class="col-md-3">
-                                {{ Form::select('memorize_skenario', $skenario ,old('memorize_skenario'), ['class' => 'form-control text-black','id'=>'memorize_skenario' ,'placeholder' => 'Ukuran Pengapalan', 'required']) }}
+                                {{ Form::select('memorize_skenario', $skenario ,old('memorize_skenario'), ['class' => 'form-control text-black','id'=>'memorize_skenario' ,'placeholder' => 'Skenario', 'required']) }}
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="file_nib">NIB: <span class="text-danger">*</span></label>
-                                {{ Form::file('file_nib',['class' => 'dropify', 'id'=>'file_nib','placeholder' => 'input', 'required']) }}
+                                {{ Form::file('file_nib',['class' => 'dropify', 'id'=>'file_nib','placeholder' => 'input',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip",'required']) }}
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="file_invoice">Invoice: <span class="text-danger">*</span></label>
-                                {{ Form::file('file_invoice',['class' => 'dropify', 'id'=>'file_invoice','placeholder' => 'input', 'required']) }}
+                                {{ Form::file('file_invoice',['class' => 'dropify', 'id'=>'file_invoice','placeholder' => 'input', "data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip",'required']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="file_packing_list">Paking List: <span class="text-danger">*</span></label>
-                                {{ Form::file('file_packing_list',['class' => 'dropify', 'id'=>'file_packing_list','placeholder' => 'input', 'required']) }}
+                                {{ Form::file('file_packing_list',['class' => 'dropify', 'id'=>'file_packing_list','placeholder' => 'input',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ,'required']) }}
                             </div>
                             {{-- <div class="col-6 mb-3">
                                 <label class="form-label" for="file_invoice">ET & PE: <span class="text-danger">*</span></label>

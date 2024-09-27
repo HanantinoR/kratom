@@ -9,49 +9,6 @@ class PPBEModel extends Model
 {
     use HasFactory;
     protected $table = 'ppbe';
-    // protected $fillable = [
-    //     'code',
-    //     'date',
-    //     'company_id',
-    //     'merk',
-    //     'packing_number',
-    //     'packing_total',
-    //     'fob_total',
-    //     'fob_currency',
-    //     'invoice_number',
-    //     'invoice_date',
-    //     'packing_list_number',
-    //     'packing_list_date',
-    //     'buyer_name',
-    //     'buyer_address',
-    //     'country_id',
-    //     'country_destination_id',
-    //     'destination_port_id',
-    //     'loading_port_id',
-    //     'goods_storage',
-    //     'inspection_office_id',
-    //     'inspection_date',
-    //     'inspection_timezone',
-    //     'inspection_address',
-    //     'inspection_province_id',
-    //     'inspection_city_id',
-    //     'inspection_pic_name',
-    //     'inspection_pic_phone',
-    //     'stuffing_office_id',
-    //     'stuffing_date',
-    //     'stuffing_timezone',
-    //     'stuffing_address',
-    //     'status',
-    //     'memorize_type',
-    //     'memorize_feet',
-    //     'memorize_total',
-    //     'memorize_skenario',
-    //     'file_nib',
-    //     'file_invoice',
-    //     'file_packing_list',
-    //     'notes',
-    // ];
-
     protected $fillable =[
         'code',
         'date',
@@ -86,7 +43,7 @@ class PPBEModel extends Model
         'stuffing_timezone',
         'stuffing_address',
         'status',
-        'checkbox_data',
+        // 'checkbox_data',
         'memorize_type',
         'memorize_size',
         'memorize_total',
@@ -104,7 +61,8 @@ class PPBEModel extends Model
         'status_name',
         'submitted_date',
         'approved_date',
-        'assignment_date'
+        'assignment_date',
+        'inspection_date'
     ];
 
     public function getStatusNameAttribute()
@@ -129,7 +87,7 @@ class PPBEModel extends Model
     public function getSubmittedDateAttribute()
     {
         $result = null;
-        if (in_array($this->status, ['submitted', 'approved', 'pending', 'pending_process', 'verified', 'print_assignment_letter', 'assignment'])) {
+        if (in_array($this->status, ['submitted', 'approved', 'print_assignment_letter', 'assignment'])) {
             $result = date("d-m-Y H:i:s", strtotime($this->created_at));
         }
 
@@ -158,6 +116,17 @@ class PPBEModel extends Model
         return $result;
     }
 
+    public function getInspectionDateAttribute()
+    {
+        $result = null;
+        if (in_array($this->status, ['print_assignment_letter', 'assignment'])) {
+            $hplps = HplpsModel::where('ppbe_id', $this->id)->whereIn('status',['hpl_submitted','verified','verified_signed_ls','print_ls','accepted_ls'])->orderBy('id', 'desc')->first();
+            if (!empty($hplps)) $result = date("d-m-Y H:i:s", strtotime($hplps->inspection_date_end));
+        }
+
+        return $result;
+    }
+
     public function goods()
     {
         return $this->hasMany(PpbeGoodsModel::class,'ppbe_id');
@@ -175,7 +144,7 @@ class PPBEModel extends Model
 
     public function assignments()
     {
-        return $this->hasMany(PenugasanModel::class,'ppbe_id');
+        return $this->hasOne(PenugasanModel::class,'ppbe_id');
     }
 
     public function hplps()

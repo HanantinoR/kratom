@@ -314,6 +314,29 @@ $(document).ready(function(){
             ]
         });
     }
+    else if('{{$assets[1]}}' == 'penugasan_list')
+    {
+        var table = $('#dataTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('penugasan.index') }}",
+                data: function(d) {
+                    d.ppbe_search  = $('#ppbe_search').val();
+                    d.company_name_search  = $('#company_name_search').val();
+                }
+            },
+            columns:[
+                {data: 'id', name: 'id'},
+                {data: 'code', name: 'code'},
+                {data: 'date', name: 'date',},
+                {data: 'buyer_name', name: 'buyer_name'},
+                {data: 'inspection_office_id', name: 'inspection_office_id'},
+                {data: 'inspection_date', name: 'inspection_date'},
+                {data: 'action', name:'action'}
+            ]
+        });
+    }
 
     $("#ppbe_search").on("keyup", function(e) {
         table.draw();
@@ -328,13 +351,6 @@ $(document).ready(function(){
         table.draw();
     });
 
-    if('{{$assets[1]}}' == 'penugasan_list')
-    {
-        console.log('b');
-        $('#assign_btn').on('click',function(){
-            console.log('a');
-        });
-    }
     $('#assign_btn').on('click',function(){
         console.log('b');
     })

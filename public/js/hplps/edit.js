@@ -510,57 +510,42 @@ $('.dateControl').each(function(index, element){
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    Dropzone.options.myDropzone = {
-        url: '/upload', // Your upload URL
-        method: 'post',
-        paramName: 'file',
-        maxFilesize: 2, // MB
-        acceptedFiles: 'image/*',
-        clickable: true,
-
+    Dropzone.options.fileUpload = {
+        url: '/pemeriksaan/upload',
+        method:"POST",
+        paramName: 'files', // The name that will be used to transfer the file
+        maxFilesize: 4, // MB
+        acceptedFiles: ".pdf,.jpg,.jpeg,.png",
+        headers: {
+            'X-CSRF-TOKEN': $('input[name="_token"]').val()
+        },
         init: function() {
-            var myDropzone = this;
-            var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            myDropzone.on("sending", function(file, xhr, formData) {
-                formData.append('_token', csrfToken); // Append CSRF token
-            });
-
             this.on("success", function(file, response) {
-                var imageItem = document.createElement("div");
-                imageItem.className = "image-item";
-                imageItem.id = "image-" + response.id;
-                imageItem.innerHTML = `
-                    <img src="${response.path}" width="100" alt="Uploaded Image">
-                    <button class='remove-file' data-id='${response.id}'>Remove</button>`;
-
-                // Append the new image item
-                document.querySelector('.image-preview').appendChild(imageItem);
-
-                // Add remove functionality
-                imageItem.querySelector(".remove-file").addEventListener("click", function(e) {
-                    e.preventDefault();
-                    fetch('/remove/' + response.id, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken // Include CSRF token
-                        }
-                    }).then(function(response) {
-                        if (response.ok) {
-                            myDropzone.removeFile(file); // Remove from Dropzone UI
-                            document.getElementById("image-" + response.id).remove(); // Remove from display
-                        } else {
-                            console.error('Error removing file.');
-                        }
-                    }).catch(function(error) {
-                        console.error('Error:', error);
-                    });
-                });
-            });
-
-            this.on("error", function(file, response) {
+                // Optionally, you can handle the response here if needed
                 console.log(response);
             });
+
+            this.on("addedfile", function(file) {
+                // Create a preview for the image
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.style.width = "100%"; // Set a fixed width or any styling
+                        img.style.height = "auto";
+
+                        // Append the image to the Dropzone preview element
+                        const previewElement = Dropzone.createElement('<div class="dz-preview dz-file-preview"></div>');
+                        previewElement.appendChild(img);
+                        file.previewElement.appendChild(previewElement);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        },
+        error: function(file, response) {
+            console.log(response);
         }
     };
 });

@@ -12,6 +12,8 @@ class HplpsModel extends Model
     protected $table = 'hplps';
     protected $fillable = [
         'ppbe_id',
+        'ls_id',
+        'lhp_id',
         'date',
         'surveyor_id',
         'inspection_date_start',
@@ -27,6 +29,8 @@ class HplpsModel extends Model
         'inpsection_address',
         'fob_total_hpl',
         'fob_currency_hpl',
+        'hpl_feedback_reason',
+        'hpl_feedback_file',
         'request_id',
         'verify_id',
     ];
@@ -64,7 +68,7 @@ class HplpsModel extends Model
         return $this->hasMany(HplpsGoodsModel::class,'hplps_id');
     }
 
-    public function memoryzations()
+    public function memory()
     {
         return $this->hasMany(HplpsMemorizationsModel::class,'hplps_id');
     }

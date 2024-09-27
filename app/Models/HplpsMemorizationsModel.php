@@ -19,18 +19,12 @@ class HplpsMemorizationsModel extends Model
         'series_init',
         'series_total',
         'series_type',
-        'tm_series',
-        'tm_init',
-        'tm_final',
-        'th_series',
-        'th_init',
-        'th_final',
-        'ts_series',
-        'ts_init',
-        'ts_final'
+        'tps_merah',
+        'tps_hijau',
+        'thread_seal',
     ];
 
-    public function hplps_id()
+    public function hplps()
     {
         return $this->belongsTo(HplpsModel::class,'hplps_id');
     }

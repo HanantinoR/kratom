@@ -24,15 +24,9 @@ class CreateHplpsMemorizationsTable extends Migration
             $table->string('series_init')->nullable();
             $table->string('series_total')->nullable();
             $table->string('series_type')->nullable();
-            $table->string('tm_series')->nullable();
-            $table->string('tm_init')->nullable();
-            $table->string('tm_final')->nullable();
-            $table->string('th_series')->nullable();
-            $table->string('th_init')->nullable();
-            $table->string('th_final')->nullable();
-            $table->string('ts_series')->nullable();
-            $table->string('ts_init')->nullable();
-            $table->string('ts_final')->nullable();
+            $table->string('tps_merah')->nullable();
+            $table->string('tps_hijau')->nullable();
+            $table->string('thread_seal')->nullable();
             $table->timestamps();
         });
     }

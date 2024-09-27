@@ -480,7 +480,7 @@
                     <div class="card-footer">
                         <div class="row justify-content-center">
                             <div class="col-md-4">
-                                {{Form::hidden('update_btn','submit',['class'=>'form-control','id'=>'update_btn','placeholder'=>'Catatan','disabled'])}}
+                                {{Form::hidden('update_btn','submitted',['class'=>'form-control','id'=>'update_btn','placeholder'=>'Catatan','disabled'])}}
                             </div>
                             <div class="col-md-6">
                                 <button type="button" class="btn btn-success me-2" id="send_btn" value="submitted">Ajukan PPBE</button>

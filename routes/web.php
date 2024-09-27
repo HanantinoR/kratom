@@ -7,6 +7,7 @@ use App\Http\Controllers\PenugasanController;
 use App\Http\Controllers\HPLPSController;
 use App\Http\Controllers\PerijinanController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LsController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
@@ -74,11 +75,19 @@ Route::group(['middleware' => 'auth'], function () {
         route::get('daftar', [HPLPSController::class,'index'])->name('hplps.daftar');
         route::get('edit/{id}', [HPLPSController::class,'edit'])->name('hplps.edit');
         route::post('save', [HPLPSController::class,'save'])->name('hplps.save');
+        route::get('verify/{id}',[HPLPSController::class,'verify'])->name('hplps.verify');
+        route::put('update/{id}',[HPLPSController::class,'update'])->name('hplps.update');
+        route::put('detail/{id}',[HPLPSController::class,'show'])->name('hplps.detail');
+        Route::post('/upload', [HPLPSController::class, 'uploadFile'])->name('hplps.upload');
     });
 
     Route::group(['prefix'=>'pengajuan'],function(){
         Route::get('pdf_export/{id}',[PengajuanController::class,'pdf_export'])->name('pengajuan.pdf');
-        Route::get('ppbe/{id}', [PengajuanController::class, 'ppbe'])->name('pengajuan.ppbe');
+        // Route::get('ppbe/{id}', [PengajuanController::class, 'ppbe'])->name('pengajuan.ppbe');
+    });
+
+    route::group(['prefix' => 'ls' ], function(){
+        Route::get('index',[LsController::class,'index'])->name('ls.daftar');
     });
 
     // Users Module
@@ -94,8 +103,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('edit', [InatradeController::class, 'edit'])->name('inatrade.edit');
         Route::post('store', [InatradeController::class, 'store'])->name('inatrade.store');
     });
-
-    Route::post('/upload', [HPLPSController::class, 'uploadFile'])->name('upload');
+    //BCOPS MODULE
     Route::group(['prefix' => 'bcops'], function(){
         Route::get('daftar', [BcopsController::class, 'daftar'])->name('bcops.daftar');
         Route::post('tambah', [BcopsController::class, 'tambah'])->name('bcops.tambah');

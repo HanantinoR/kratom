@@ -28,8 +28,8 @@ class PPBEDataTable extends DataTable
             //     return $query->userProfile->company_name ?? '-';
             // })
             ->editColumn('status', function($query) {
-                // dd($query->approved_date);
-                $status = $query->status;
+                // dd($query->inspection_date);
+                $status =$query->ppbe_status  ;
                 $status_draft = '';
                 $status_submitted = '';
                 $status_verified = '';
@@ -74,8 +74,8 @@ class PPBEDataTable extends DataTable
 
                     if(!empty($query->approved_date))
                     {
-                        $status_verified = 'Terverifikasi '.date("d-m-Y", strtotime($query->approved_date));
-                        $merk_status .= $success.$info_icon.$status_verified.'</span><br>';
+                        $status_verified = 'Pengajuan Terverifikasi '.date("d-m-Y", strtotime($query->approved_date));
+                        $merk_status .= $success.$success_icon.$status_verified.'</span><br>';
                     } else if($query->status != 'rejected') {
                         $status_verified = 'Menunggu Verifikasi oleh Pendok';
                         $merk_status .= $secondary.$info_icon.$status_verified.'</span><br>';
@@ -83,10 +83,19 @@ class PPBEDataTable extends DataTable
 
                     if(!empty($query->assignment_date))
                     {
-                        $status_assignment = 'Penugasan '.date("d-m-Y", strtotime($query->assignment_date));
+                        $status_assignment = 'Pengajuan Penugasan '.date("d-m-Y", strtotime($query->assignment_date));
                         $merk_status .= $success.$success_icon.$status_assignment.'</span><br>';
                     }else {
                         $status_assignment = 'Menunggu Penugasan oleh Pendok';
+                        $merk_status .=  $secondary.$info_icon.$status_assignment.'</span><br>';
+                    }
+
+                    if(!empty($query->inspection_date))
+                    {
+                        $status_assignment = 'Sudah Dilakukan pemeriksaan '.date("d-m-Y", strtotime($query->assignment_date));
+                        $merk_status .= $success.$success_icon.$status_assignment.'</span><br>';
+                    }else {
+                        $status_assignment = 'Menunggu Pemeriksaan oleh Petugas';
                         $merk_status .=  $secondary.$info_icon.$status_assignment.'</span><br>';
                     }
 
@@ -98,8 +107,8 @@ class PPBEDataTable extends DataTable
             ->editColumn('pengajuan_date', function($query) {
                 return date('Y/m/d',strtotime($query['pengajuan_date']));
             })
-            ->filterColumn('pengajuan_code',function($query,$keyword){
-                return $query->where('pengajuan_code','like',"%{$keyword}%");
+            ->filterColumn('ppbe.code',function($query,$keyword){
+                return $query->where('ppbe.code','like',"%{$keyword}%");
             })
             // ->filterColumn('full_name', function($query, $keyword) {
             //     $sql = "CONCAT(users.first_name,' ',users.last_name)  like ?";
@@ -128,7 +137,8 @@ class PPBEDataTable extends DataTable
     public function query()
     {
         $model = PPBEModel::join('company','company.id','=','ppbe.company_id')
-                        ->select('ppbe.id','ppbe.code','ppbe.date','company.company_name','ppbe.inspection_office_id','ppbe.status','ppbe.created_at');
+                        ->leftjoin('hplps','hplps.ppbe_id','=','ppbe.id')
+                        ->select('ppbe.id','ppbe.code','ppbe.date','company.company_name','ppbe.inspection_office_id','ppbe.status as status','ppbe.created_at','hplps.status as hplps_status');
         $query = $model->newQuery();
         if ($search = request()->get('ppbe_search')) {
             $query->where('ppbe.code', 'like', "%{$search}%");

@@ -19,7 +19,8 @@ class PenugasanController extends Controller
         $pageTitle = trans('global-message.list_form_title',['form' => trans('penugasan.title')] );
         $auth_user = AuthHelper::authSession();
         $assets = ['data-table','penugasan_list'];
-        $headerAction = '<a href="surat-penugasan" class="btn btn-sm btn-primary me-2" role="button">Print Surat Penugasan</a><a href="surat-tugas" class="btn btn-sm btn-warning me-2" role="button">Print Surat Tugas</a>';
+        $headerAction = '<a href="surat-penugasan" class="btn btn-sm btn-primary me-2" role="button" target="_blank">Print Surat Penugasan</a>
+                        <a href="surat-tugas" class="btn btn-sm btn-warning me-2" role="button" target="_blank">Print Surat Tugas</a>';
         return $dataTable->render('global.datatable', compact('pageTitle','auth_user','assets','headerAction'));
     }
 
@@ -89,7 +90,7 @@ class PenugasanController extends Controller
             'ppbe' => $ppbe,
         ],200);
     }
-    
+
     public function surat_tugas(){
         $data =[
             'title' => 'Surat Tugas',
@@ -121,7 +122,7 @@ class PenugasanController extends Controller
         $dompdf->loadHtml($documentPDF);
 
         // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->setPaper('A4', 'landscape');
 
         // Render the HTML as PDF
         $dompdf->render();

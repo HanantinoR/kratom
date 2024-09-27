@@ -16,7 +16,7 @@ class CreateBcopsUsageTable extends Migration
         Schema::create('bcops_usage', function (Blueprint $table) {
             $table->id();
             $table->foreignId('hplps_id')->constrained('hplps')->onDelete('cascade');
-            $table->integer('type')->nullable();
+            $table->string('type')->nullable();
             $table->string('series')->nullable();
             $table->string('series_init')->nullable();
             $table->string('series_final')->nullable();

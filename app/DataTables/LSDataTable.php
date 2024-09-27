@@ -8,7 +8,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class HPLPSDataTable extends DataTable
+class LSDataTable extends DataTable
 {
         /**
      * Build DataTable class.
@@ -21,9 +21,9 @@ class HPLPSDataTable extends DataTable
 
         return datatables()
             ->eloquent($query)
-            // ->editColumn('userProfile.country', function($query) {
-            //     return $query->userProfile->country ?? '-';
-            // })
+            ->editColumn('code', function($row) {
+                return '<a href="'.route('ppbe.edit',$row->id).'">'.$row->code.'</a>';
+            })
             // ->editColumn('userProfile.company_name', function($query) {
             //     return $query->userProfile->company_name ?? '-';
             // })
@@ -62,29 +62,29 @@ class HPLPSDataTable extends DataTable
                     $status_signed_ls = 'Menunggu Verifikasi Tanda Tangan';
                     $merk_status .=  $secondary.$info_icon.$status_signed_ls.'</span><br>';
                 } else {
-                    if(in_array($status,['hpl_submitted','verified','verified_signed_ls','print_ls','accepted_ls']))
+                    if(in_array($status,['verified','verified_signed_ls','print_ls','accepted_ls']))
                     {
-                        $status_submitted = 'Sudah Dilaksanakan Pemeriksaan';
+                        $status_submitted = 'Pengajuan Pemeriksaan Verifikasi';
                         $merk_status .= $success.$success_icon.$status_submitted.'</span><br>';
                     } else {
                         $status_submitted = 'Menunggu Pengajuan Pemeriksaan';
                         $merk_status .=  $secondary.$info_icon.$status_submit.'</span><br>';
                     }
 
-                    if(in_array($status,['verified','verified_signed_ls','print_ls','accepted_ls']))
+                    if(in_array($status,['verified_signed_ls','print_ls','accepted_ls']))
                     {
-                        $status_verified = 'Sudah Dilakukan Verifikasi';
+                        $status_verified = 'Sudah Mendapatkan Nomor LS';
                         $merk_status .= $success.$success_icon.$status_verified.'</span><br>';
                     } else {
-                        $status_verified = 'Menunggu Verifikasi Pemeriksaan';
+                        $status_verified = 'Menunggu Verifikasi Tanda Tangan';
                         $merk_status .=  $secondary.$info_icon.$status_verified.'</span><br>';
                     }
 
-                    if(in_array($status,['verified_signed_ls','print_ls','accepted_ls'])) {
-                        $status_signed_ls = 'Sudah Dilakukan Verifikasi Tanda Tangan';
+                    if(in_array($status,['print_ls','accepted_ls'])) {
+                        $status_signed_ls = 'LS Terbit';
                         $merk_status .=  $success.$success_icon.$status_signed_ls.'</span><br>';
                     } else {
-                        $status_signed_ls = 'Menunggu Verifikasi Tanda Tangan';
+                        $status_signed_ls = 'Menunggu LS Terbit';
                         $merk_status .=  $secondary.$info_icon.$status_signed_ls.'</span><br>';
                     }
                 }
@@ -116,7 +116,7 @@ class HPLPSDataTable extends DataTable
                     'status' => $query->hplps_status
                 ]);
             })
-            ->rawColumns(['action','status']);
+            ->rawColumns(['action','status','code']);
     }
 
     /**
@@ -130,7 +130,7 @@ class HPLPSDataTable extends DataTable
         $model = PPBEModel::join('company','company.id','=','ppbe.company_id')
                         ->leftjoin('hplps','hplps.ppbe_id','=','ppbe.id')
                         ->select('ppbe.id','ppbe.code','ppbe.date','company.company_name','ppbe.inspection_office_id','ppbe.status as ppbe_status','ppbe.created_at','hplps.status as hplps_status')
-                        ->whereIn('ppbe.status',array('inspection','stuffing', 'verified','verified_ls','verified_lhp','assignment', 'print_assignment_letter'));
+                        ->whereIn('ppbe.status',array('verified','verified_ls','verified_lhp','assignment', 'print_assignment_letter'));
         $query = $model->newQuery();
         if ($search = request()->get('ppbe_search')) {
             $query->where('ppbe.code', 'like', "%{$search}%");

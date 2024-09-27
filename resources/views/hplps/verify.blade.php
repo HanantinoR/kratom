@@ -14,8 +14,9 @@
 
         ?>
 
-        {{-- {{dd($data->assignments->surveyor_id)}} --}}
-        {!! Form::model($data, ['route' => ['hplps.save'], 'method' => 'POST' , 'enctype' => 'multipart/form-data','id'=>'form_edit', 'novalidate', 'class' => 'needs-validation']) !!}
+        {{-- {{dd($data)}} --}}
+        {!! Form::model($data, ['route' => ['hplps.save'], 'method' => 'POST' , 'enctype' => 'multipart/form-data','id'=>'form_edit']) !!}
+            @csrf
         {{ Form::hidden('ppbe_id', old('ppbe_id', $id), ['class' => 'form-control text-black', 'id' => 'ppbe_id', 'readonly']) }}
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12">
@@ -35,13 +36,13 @@
                                     <div class="form-group col-md-12">
                                         <label for="inspection_date" class="form-label">Tanggal: <span class="text-danger">*</span></label>
                                         <input type="datetime-local" id="inspection_date" name="inspection_date" class="form-control text-black" value="{{ old('inspection_date', now()->format('Y-m-d\H:i')) }}">
-                                        {{-- {{ Form::datetimeLocal('inspection_date', old('inspection_date',$data->insepction_date), ['class' => 'form-control text-black', 'id' => 'inspection_date', 'required']) }} --}}
+                                        {{-- {{ Form::datetimeLocal('inspection_date', old('inspection_date',$data->insepction_date), ['class' => 'form-control text-black', 'id' => 'inspection_date', 'readonly']) }} --}}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-12">
                                         <label for="npp" class="form-label">NPP/Surveyor Pemeriksa: <span class="text-danger">*</span></label>
-                                        {{ Form::text('npp', old('npp', $data->assignments->surveyor_id), ['class' => 'form-control text-black', 'id' => 'npp', 'readonly']) }}
+                                        {{ Form::text('npp', old('npp', '16.83.13133 - DOYS ADAM CHRISMAWAN'), ['class' => 'form-control text-black', 'id' => 'npp', 'readonly']) }}
                                     </div>
                                 </div>
                             </div>
@@ -115,59 +116,59 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="packing_list_number" class="form-label">Nomor Packing List: <span class="text-danger">*</span></label>
-                                {{ Form::text('packing_list_number', old('packing_list_number'), ['class' => 'form-control text-black', 'id' => 'packing_list_number', 'required']) }}
+                                {{ Form::text('packing_list_number', old('packing_list_number'), ['class' => 'form-control text-black', 'id' => 'packing_list_number', 'readonly']) }}
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="packing_list_date" class="form-label"> Tgl. Packing List: <span class="text-danger">*</span></label>
-                                {{ Form::text('packing_list_date', old('packing_list_date'), ['class' => 'form-control text-black', 'id' => 'packing_list_date', 'required']) }}
+                                {{ Form::text('packing_list_date', old('packing_list_date'), ['class' => 'form-control text-black', 'id' => 'packing_list_date', 'readonly']) }}
                                 <small class="text-gray-500">Tanggal Packing List tidak boleh lebih dari tanggal pengajuan</small>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="invoice_number" class="form-label">Nomor Invoice: <span class="text-danger">*</span></label>
-                                {{ Form::text('invoice_number', old('invoice_number'), ['class' => 'form-control text-black', 'id' => 'invoice_number', 'required']) }}
+                                {{ Form::text('invoice_number', old('invoice_number'), ['class' => 'form-control text-black', 'id' => 'invoice_number', 'readonly']) }}
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="invoice_date" class="form-label">Tgl. Invoice: <span class="text-danger">*</span></label>
-                                {{ Form::text('invoice_date', old('invoice_date'), ['class' => 'form-control text-black', 'id' => 'invoice_date', 'required']) }}
+                                {{ Form::text('invoice_date', old('invoice_date'), ['class' => 'form-control text-black', 'id' => 'invoice_date', 'readonly']) }}
                                 <small class="text-gray-500">Tanggal Invoice tidak boleh lebih dari tanggal pengajuan</small>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="buyer_name" class="form-label">Nama Pembeli: <span class="text-danger">*</span></label>
-                                {{ Form::text('buyer_name', old('buyer_name'), ['class' => 'form-control text-black', 'id' => 'buyer_name', 'required']) }}
+                                {{ Form::text('buyer_name', old('buyer_name'), ['class' => 'form-control text-black', 'id' => 'buyer_name', 'readonly']) }}
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="buyer_address" class="form-label">Alamat Pembeli: <span class="text-danger">*</span></label>
-                                {{ Form::textarea('buyer_address', old('buyer_address'), ['class' => 'form-control text-black', 'id' => 'buyer_address', 'rows' => 2, 'required']) }}
+                                {{ Form::textarea('buyer_address', old('buyer_address'), ['class' => 'form-control text-black', 'id' => 'buyer_address', 'rows' => 2, 'readonly']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="origin_port_id" class="form-label">Pelabuhan asal: <span class="text-danger">*</span></label>
-                                {{ Form::text('origin_port_id', old('origin_port_id', $data->origin_port_id), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'required']) }}
+                                {{ Form::text('origin_port_id', old('origin_port_id', $data->origin_port_id), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'readonly']) }}
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="loading_port_id" class="form-label">Pelabuhan Muat: <span class="text-danger">*</span></label>
-                                {{ Form::text('loading_port_id', old('loading_port_id'), ['class' => 'form-control text-black', 'id' => 'loading_port_id', 'required']) }}
+                                {{ Form::text('loading_port_id', old('loading_port_id'), ['class' => 'form-control text-black', 'id' => 'loading_port_id', 'readonly']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="destination_port_id" class="form-label">Pelabuhan Tujuan: <span class="text-danger">*</span></label>
-                                {{ Form::text('destination_port_id', old('destination_port_id'), ['class' => 'form-control text-black', 'id' => 'destination_port_id', 'required']) }}
+                                {{ Form::text('destination_port_id', old('destination_port_id'), ['class' => 'form-control text-black', 'id' => 'destination_port_id', 'readonly']) }}
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="country_destination_id" class="form-label">Negara Tujuan: <span class="text-danger">*</span></label>
-                                {{ Form::text('country_destination_id', old('country_destination_id'), ['class' => 'form-control text-black', 'id' => 'country_destination_id', 'required']) }}
+                                {{ Form::text('country_destination_id', old('country_destination_id'), ['class' => 'form-control text-black', 'id' => 'country_destination_id', 'readonly']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="country_id" class="form-label">Negara Tujuan: <span class="text-danger">*</span></label>
-                                {{ Form::text('country_id', old('country_id'), ['class' => 'form-control text-black', 'id' => 'country_id', 'required']) }}
+                                {{ Form::text('country_id', old('country_id'), ['class' => 'form-control text-black', 'id' => 'country_id', 'readonly']) }}
                                 <small class="text-gray-500">(Tercantum Pada LS)*</small>
                             </div>
                         </div>
@@ -184,6 +185,10 @@
                             <a href=""></a>
                         </div>
                     </div>
+                    @php
+                        $check = json_decode($data->hplps->checker_list)
+                    @endphp
+                    {{-- {{dd($check)}} --}}
                     <div class="card-body">
                         <h5 class="mb-4 text-secondary">KEMASAN</h5>
                         <div class="row">
@@ -203,7 +208,7 @@
                                     </div>
                                     <div class="col-md-1">
                                         <div class="checkbox-wrapper-input">
-                                            <input type="checkbox" id="check_merk" class="check_hplps" name="check_merk"/>
+                                            <input type="checkbox" id="check_merk" class="check_hplps" name="check_merk" {{$check->merk_checked === "on" ? "checked" : ""}}/>
                                             <label for="check_merk" class="check-box mt-4">
                                         </div>
                                     </div>
@@ -218,7 +223,7 @@
                                         {{ Form::text('packing_total', old('packing_total'), ['class' => 'form-control text-black', 'id' => 'packing_total', 'readonly']) }}
                                     </div>
                                     <div class="col-md-5">
-                                        {{ Form::text('packing_type', old('packing_type'), ['class' => 'form-control text-black', 'id' => 'packing_type', 'required']) }}
+                                        {{ Form::text('packing_type', old('packing_type'), ['class' => 'form-control text-black', 'id' => 'packing_type', 'readonly']) }}
                                     </div>
                                     <div class="col-md-1">
                                         <button type="button" class="btn btn-small btn-icon btn-warning mt-1 edit_readonly" name="packing_btn">
@@ -228,9 +233,9 @@
                                             </svg>
                                         </button>
                                     </div>
-                                    <div class="col-md-1">
+                                    <div class="col-md-1" >
                                         <div class="checkbox-wrapper-input">
-                                            <input type="checkbox" id="check_packing" class="check_hplps" name="check_packing"/>
+                                            <input type="checkbox" id="check_packing" class="check_hplps" name="check_packing" disabled {{$check->check_packing === "on" ? "checked" : ""}} />
                                             <label for="check_packing" class="check-box mt-2">
                                         </div>
                                     </div>
@@ -240,13 +245,13 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="inspection_date_start" class="form-label">Waktu Pemeriksaan: <span class="text-danger">*</span></label>
-                                <input type="datetime-local" id="inspection_date_start" name="inspection_date_start" class="form-control text-black" value="{{ old('inspection_date_start')}}">
-                                {{-- {{ Form::text('inspection_date_start', old('inspection_date_start',$data->inspection_date_start), ['class' => 'form-control text-black', 'id' => 'inspection_date_start', 'required',"data-date-format"=>"yyyy-mm-dd hh-mm"]) }} --}}
+                                <input type="datetime-local" id="inspection_date_start" name="inspection_date_start" class="form-control text-black" value="{{ old('inspection_date_start', $data->hplps->inspection_date_start)}}" disabled>
+                                {{-- {{ Form::text('inspection_date_start', old('inspection_date_start',$data->inspection_date_start), ['class' => 'form-control text-black', 'id' => 'inspection_date_start', 'readonly',"data-date-format"=>"yyyy-mm-dd hh-mm"]) }} --}}
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inspection_date_end" class="form-label">S/D: <span class="text-danger">*</span></label>
-                                <input type="datetime-local" id="inspection_date_end" name="inspection_date_end" class="form-control text-black" value="{{ old('inspection_date_end')}}">
-                                {{-- {{ Form::text('inspection_date_end', old('inspection_date_end'), ['class' => 'form-control text-black', 'id' => 'inspection_date_end', 'required']) }} --}}
+                                <input type="datetime-local" id="inspection_date_end" name="inspection_date_end" class="form-control text-black" value="{{ old('inspection_date_end', $data->hplps->inspection_date_end)}}" disabled>
+                                {{-- {{ Form::text('inspection_date_end', old('inspection_date_end'), ['class' => 'form-control text-black', 'id' => 'inspection_date_end', 'readonly']) }} --}}
                             </div>
                         </div>
                         <div class="row">
@@ -272,7 +277,7 @@
                                     </div>
                                     <div class="col-md-1">
                                         <div class="checkbox-wrapper-input">
-                                            <input type="checkbox" id="check_inspection" class="check_hplps" name="check_inspection"/>
+                                            <input type="checkbox" id="check_inspection" class="check_hplps" name="check_inspection" {{$check->check_inspection === "on" ? "checked" : ""}}/>
                                             <label for="check_inspection" class="check-box mt-2">
                                         </div>
                                     </div>
@@ -282,11 +287,11 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="inspection_province_id" class="form-label">Provinssi (Tercantum Pada LS): <span class="text-danger">*</span></label>
-                                {{ Form::text('inspection_province_id', old('inspection_province_id'), ['class' => 'form-control text-black', 'id' => 'inspection_province_id', 'required']) }}
+                                {{ Form::text('inspection_province_id', old('inspection_province_id'), ['class' => 'form-control text-black', 'id' => 'inspection_province_id', 'readonly']) }}
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inspection_city_id" class="form-label">Kab. / Kota (Tercantum Pada LS): <span class="text-danger">*</span></label>
-                                {{ Form::text('inspection_city_id', old('inspection_city_id'), ['class' => 'form-control text-black', 'id' => 'inspection_city_id', 'required']) }}
+                                {{ Form::text('inspection_city_id', old('inspection_city_id'), ['class' => 'form-control text-black', 'id' => 'inspection_city_id', 'readonly']) }}
                             </div>
                         </div>
                         <hr>
@@ -304,10 +309,10 @@
                                 <tbody>
                                     @foreach ($data->goods as $index => $good)
                                     <tr>
-                                        <td>{{ Form::text('barang['.$index.'][nomor_hs]', old('barang['.$index.'][nomor_hs]',$good->processed_level_id), ['class' => 'form-control text-black','id'=>'barang['.$index.'][nomor_hs]' ,'placeholder' => 'Nomor HS', 'required']) }}</td>
-                                        <td>{{ Form::text('barang['.$index.'][uraian]', old('barang['.$index.'][uraian]',$good->description), ['class' => 'form-control text-black','id'=>'barang['.$index.'][uraian]' ,'placeholder' => 'Uraian', 'required']) }}</td>
-                                        <td>{{ Form::text('barang['.$index.'][jumlah_total]', old('barang['.$index.'][jumlah_total]',$good->quantity_kg), ['class' => 'form-control text-black','id'=>'barang['.$index.'][jumlah_total]' ,'placeholder' => 'Jumlah Total', 'required']) }}</td>
-                                        <td>{{ Form::text('barang['.$index.'][nilai_fob]', old('barang['.$index.'][nilai_fob]',$good->fob_value), ['class' => 'form-control text-black calculateFOB','id'=>'barang['.$index.'][nilai_fob]' ,'placeholder' => 'FOB', 'required']) }}</td>
+                                        <td>{{ Form::text('barang['.$index.'][nomor_hs]', old('barang['.$index.'][nomor_hs]',$good->processed_level_id), ['class' => 'form-control text-black','id'=>'barang['.$index.'][nomor_hs]' ,'placeholder' => 'Nomor HS', 'readonly']) }}</td>
+                                        <td>{{ Form::text('barang['.$index.'][uraian]', old('barang['.$index.'][uraian]',$good->description), ['class' => 'form-control text-black','id'=>'barang['.$index.'][uraian]' ,'placeholder' => 'Uraian', 'readonly']) }}</td>
+                                        <td>{{ Form::text('barang['.$index.'][jumlah_total]', old('barang['.$index.'][jumlah_total]',$good->quantity_kg), ['class' => 'form-control text-black','id'=>'barang['.$index.'][jumlah_total]' ,'placeholder' => 'Jumlah Total', 'readonly']) }}</td>
+                                        <td>{{ Form::text('barang['.$index.'][nilai_fob]', old('barang['.$index.'][nilai_fob]',$good->fob_value), ['class' => 'form-control text-black calculateFOB','id'=>'barang['.$index.'][nilai_fob]' ,'placeholder' => 'FOB', 'readonly']) }}</td>
                                         <td>
                                             <button class="btn btn-sm btn-icon btn-success btn_tambah" id="tambah_row" type="button">
                                                 <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -328,7 +333,7 @@
                                         {{ Form::text('fob_total_hpl', old('fob_total_hpl', !empty($hplps)? $hplps->fob_total: $data->fob_total), ['class' => 'form-control text-black', 'id' => 'fob_total_hpl', 'readonly']) }}
                                     </div>
                                     <div class="col-md-2">
-                                        {{ Form::text('fob_currency_hpl', old('fob_currency_hpl'), ['class' => 'form-control text-black', 'id' => 'fob_currency_hpl', 'required']) }}
+                                        {{ Form::text('fob_currency_hpl', old('fob_currency_hpl',$data->hplps->fob_currency_hpl), ['class' => 'form-control text-black', 'id' => 'fob_currency_hpl', 'readonly']) }}
                                     </div>
                                 </div>
                             </div>
@@ -337,19 +342,19 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label for="memorize_type">Tipe</label>
-                                {{ Form::select('memorize_type', $type ,old('memorize_type'), ['class' => 'form-control text-black','id'=>'memorize_type' ,'placeholder' => 'Type Pengapalan', 'required']) }}
+                                {{ Form::select('memorize_type', $type ,old('memorize_type'), ['class' => 'form-control text-black','id'=>'memorize_type' ,'placeholder' => 'Type Pengapalan', 'readonly']) }}
                             </div>
                             <div class="col-md-3">
                                 <label for="memorize_size">Ukuran</label>
-                                {{ Form::select('memorize_size', $size ,old('memorize_size'), ['class' => 'form-control text-black','id'=>'memorize_size' ,'placeholder' => 'Ukuran Pengapalan', 'required']) }}
+                                {{ Form::select('memorize_size', $size ,old('memorize_size'), ['class' => 'form-control text-black','id'=>'memorize_size' ,'placeholder' => 'Ukuran Pengapalan', 'readonly']) }}
                             </div>
                             <div class="col-md-3">
                                 <label for="memorize_total">Jumlah</label>
-                                {{ Form::text('memorize_total', old('memorize_total'), ['class' => 'form-control text-black','id'=>'memorize_total' ,'placeholder' => 'Total' ,'required']) }}
+                                {{ Form::text('memorize_total', old('memorize_total'), ['class' => 'form-control text-black','id'=>'memorize_total' ,'placeholder' => 'Total' ,'readonly']) }}
                             </div>
                             <div class="col-md-3">
                                 <label for="memorize_skenario">Skenario</label>
-                                {{ Form::select('memorize_skenario', $skenario ,old('memorize_skenario'), ['class' => 'form-control text-black','id'=>'memorize_skenario' ,'placeholder' => 'Ukuran Pengapalan', 'required']) }}
+                                {{ Form::select('memorize_skenario', $skenario ,old('memorize_skenario'), ['class' => 'form-control text-black','id'=>'memorize_skenario' ,'placeholder' => 'Ukuran Pengapalan', 'readonly']) }}
                             </div>
                         </div>
                         <hr>
@@ -390,33 +395,37 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td> {{ Form::text('usage[0][type]', old('usage[0][type]'), ['class' => 'form-control text-black', 'id' => 'usage[0][type]']) }}</td>
-                                            <td>
-                                                <div class="row">
-                                                    <div class="col-lg-2 mt-2">No. Seri</div>
-                                                    <div class="col-lg-3">
-                                                        {{ Form::text('usage[0][series]', old('usage[0][series]'), ['class' => 'form-control text-black', 'id' => 'usage[0][series]']) }}
+                                        {{-- {{dd($data->hplps->usage)}} --}}
+                                        @foreach ($data->hplps->usage as $usage)
+                                            <tr>
+                                                <td> {{ Form::text('usage[0][type]', old('usage[0][type]', $usage['type']), ['class' => 'form-control text-black', 'id' => 'usage[0][type]','readonly']) }}</td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col-lg-2 mt-2">No. Seri</div>
+                                                        <div class="col-lg-3">
+                                                            {{ Form::text('usage[0][series]', old('usage[0][series]', $usage['series']), ['class' => 'form-control text-black', 'id' => 'usage[0][series]','readonly']) }}
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            {{ Form::text('usage[0][init]', old('usage[0][init]', $usage['series_init']), ['class' => 'form-control text-black', 'id' => 'usage[0][init]','readonly']) }}
+                                                        </div>
+                                                        <div class="col-lg-1 mt-2">
+                                                            S/D
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            {{ Form::text('usage[0][final]', old('usage[0][final]', $usage['series_final']), ['class' => 'form-control text-black', 'id' => 'usage[0][final]','readonly']) }}
+                                                        </div>
                                                     </div>
-                                                    <div class="col-lg-3">
-                                                        {{ Form::text('usage[0][init]', old('usage[0][init]'), ['class' => 'form-control text-black', 'id' => 'usage[0][init]']) }}
-                                                    </div>
-                                                    <div class="col-lg-1 mt-2">
-                                                        S/D
-                                                    </div>
-                                                    <div class="col-lg-3">
-                                                        {{ Form::text('usage[0][final]', old('usage[0][final]'), ['class' => 'form-control text-black', 'id' => 'usage[0][final]']) }}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-sm btn-icon btn-success btn_tambah_usage" id="tambah_row" type="button">
-                                                    <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
-                                                    </svg>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                                <td>
+                                                    {{-- <button class="btn btn-sm btn-icon btn-success btn_tambah_usage" id="tambah_row" type="button">
+                                                        <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
+                                                        </svg>
+                                                    </button> --}}
+                                                    -
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -424,7 +433,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="hpl_notes" class="form-label">Catatan Pemeriksaan: <span class="text-danger">*</span></label>
-                                {{ Form::textarea('hpl_notes', old('hpl_notes'), ['class' => 'form-control text-black', 'id' => 'hpl_notes', 'required','rows'=>4]) }}
+                                {{ Form::textarea('hpl_notes', old('hpl_notes', $data->hplps->hpl_notes), ['class' => 'form-control text-black', 'id' => 'hpl_notes', 'readonly','rows'=>4]) }}
                             </div>
                         </div>
                     </div>
@@ -443,13 +452,13 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="stuffing_date_start" class="form-label">Waktu Pengawasan: <span class="text-danger">*</span></label>
-                                <input type="datetime-local" id="stuffing_date_start" name="stuffing_date_start" class="form-control text-black" value="{{ old('stuffing_date_start')}}">
-                                {{-- {{ Form::text('stuffing_date_start', old('stuffing_date_start'), ['class' => 'form-control text-black', 'id' => 'stuffing_date_start', 'required']) }} --}}
+                                <input type="datetime-local" id="stuffing_date_start" name="stuffing_date_start" class="form-control text-black" value="{{ old('stuffing_date_start',$data->hplps->stuffing_date_start)}}" disabled>
+                                {{-- {{ Form::text('stuffing_date_start', old('stuffing_date_start'), ['class' => 'form-control text-black', 'id' => 'stuffing_date_start', 'readonly']) }} --}}
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="stuffing_date_end" class="form-label">S/D: <span class="text-danger">*</span></label>
-                                <input type="datetime-local" id="stuffing_date_end" name="stuffing_date_end" class="form-control text-black" value="{{ old('stuffing_date_end')}}">
-                                {{-- {{ Form::text('stuffing_date_end', old('stuffing_date_end'), ['class' => 'form-control text-black', 'id' => 'stuffing_date_end', 'required']) }} --}}
+                                <input type="datetime-local" id="stuffing_date_end" name="stuffing_date_end" class="form-control text-black" value="{{ old('stuffing_date_end', $data->hplps->stuffing_date_end)}}" disabled>
+                                {{-- {{ Form::text('stuffing_date_end', old('stuffing_date_end'), ['class' => 'form-control text-black', 'id' => 'stuffing_date_end', 'readonly']) }} --}}
                             </div>
                         </div>
                         <div class="row">
@@ -499,18 +508,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="">
+                                        @foreach ($data->hplps->memory as $memory)
+                                        {{-- {{dd($memory, $data->hplps->memory)}} --}}
+                                            <tr class="">
                                             <td class="p-1 ">
-                                                {{ Form::text('memorizations[0][type]', old('memorizations[0][type]'), ['class' => 'form-control text-black', 'id' => 'memorizations[0][type]', 'required']) }}
+                                                {{ Form::text('memorizations[0][type]', old('memorizations[0][type]',$memory['type']), ['class' => 'form-control text-black', 'id' => 'memorizations[0][type]', 'readonly']) }}
                                             </td>
                                             <td class="p-1">
-                                                {{ Form::text('memorizations[0][create_number]', old('memorizations[0][create_number]'), ['class' => 'form-control text-black', 'id' => 'memorizations[0][create_number]', 'required']) }}
+                                                {{ Form::text('memorizations[0][create_number]', old('memorizations[0][create_number]',$memory['create_number']), ['class' => 'form-control text-black', 'id' => 'memorizations[0][create_number]', 'readonly']) }}
                                             </td>
                                             <td class="p-1 ">
-                                                {{ Form::text('memorizations[0][create_type]', old('memorizations[0][create_type]'), ['class' => 'form-control text-black', 'id' => 'memorizations[0][create_type]', 'required']) }}
+                                                {{ Form::text('memorizations[0][create_type]', old('memorizations[0][create_type]',$memory['create_type']), ['class' => 'form-control text-black', 'id' => 'memorizations[0][create_type]', 'readonly']) }}
                                             </td>
                                             <td class="p-1 ">
-                                                {{ Form::text('memorizations[0][size]', old('memorizations[0][size]'), ['class' => 'form-control text-black', 'id' => 'memorizations[0][size]', 'required']) }}
+                                                {{ Form::text('memorizations[0][size]', old('memorizations[0][size]',$memory['size']), ['class' => 'form-control text-black', 'id' => 'memorizations[0][size]', 'readonly']) }}
                                             </td>
                                             <td class="p-1 ">
                                                 <div class="row ">
@@ -523,10 +534,10 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-5 col-lg-4 pe-1">
-                                                                {{ Form::text('memorizations[0][series]', old('memorizations[0][series]'), ['class' => 'form-control text-black segel-0', 'id' => 'memorizations[0][series]', 'required']) }}
+                                                                {{ Form::text('memorizations[0][series]', old('memorizations[0][series]',$memory['series']), ['class' => 'form-control text-black segel-0', 'id' => 'memorizations[0][series]', 'readonly']) }}
                                                             </div>
                                                             <div class="col-md-5 col-lg-6 ps-1">
-                                                                {{ Form::text('memorizations[0][series_init]', old('memorizations[0][series_init]'), ['class' => 'form-control text-black segel-0', 'id' => 'memorizations[0][series_init]', 'required']) }}
+                                                                {{ Form::text('memorizations[0][series_init]', old('memorizations[0][series_init]',$memory['series_init']), ['class' => 'form-control text-black segel-0', 'id' => 'memorizations[0][series_init]', 'readonly']) }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -537,119 +548,143 @@
                                                     <div class="col-md-12 col-lg-12">
                                                         <div class="row">
                                                             <div class="col-md-6 col-lg-6 pe-1">
-                                                                {{ Form::text('memorizations[0][series_total]', old('memorizations[0][series_total]'), ['class' => 'form-control text-black', 'id' => 'memorizations[0][series_total]', 'required']) }}
+                                                                {{ Form::text('memorizations[0][series_total]', old('memorizations[0][series_total]',$memory['series_total']), ['class' => 'form-control text-black', 'id' => 'memorizations[0][series_total]', 'readonly']) }}
                                                             </div>
                                                             <div class="col-md-6 col-lg-6 ps-1">
-                                                                {{ Form::text('memorizations[0][series_type]', old('memorizations[0][series_type]'), ['class' => 'form-control text-black', 'id' => 'memorizations[0][series_type]', 'required']) }}
+                                                                {{ Form::text('memorizations[0][series_type]', old('memorizations[0][series_type]',$memory['series_type']), ['class' => 'form-control text-black', 'id' => 'memorizations[0][series_type]', 'readonly']) }}
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="">
-                                                <div class="row">
-                                                    <label for="memorizations[0][red_series]">TPS Merah</label>
-                                                    <div class="red_field" id="red_field_0">
+                                                {{-- {{$merah =""}} --}}
+                                                @if($memory['tps_merah'] != "" || !empty($memory['tps_merah']))
+                                                        @php
+                                                            $merah = json_decode($memory['tps_merah']);
+                                                        @endphp
+                                                    @foreach ($merah as $tps_merah)
                                                         <div class="row">
-                                                            <div class="col-md-3 p-1">
-                                                                {{ Form::text('memorizations[0][red_series][0]', old('memorizations[0][red_series][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][red_series][0]', 'required','disabled']) }}
+                                                            <label for="memorizations[0][red_series]">TPS Merah</label>
+                                                            <div class="red_field" id="red_field_0">
+                                                                <div class="row">
+                                                                    <div class="col-md-3 p-1">
+                                                                        {{ Form::text('memorizations[0][red_series][0]', old('memorizations[0][red_series][0]', $tps_merah->series), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][red_series][0]', 'readonly','disabled']) }}
+                                                                    </div>
+                                                                    <div class="col-md-4 p-1">
+                                                                        {{ Form::text('memorizations[0][red_init][0]', old('memorizations[0][red_init][0]',$tps_merah->red_init), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][red_init][0]', 'readonly','disabled']) }}
+                                                                    </div>
+                                                                    <div class="col-md-4 p-1">
+                                                                        {{ Form::text('memorizations[0][red_final][0]', old('memorizations[0][red_final][0]',$tps_merah->red_final), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][red_final][0]', 'readonly','disabled']) }}
+                                                                    </div>
+                                                                    <div class="col-md-1">
+                                                                        <button type="button" class="btn btn-sm btn-icon btn-warning btn_tps_merah_0 mt-2" id="btn_tps_merah_0" name="btn_tps_merah[0]" target="0" disabled>
+                                                                            <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="col-md-4 p-1">
-                                                                {{ Form::text('memorizations[0][red_init][0]', old('memorizations[0][red_init][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][red_init][0]', 'required','disabled']) }}
-                                                            </div>
-                                                            <div class="col-md-4 p-1">
-                                                                {{ Form::text('memorizations[0][red_final][0]', old('memorizations[0][red_final][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][red_final][0]', 'required','disabled']) }}
-                                                            </div>
-                                                            <div class="col-md-1">
-                                                                <button type="button" class="btn btn-sm btn-icon btn-warning btn_tps_merah_0 mt-2" id="btn_tps_merah_0" name="btn_tps_merah[0]" target="0" disabled>
-                                                                    <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
-                                                                    </svg>
-                                                                </button>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                                @if ($memory['tps_hijau'] != "" || !empty($memory['tps_hijau']))
+                                                    @php
+                                                        $hijau = json_decode($memory['tps_hijau']);
+                                                    @endphp
+                                                    @foreach ($hijau as $tps_hijau)
+                                                    <div class="row">
+                                                        <label for="memorizations[0][green_series]">TPS Hijau</label>
+                                                        <div class="green_field" id="green_field_0">
+                                                            <div class="row">
+                                                                <div class="col-md-3 p-1">
+                                                                    {{ Form::text('memorizations[0][green_series][0]', old('memorizations[0][green_series][0]',$tps_hijau->series), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][green_series][0]', 'readonly','disabled']) }}
+                                                                </div>
+                                                                <div class="col-md-4 p-1">
+                                                                    {{ Form::text('memorizations[0][green_init][0]', old('memorizations[0][green_init][0]',$tps_hijau->green_init), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][green_init][0]', 'readonly','disabled']) }}
+                                                                </div>
+                                                                <div class="col-md-4 p-1">
+                                                                    {{ Form::text('memorizations[0][green_final][0]', old('memorizations[0][green_final][0]',$tps_hijau->green_final), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][green_final][0]', 'readonly','disabled']) }}
+                                                                </div>
+                                                                <div class="col-md-1">
+                                                                    <button type="button" class="btn btn-sm btn-icon btn-warning btn_tps_hijau_0 mt-2" id="btn_tps_hijau_0" name="btn_tps_hijau[0]" target="0" disabled>
+                                                                        <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
+                                                                        </svg>
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <label for="memorizations[0][green_series]">TPS Hijau</label>
-                                                    <div class="green_field" id="green_field_0">
-                                                        <div class="row">
-                                                            <div class="col-md-3 p-1">
-                                                                {{ Form::text('memorizations[0][green_series][0]', old('memorizations[0][green_series][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][green_series][0]', 'required','disabled']) }}
-                                                            </div>
-                                                            <div class="col-md-4 p-1">
-                                                                {{ Form::text('memorizations[0][green_init][0]', old('memorizations[0][green_init][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][green_init][0]', 'required','disabled']) }}
-                                                            </div>
-                                                            <div class="col-md-4 p-1">
-                                                                {{ Form::text('memorizations[0][green_final][0]', old('memorizations[0][green_final][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][green_final][0]', 'required','disabled']) }}
-                                                            </div>
-                                                            <div class="col-md-1">
-                                                                <button type="button" class="btn btn-sm btn-icon btn-warning btn_tps_hijau_0 mt-2" id="btn_tps_hijau_0" name="btn_tps_hijau[0]" target="0" disabled>
-                                                                    <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
-                                                                    </svg>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <label for="memorizations[0][thread_seal_series]">Thread Seal</label>
-                                                    <div class="thread_field" id="thread_field_0">
-                                                        <div class="row">
-                                                            <div class="col-md-3 p-1">
-                                                                {{ Form::text('memorizations[0][thread_seal_series][0]', old('memorizations[0][thread_seal_series][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][thread_seal_series][0]', 'required','disabled']) }}
-                                                            </div>
-                                                            <div class="col-md-4 p-1">
-                                                                {{ Form::text('memorizations[0][thread_seal_init][0]', old('memorizations[0][thread_seal_init][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][thread_seal_init][0]', 'required','disabled']) }}
-                                                            </div>
-                                                            <div class="col-md-4 p-1">
-                                                                {{ Form::text('memorizations[0][thread_seal_final][0]', old('memorizations[0][thread_seal_final][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][thread_seal_final][0]', 'required','disabled']) }}
-                                                            </div>
-                                                            <div class="col-md-1">
-                                                                <button type="button" class="btn btn-sm btn-icon btn-warning  btn_thread_seal_0 mt-2" id="btn_thread_seal_0" name="btn_thread_seal[0]" target="0" disabled>
-                                                                    <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
-                                                                    </svg>
-                                                                </button>
+                                                    @endforeach
+                                                @endif
+                                                @if($memory['thread_seal']!= "")
+                                                    @php
+                                                        $seal = json_decode($memory['thread_seal']);
+                                                    @endphp
+                                                    @foreach ($seal as $thread_seal)
+                                                    <div class="row">
+                                                        <label for="memorizations[0][thread_seal_series]">Thread Seal</label>
+                                                        <div class="thread_field" id="thread_field_0">
+                                                            <div class="row">
+                                                                <div class="col-md-3 p-1">
+                                                                    {{ Form::text('memorizations[0][thread_seal_series][0]', old('memorizations[0][thread_seal_series][0]',$thread_seal->series), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][thread_seal_series][0]', 'readonly','disabled']) }}
+                                                                </div>
+                                                                <div class="col-md-4 p-1">
+                                                                    {{ Form::text('memorizations[0][thread_seal_init][0]', old('memorizations[0][thread_seal_init][0]',$thread_seal->thread_seal_init), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][thread_seal_init][0]', 'readonly','disabled']) }}
+                                                                </div>
+                                                                <div class="col-md-4 p-1">
+                                                                    {{ Form::text('memorizations[0][thread_seal_final][0]', old('memorizations[0][thread_seal_final][0]',$thread_seal->thread_seal_final), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][thread_seal_final][0]', 'readonly','disabled']) }}
+                                                                </div>
+                                                                <div class="col-md-1">
+                                                                    {{-- <button type="button" class="btn btn-sm btn-icon btn-warning  btn_thread_seal_0 mt-2" id="btn_thread_seal_0" name="btn_thread_seal[0]" target="0" disabled>
+                                                                        <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
+                                                                        </svg>
+                                                                    </button> --}}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    @endforeach
+                                                @endif
                                             </td>
                                             <td class="">
-                                                <button class="btn btn-sm btn-icon btn-success btn_tambah_hplps" id="tambah_row" type="button">
+                                                {{-- <button class="btn btn-sm btn-icon btn-success btn_tambah_hplps" id="tambah_row" type="button">
                                                     <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
                                                     </svg>
-                                                </button>
+                                                </button> --}}
+                                                -
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <style>
-                            #my-dropzone {
+                            .dropzone {
                                 border: 2px dashed #0087F7;
+                                border-radius: 5px;
                                 padding: 20px;
-                                width: 100%;
                                 text-align: center;
-                                cursor: pointer;
                                 margin-bottom: 20px;
                             }
-                            .remove-file {
-                                cursor: pointer;
-                                color: red;
-                                margin-left: 10px;
-                            }
-                            .image-item {
+                            .dz-preview {
                                 display: flex;
+                                flex-direction: column;
                                 align-items: center;
-                                margin-top: 10px;
+                                margin: 10px;
+                            }
+
+                            .dz-preview img {
+                                max-width: 100%; // Ensure images fit within the preview
+                                height: auto;
                             }
                         </style>
-                        <h5 class="mt-4">Upload Dokumen & Foto</h5>
+                        {{-- <h5 class="mt-4">Upload Dokumen & Foto</h5>
                         <i class="tx-danger tx-11">(Ekstention File : jpeg, png, jpg, .pdf, .zip)</i>
                         <div class="form-group mt-4">
                             <div class="row">
@@ -658,23 +693,13 @@
                                     <br><i class="tx-info tx-11">Maksimum: 10MB</i>
                                 </label>
                                 <div class="col-md-3 col-sm-3">
-                                    <div id="my-dropzone" class="dropzone">
-                                        <div class="dz-message">Drag and drop files here or click to upload.</div>
-                                    </div>
-                                    <div class="image-preview">
-                                        {{-- @foreach($images as $image)
-                                            <div class="image-item" id="image-{{ $image->id }}">
-                                                <img src="{{ Storage::url($image->path) }}" width="100" alt="Uploaded Image">
-                                                <button class="remove-file" data-id="{{ $image->id }}">Remove</button>
-                                            </div>
-                                        @endforeach --}}
-                                    </div>
+                                    <div class="dropzone" id="file-upload"></div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="card-footer d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary me-2" id="send_hpl_btn"> Ajukan</button>
+                        <button type="button" class="btn btn-success me-2" data-id="{{$id}}"  id="verify_btn"> Verify</button>
                         <button type="button" class="btn btn-secondary"> Kembali</button>
                     </div>
                 </div>
@@ -686,3 +711,44 @@
         {!! Form::close() !!}
     </div>
 </x-app-layout>
+<div class="modal fade" id="verifikasiHPLModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="verifikasiHPLModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="verifikasiHPLModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            {!! Form::model($data, ['route' => ['hplps.update', $id], 'method' => 'PUT' , 'enctype' => 'multipart/form-data','id'=>"form_approval"]) !!}
+                <div class="modal-body">
+                    <div class="row">
+                        {{Form::hidden('ppbe_id',old('ppbe_id',$id),['class'=>'form-control','id'=>'ppbe_id','placeholder'=>'Catatan'])}}
+                        <div class="mb-3">
+                            <label for="hpl_new_status" class="col-form-label">Status:</label>
+                            <select class="form-control select2" name="hpl_new_status" id="hpl_new_status" style="width: 100%">
+                                <option value="0">Tolak</option>
+                                <option value="1">Verifikasi</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="hplps_reason" class="col-form-label">Alasan:</label>
+                            {{Form::text('hplps_reason',null,['class'=>'form-control text-black','id'=>'hplps_reason','placeholder'=>'Catatan'])}}
+                        </div>
+                        <div class="mb-3 form-group">
+                            <label for="hpl_feedback_file" class="col-form-label">File:</label>
+                            {{Form::file('hpl_feedback_file',null,['class'=>'form-control','id'=>'hpl_feedback_file','placeholder'=>'Catatan'])}}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="verifyBtn">
+                        <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.4274 2.5783C20.9274 2.0673 20.1874 1.8783 19.4974 2.0783L3.40742 6.7273C2.67942 6.9293 2.16342 7.5063 2.02442 8.2383C1.88242 8.9843 2.37842 9.9323 3.02642 10.3283L8.05742 13.4003C8.57342 13.7163 9.23942 13.6373 9.66642 13.2093L15.4274 7.4483C15.7174 7.1473 16.1974 7.1473 16.4874 7.4483C16.7774 7.7373 16.7774 8.2083 16.4874 8.5083L10.7164 14.2693C10.2884 14.6973 10.2084 15.3613 10.5234 15.8783L13.5974 20.9283C13.9574 21.5273 14.5774 21.8683 15.2574 21.8683C15.3374 21.8683 15.4274 21.8683 15.5074 21.8573C16.2874 21.7583 16.9074 21.2273 17.1374 20.4773L21.9074 4.5083C22.1174 3.8283 21.9274 3.0883 21.4274 2.5783Z" fill="currentColor"></path>
+                            <path opacity="0.4" fill-rule="evenodd" clip-rule="evenodd" d="M3.01049 16.8079C2.81849 16.8079 2.62649 16.7349 2.48049 16.5879C2.18749 16.2949 2.18749 15.8209 2.48049 15.5279L3.84549 14.1619C4.13849 13.8699 4.61349 13.8699 4.90649 14.1619C5.19849 14.4549 5.19849 14.9299 4.90649 15.2229L3.54049 16.5879C3.39449 16.7349 3.20249 16.8079 3.01049 16.8079ZM6.77169 18.0003C6.57969 18.0003 6.38769 17.9273 6.24169 17.7803C5.94869 17.4873 5.94869 17.0133 6.24169 16.7203L7.60669 15.3543C7.89969 15.0623 8.37469 15.0623 8.66769 15.3543C8.95969 15.6473 8.95969 16.1223 8.66769 16.4153L7.30169 17.7803C7.15569 17.9273 6.96369 18.0003 6.77169 18.0003ZM7.02539 21.5683C7.17139 21.7153 7.36339 21.7883 7.55539 21.7883C7.74739 21.7883 7.93939 21.7153 8.08539 21.5683L9.45139 20.2033C9.74339 19.9103 9.74339 19.4353 9.45139 19.1423C9.15839 18.8503 8.68339 18.8503 8.39039 19.1423L7.02539 20.5083C6.73239 20.8013 6.73239 21.2753 7.02539 21.5683Z" fill="currentColor"></path>
+                        </svg>
+                    Verify PPBE</button>
+                </div>
+            {!! Form::close() !!}
+        </div>
+    </div>
+</div>

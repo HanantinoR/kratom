@@ -61,12 +61,18 @@
     <script src="{{asset('js/ppbe/verify.js')}}"></script>
 @endif
 
-
+{{-- hplps --}}
 @if(in_array('hplps',$assets ?? []))
-    <script src="{{asset('js/hplps/edit.js')}}"></script>
     <script src="{{asset('js/dropzone.js')}}"></script>
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script> --}}
 @endif
+@if (in_array('hplps_edit',$assets ?? []))
+    <script src="{{asset('js/hplps/edit.js')}}"></script>
+@endif
+@if (in_array('hplps_verify',$assets ?? []))
+    <script src="{{asset('js/hplps/verify.js')}}"></script>
+@endif
+
+{{-- perijinan --}}
 @if(in_array('perijinan',$assets ?? []))
     <script src="{{asset('js/perijinan/tambah.js')}}"></script>
 @endif

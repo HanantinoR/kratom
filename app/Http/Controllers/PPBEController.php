@@ -281,9 +281,9 @@ class PPBEController extends Controller
             $status_descript = "Pengajuan Diverifikasi";
             $code = $this->generateCode($dataPPBE);
 
-            $dataUpdate['status'] = $status;
-            $dataUpdate['notes'] = $status_descript;
-            $dataUpdate['code'] = $code;
+            $data_update['status'] = $status;
+            $data_update['notes'] = $status_descript;
+            $data_update['code'] = $code;
 
             $data_quota = HistoryQuotaModel::where('company_id',$dataPPBE->company_id)->orderBy("created_at",'desc')->first();
             $data_goods = $dataPPBE->goods;
@@ -361,7 +361,7 @@ class PPBEController extends Controller
                 $code = null ;
             }
 
-            $dataUpdate = [
+            $data_update = [
                 'code' => $code,
                 'date' => $request->date,
                 'company_id' => $request->company_id ,
@@ -408,7 +408,7 @@ class PPBEController extends Controller
                 $file1Name = time() . '_file_nib_' . $file1->getClientOriginalName();
                 $file1Path = $file1->storeAs($path, $file1Name, 'local');
 
-                $dataUpdate['file_nib'] = $file1Name;
+                $data_update['file_nib'] = $file1Name;
             }
 
             if($request->hasFile('file_invoice'))
@@ -417,7 +417,7 @@ class PPBEController extends Controller
                 $file2Name = time() . '_file_invoice_' . $file2->getClientOriginalName();
                 $file2Path = $file2->storeAs($path, $file2Name, 'local');
 
-                $dataUpdate['file_invoice'] = $file2Name;
+                $data_update['file_invoice'] = $file2Name;
             }
 
             if($request->hasFile('file_packing_list'))
@@ -426,11 +426,11 @@ class PPBEController extends Controller
                 $file3Name = time() . '_file_packing_list_' . $file3->getClientOriginalName();
                 $file3Path = $file3->storeAs($path, $file3Name, 'local');
 
-                $dataUpdate['file_packing_list'] = $file3Name;
+                $data_update['file_packing_list'] = $file3Name;
             }
         }
 
-        $dataPPBE->update($dataUpdate);
+        $dataPPBE->update($data_update);
 
         if(!empty($request->barang)) {
             $ppbe_goods = PpbeGoodsModel::where('ppbe_id',$id)->delete();

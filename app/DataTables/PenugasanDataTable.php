@@ -59,13 +59,12 @@ class PenugasanDataTable extends DataTable
         $query = $model->newQuery();
 
         if ($search = request()->get('ppbe_search')) {
-            $query->where('ppbe_number', 'like', "%{$search}%");
+            $query->where('ppbe.code', 'like', "%{$search}%");
         }
 
-        // if ($search = request()->get('company_name_search')) {
-        //     $query->where('company_name', 'like', "%{$search}%");
-        // }
-
+        if ($search = request()->get('company_name_search')) {
+            $query->where('company.company_name', 'like', "%{$search}%");
+        }
         // if($search = request()->get('ls_search')){
         //     $query->where('ls_number', 'like', "%{$search}%");
         // }

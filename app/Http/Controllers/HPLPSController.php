@@ -28,9 +28,19 @@ class HPLPSController extends Controller
         return $dataTable->render('global.datatable', compact('pageTitle','auth_user','assets'));
     }
 
-    public function edit($id)
+    public function show($id)
     {
         $assets = ['hplps','file'];
+        $data = PPBEModel::with('goods','ppbe_history','company','assignments','hplps','hplps.goods','hplps.memory','hplps.usage')->findOrFail($id);
+        $data_company = PerijinanModel::where('id',$data->company_id)->get();
+        $history_quota = HistoryQuotaModel::where('id',$data->company_id)->orderBy('created_at','desc')->first();
+
+        return view('hplps.verify',compact('assets','data','data_company','id','history_quota'));
+    }
+
+    public function edit($id)
+    {
+        $assets = ['hplps','hplps_edit','file'];
         $data = PPBEModel::with('goods','ppbe_history','company','assignments')->findOrFail($id);
         $data_company = PerijinanModel::where('id',$data->company_id)->get();
         $history_quota = HistoryQuotaModel::where('id',$data->company_id)->orderBy('created_at','desc')->first();
@@ -41,8 +51,7 @@ class HPLPSController extends Controller
     public function save(Request $request)
     {
 
-
-        // dd($request, $checker_list);
+        // dd($request);
         $auth_user = AuthHelper::authSession();
         $validate = Validator::make($request->all(),[
             'barang.*.nomor_hs' => "required",
@@ -133,7 +142,7 @@ class HPLPSController extends Controller
                 'stuffing_date_start'=> $request->stuffing_date_start ,
                 'stuffing_date_end'=> $request->stuffing_date_end ,
                 // 'analysis_result'=> $request-> ,
-                // 'checker_list'=> $request-> ,
+                'checker_list'=> $checker_list ,
                 'status'=> "hpl_submitted" ,
                 'packaging_total'=> $request->packing_total,
                 'packaging_unit'=> $request->packing_type,
@@ -156,30 +165,53 @@ class HPLPSController extends Controller
                     ]);
                 }
             }
+            $merah = "";
+            $hijau = "";
+            $seal = "";
 
             if(!empty($request->memorizations)){
                 $memorizations = HplpsMemorizationsModel::where('hplps_id',$hplps->id)->delete();
-                foreach ($request->memorizations as $value) {
-                    // dd($value['series_total'], $request->memorizations);
+                foreach ($request->memorizations as $memorization) {
+                    if(isset($memorization['red_series'])){
+                        foreach ($memorization['red_series'] as $key => $value) {
+                            $tps_merah[] = [
+                                'series' => $value,
+                                'red_init' => $memorization['red_init'][$key],
+                                'red_final' => $memorization['red_final'][$key]
+                            ];
+
+                            $tps_hijau[] = [
+                                'series' => $memorization['green_series'][$key],
+                                'green_init' => $memorization['green_init'][$key],
+                                'green_final' => $memorization['green_init'][$key]
+                            ];
+
+                            $thread_seal[] = [
+                                'series' => $memorization['thread_seal_series'][$key],
+                                'thread_seal_init' => $memorization['thread_seal_init'][$key],
+                                'thread_seal_final' => $memorization['thread_seal_init'][$key]
+                            ];
+
+                            $merah = json_encode($tps_merah);
+                            $hijau = json_encode($tps_hijau);
+                            $seal = json_encode($thread_seal);
+
+
+                        }
+                    }
                     $memorizations = HplpsMemorizationsModel::create([
                         'hplps_id'=> $hplps->id,
-                        'type'=> $value['type'],
-                        'create_number'=> $value['create_number'],
-                        'create_type'=> $value['create_type'],
-                        'size'=> $value['size'],
-                        'series'=> isset($value['series']) ? $value['series']:null,
-                        'series_init'=> isset($value['series_init']) ? $value['series_init']:null,
-                        'series_total'=> $value['series_total'],
-                        'series_type'=> $value['series_type'],
-                        // 'tm_series'
-                        // 'tm_init'
-                        // 'tm_final'
-                        // 'th_series'
-                        // 'th_init'
-                        // 'th_final'
-                        // 'ts_series'
-                        // 'ts_init'
-                        // 'ts_final'
+                        'type'=> $memorization['type'],
+                        'create_number'=> $memorization['create_number'],
+                        'create_type'=> $memorization['create_type'],
+                        'size'=> $memorization['size'],
+                        'series'=> isset($memorization['series']) ? $memorization['series']:null,
+                        'series_init'=> isset($memorization['series_init']) ? $memorization['series_init']:null,
+                        'series_total'=> $memorization['series_total'],
+                        'series_type'=> $memorization['series_type'],
+                        'tps_merah' => $merah,
+                        'tps_hijau' => $hijau,
+                        'thread_seal' => $seal
                     ]);
                 }
             }
@@ -197,25 +229,75 @@ class HPLPSController extends Controller
                 }
             }
 
-            return redirect()->route('ppbe.index')->with('success', 'Pengajuan berhasil Kirim.');
+            return redirect()->route('hplps.daftar')->with('success', 'Pengajuan berhasil Kirim.');
         } catch (\Throwable $th) {
             dd($th);
         }
     }
+
+    public function verify($id)
+    {
+        // dd('a');
+        $assets = ['hplps','hplps_verify','file'];
+        $data = PPBEModel::with('goods','ppbe_history','company','assignments','hplps','hplps.goods','hplps.memory','hplps.usage')->findOrFail($id);
+        $data_company = PerijinanModel::where('id',$data->company_id)->get();
+        $history_quota = HistoryQuotaModel::where('id',$data->company_id)->orderBy('created_at','desc')->first();
+        // dd($ppbe);
+        return view('hplps.verify',compact('assets','data','data_company','id','history_quota'));
+    }
+
+    public function update(Request $request,$id)
+    {
+        $auth_user = AuthHelper::authSession();
+        $hplps = HplpsModel::where('ppbe_id',$request->ppbe_id)->findOrFail($request->ppbe_id);
+        $path = 'hplps_verify_file';
+
+        try {
+            $data_update = [
+                'hpl_feedback_reason' => $request->hplps_reason,
+                'verify_id' => $auth_user->id
+            ];
+
+            if($request->hpl_new_status == "1")
+            {
+                $status = "verified";
+                $data_update['status'] = $status;
+            } else {
+                $status = "reject";
+                $data_update['status'] = $status;
+            }
+
+            if($request->hasFile('hpl_feedback_file'))
+            {
+                $file1 = $request->file('hpl_feedback_file');
+                $file1Name = time() . '_hpl_feedback_file_' . $file1->getClientOriginalName();
+                $file1Path = $file1->storeAs($path, $file1Name, 'local');
+
+                $data_update['hpl_feedback_file'] = $file1Name;
+            }
+
+            $hplps->update($data_update);
+
+            return redirect()->route('hplps.daftar')->with('success', 'Pengajuan berhasil diverifikasi.');
+        } catch (\Throwable $th) {
+            return redirect()->route('hplps.daftar')->with('error', $th);
+        }
+    }
+
     public function uploadFile(Request $request)
     {
-     // Validate the request
         $request->validate([
-            'file' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
+            'files' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
         ]);
 
         // Handle the file upload
-        if ($request->file('file')) {
-            $path = $request->file('file')->store('ppbe_file', 'local');
+        if ($request->file('files')) {
+            $path = $request->file('files')->store('ppbe_file', 'local');
             // $file1->storeAs($path, $file1Name, 'local');
             return response()->json(['success' => 'File uploaded successfully', 'path' => $path]);
         }
 
+        // dd($request->all());
         return response()->json(['error' => 'File upload failed'], 422);
     }
 }

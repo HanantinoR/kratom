@@ -265,7 +265,7 @@
         </a>
         <ul class="sub-nav collapse" id="ls-pages" data-bs-parent="#ls">
             <li class="nav-item">
-                <a class="nav-link {{activeRoute(route('special-pages.billing'))}}" href="{{route('special-pages.billing')}}">
+                <a class="nav-link {{activeRoute(route('ls.daftar'))}}" href="{{route('ls.daftar')}}">
                     <i class="icon">
                           <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                               <g>
@@ -305,7 +305,7 @@
             </li>
         </ul>
     </li>
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-special-pages" role="button"  aria-expanded="false" aria-controls="sidebar-special-pages">
             <i class="icon">
                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -609,7 +609,7 @@
             </i>
             <span class="item-name">Admin</span>
         </a>
-    </li>
+    </li> --}}
     <li><hr class="hr-horizontal"></li>
     <li class="nav-item static-item">
         <a class="nav-link static-item disabled" href="#" tabindex="-1">
@@ -723,7 +723,7 @@
             </li>
         </ul>
     </li>
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link" href="{{route('uisheet')}}" target="_blank">
             <i class="icon">
                  <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -935,7 +935,7 @@
                 </a>
             </li>
         </ul>
-    </li>
+    </li>--}}
     <li class="nav-item mb-5">
         <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-icons" role="button" aria-expanded="false" aria-controls="sidebar-icons">
             <i class="icon">

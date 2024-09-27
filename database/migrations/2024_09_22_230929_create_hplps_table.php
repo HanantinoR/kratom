@@ -16,8 +16,8 @@ class CreateHplpsTable extends Migration
         Schema::create('hplps', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ppbe_id')->constrained('ppbe')->onDelete('cascade')->nullable();
-            // $table->foreignId('ls_id')->constrained('ls')->onDelete('cascade')->nullable();
-            // $table->foreignId('lhp_id')->constrained('lhp')->onDelete('cascade')->nullable();
+            $table->foreignId('ls_id')->constrained('ls')->onDelete('cascade')->nullable();
+            $table->foreignId('lhp_id')->constrained('lhp')->onDelete('cascade')->nullable();
             $table->datetime('date')->nullable();
             $table->string('surveyor_id')->nullable();
             $table->datetime('inspection_date_start')->nullable();
@@ -34,6 +34,8 @@ class CreateHplpsTable extends Migration
             $table->string('inpsection_address')->nullable();
             $table->string('fob_total_hpl')->nullable();
             $table->string('fob_currency_hpl')->nullable();
+            $table->string('hpl_feedback_reason')->nullable();
+            $table->string('hplps_feedback_file')->nullable();
             $table->timestamps();
             $table->integer('request_id')->nullable();
             $table->integer('verify_id')->nullable();
