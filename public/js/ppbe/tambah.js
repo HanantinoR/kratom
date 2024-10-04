@@ -47,6 +47,7 @@ $(document).ready(function(){
                 <td> <input type="text" name="barang[`+count+ `][uraian]" class="form-control text-black " id="barang[`+count+`][uraian]" placeholder="Uraian" required></td>
                 <td> <input type="text" name="barang[`+count+ `][jumlah_total]" class="form-control text-black " id="barang[`+count+`][jumlah_total]" placeholder="Jumlah Total" required></td>
                 <td> <input type="text" name="barang[`+count+ `][nilai_fob]" class="form-control text-black calculateFOB" id="barang[`+count+`][nilai_fob]" placeholder="Nilai FOB" required></td>
+                <td> <input type="text" name="barang[`+count+ `][per_kilogram]" class="form-control text-black calculateFOB" id="barang[`+count+`][per_kilogram]" placeholder="perKilo" required></td>
                 <td>
                     <button class="btn btn-sm btn-icon btn-danger rmv_tambah" id="" type="button">
                         <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

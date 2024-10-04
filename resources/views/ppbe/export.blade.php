@@ -9,7 +9,7 @@
             font-family: 'Helvetica', sans-serif;
             color: #333;
         }
-        h1 {
+        h4 {
             text-align: center;
             color: #004085;
         }
@@ -45,7 +45,7 @@
             width: 200px;
             margin-top: 50px;
             margin-left: auto;
-            
+
         }
         .signature-line {
             border-bottom: 1px dotted #000;
@@ -64,12 +64,12 @@
     </style>
 </head>
 <body>
-    <h1>Export PPBE</h1>
-
+    <h4>{{$data['title']}}</h4>
+    {{-- {{dd($data)}} --}}
     <div class="container">
         <!-- Customer Info Section -->
-        <h4 style="margin-top:-10px">I. Data Pemohon</h4>
-        <table style="width: 100%; font-size:11px; margin-top:-10px">
+        <h5 style="margin-top:-20px; margin-bottom:10px">I. Data Pemohon</h5>
+        <table style="width: 100%; font-size:11px; margin-top:-10px;margin-bottom:-20px">
             <tr>
                 <td style="width: 40%;">Nama Perusahaan Exportir</td>
                 <td style="width: 5%">:</td>
@@ -91,12 +91,12 @@
                 <td></td>
             </tr>
             <tr>
-                <td style="width: 40%">No. ETPK/ETNPK (Eksportir Terdaftar Produsen/Non Produsen Kratom)</td>
+                <td style="width: 40%">No. dan Tanggal ET (Eksportir Terdaftar)</td>
                 <td>:</td>
                 <td></td>
             </tr>
             <tr>
-                <td style="width: 40%">No. Persetujuan Export</td>
+                <td style="width: 40%">No. dan Tanggal PE (Persetujuan Eksport)</td>
                 <td>:</td>
                 <td></td>
             </tr>
@@ -108,14 +108,14 @@
         </table>
 
         <!-- Table Section -->
-        <h4>II. Barang Ekspor</h4>
-        <table class="table" style="font-size:11px; margin-top:-10px">
+        <h5>II. Barang Ekspor</h5>
+        <table class="table" style="font-size:11px; margin-top:-20px; margin-bottom:10px">
             <thead>
                 <tr>
                     <th>NOMOR HS & URAIAN BARANG</th>
                     <th>KUANTITAS & SATUAN</th>
                     <th>MEREK & NOMOR KEMASAN</th>
-                    <th>JENIS KEMASAN</th>
+                    {{-- <th>JENIS KEMASAN</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -123,17 +123,17 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    {{-- <td></td> --}}
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    {{-- <td></td> --}}
                 </tr>
             </tbody>
         </table>
-        <table style="width: 100%; font-size:11px; margin-top:-10px">
+        <table style="width: 100%; font-size:11px; margin-top:-10px; margin-bottom:-20px">
             <tr>
                 <td style="width: 3%">1. </td>
                 <td style="width: 30%;">Nilai FOB</td>
@@ -199,14 +199,19 @@
             </tr>
         </table>
 
-        <h4>III. Kesiapan Barang</h4>
-        <table style="width: 100%; font-size:11px; margin-top:-10px">
+        <h5>III. Kesiapan Barang</h5>
+        <table style="width: 100%; font-size:11px; margin-top:-20px; margin-bottom:-20px">
             <tr>
                 <td style="width:3%">1.</td>
-                <td style="width:27%">Tempat Penyimpanan Barang</td>
+                <td style="width:15%">Tempat Penyimpanan Barang</td>
                 <td style="width:5%">:</td>
-                <td style="width:10%">   Gudang Pabrik</td>
-                <td style="width:10%">   Gudang Konsolidator</td>
+                <td style="width:10%">
+                    <input type="checkbox" name="" id="check">
+                    <label for="check" class="mt-1">
+                        Gudang Pabrik
+                    </label>
+                </td>
+                <td style="width:10%"><input type="checkbox" name="" id="">Gudang Konsolidator</td>
             </tr>
             <tr>
                 <td>2.</td>
@@ -270,11 +275,11 @@
                 <td>:</td>
                 <td></td>
                 <td></td>
-            </tr>   
+            </tr>
         </table>
 
-        <h4>IV. Cara Pengapalan</h4>
-        <table style="width: 100%; font-size:11px; margin-top:-10px">
+        <h5>IV. Cara Pengapalan</h5>
+        <table style="width: 100%; font-size:11px; margin-top:-20px">
             <tr>
                 <td style="width:5%">(.....)</td>
                 <td style="width:23%">FCL</td>
@@ -302,27 +307,26 @@
                 <td>Konvensional (Udara, dll)</td>
             </tr>
         </table>
-        
-        <h5 style="padding-top:10%">Bersama Ini kami Sampaikan Kelengkapan Dokumen</h5>
-        <table style="width: 100%; font-size:11px; margin-top:-10px">
+
+        <h5 style="margin-top:0px">Bersama Ini kami Sampaikan Kelengkapan Dokumen</h5>
+        <table style="width: 100%; font-size:11px; margin-top:-20px">
             <tr>
-                <td style="width:5%">(___)</td>
+                <td style="width:5%"><input type="checkbox" name="" id=""></td>
                 <td>Copy NIB</td>
             </tr>
             <tr>
-                <td style="width:5%">(___)</td>
+                <td style="width:5%"><input type="checkbox" name="" id=""></td>
                 <td>Copy PE</td>
             </tr>
             <tr>
-                <td style="width:5%">(___)</td>
+                <td style="width:5%"><input type="checkbox" name="" id=""></td>
                 <td>Packing List</td>
             </tr>
             <tr>
-                <td style="width:5%">(___)</td>
+                <td style="width:5%"><input type="checkbox" name="" id=""></td>
                 <td>Invoice</td>
             </tr>
         </table>
-
         <div class="signature">
             <p style="font-size:12px">Pemohon:</p>
             <br>

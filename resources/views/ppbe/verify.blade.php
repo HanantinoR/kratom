@@ -240,6 +240,10 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
+                                <label class="form-label" for="origin_port_id">Pelabuhan asal: <span class="text-danger">*</span></label>
+                                {{ Form::text('origin_port_id', old('origin_port_id'), ['class' => 'form-control text-black','id'=>'origin_port_id' ,'placeholder' => 'Pelabuhan Muat', 'required']) }}
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="loading_port_id">Pelabuhan Muat: <span class="text-danger">*</span></label>
                                 {{ Form::text('loading_port_id', old('loading_port_id'), ['class' => 'form-control text-black','id'=>'loading_port_id' ,'placeholder' => 'Pelabuhan Muat', 'readonly']) }}
                             </div>

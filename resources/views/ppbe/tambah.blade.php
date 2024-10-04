@@ -157,6 +157,7 @@
                                             <th>uraian</th>
                                             <th>jumlah</th>
                                             <th>fob</th>
+                                            <th>harga perKg</th>
                                             <th>action</th>
                                         </tr>
                                     </thead>
@@ -166,6 +167,7 @@
                                             <td>{{ Form::text('barang[0][uraian]', old('barang[0][uraian]'), ['class' => 'form-control text-black','id'=>'barang[0][uraian]' ,'placeholder' => 'Uraian', 'required']) }}</td>
                                             <td>{{ Form::text('barang[0][jumlah_total]', old('barang[0][jumlah_total]'), ['class' => 'form-control text-black','id'=>'barang[0][jumlah_total]' ,'placeholder' => 'Jumlah Total', 'required']) }}</td>
                                             <td>{{ Form::text('barang[0][nilai_fob]', old('barang[0][nilai_fob]'), ['class' => 'form-control text-black calculateFOB','id'=>'barang[0][nilai_fob]' ,'placeholder' => 'FOB', 'required']) }}</td>
+                                            <td>{{ Form::text('barang[0][per_kilogram]', old('barang[0][per_kilogram]'), ['class' => 'form-control text-black calculateFOB','id'=>'barang[0][per_kilogram]' ,'placeholder' => 'perKilo', 'required']) }}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-icon btn-success btn_tambah" id="tambah_row" type="button">
                                                     <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -238,6 +240,10 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="form-group col-md-6 col-sm-12">
+                                <label class="form-label" for="origin_port_id">Pelabuhan asal: <span class="text-danger">*</span></label>
+                                {{ Form::text('origin_port_id', old('origin_port_id'), ['class' => 'form-control text-black','id'=>'origin_port_id' ,'placeholder' => 'Pelabuhan Muat', 'required']) }}
+                            </div>
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="loading_port_id">Pelabuhan Muat: <span class="text-danger">*</span></label>
                                 {{ Form::text('loading_port_id', old('loading_port_id'), ['class' => 'form-control text-black','id'=>'loading_port_id' ,'placeholder' => 'Pelabuhan Muat', 'required']) }}
@@ -409,10 +415,10 @@
                                 <label class="form-label" for="file_packing_list">Paking List: <span class="text-danger">*</span></label>
                                 {{ Form::file('file_packing_list',['class' => 'dropify', 'id'=>'file_packing_list','placeholder' => 'input',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ,'required']) }}
                             </div>
-                            {{-- <div class="col-6 mb-3">
+                            <div class="col-6 mb-3">
                                 <label class="form-label" for="file_invoice">ET & PE: <span class="text-danger">*</span></label>
-                                {{ Form::file('file_invoice',['class' => 'dropify', 'id'=>'file_invoice','placeholder' => 'input' ,'required']) }}
-                            </div> --}}
+                                {{ Form::file('file_invoice',['class' => 'form-control', 'id'=>'file_invoice','placeholder' => 'input' ,'required','multiple']) }}
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-4">

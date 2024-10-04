@@ -53,7 +53,7 @@ class HPLPSDataTable extends DataTable
                                     '</svg> '.
                                 '</i>';
 
-                if(!isset($status))
+                if(!isset($status) || $status == "" || $status == null)
                 {
                     $status_submit = 'Menunggu Pengajuan Pemeriksaan';
                     $merk_status .=  $secondary.$info_icon.$status_submit.'</span><br>';
@@ -81,10 +81,10 @@ class HPLPSDataTable extends DataTable
                     }
 
                     if(in_array($status,['verified_signed_ls','print_ls','accepted_ls'])) {
-                        $status_signed_ls = 'Sudah Dilakukan Verifikasi Tanda Tangan';
+                        $status_signed_ls = 'Sudah Dilakukan Verifikasi LS';
                         $merk_status .=  $success.$success_icon.$status_signed_ls.'</span><br>';
                     } else {
-                        $status_signed_ls = 'Menunggu Verifikasi Tanda Tangan';
+                        $status_signed_ls = 'Menunggu Verifikasi LS';
                         $merk_status .=  $secondary.$info_icon.$status_signed_ls.'</span><br>';
                     }
                 }
@@ -126,11 +126,11 @@ class HPLPSDataTable extends DataTable
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query()
-    {
+    { //
         $model = PPBEModel::join('company','company.id','=','ppbe.company_id')
                         ->leftjoin('hplps','hplps.ppbe_id','=','ppbe.id')
                         ->select('ppbe.id','ppbe.code','ppbe.date','company.company_name','ppbe.inspection_office_id','ppbe.status as ppbe_status','ppbe.created_at','hplps.status as hplps_status')
-                        ->whereIn('ppbe.status',array('inspection','stuffing', 'verified','verified_ls','verified_lhp','assignment', 'print_assignment_letter'));
+                        ->whereIn('ppbe.status',array('assignment', 'print_assignment_letter','verified_hpl','verified_ls','verified_lhp'));
         $query = $model->newQuery();
         if ($search = request()->get('ppbe_search')) {
             $query->where('ppbe.code', 'like', "%{$search}%");

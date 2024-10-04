@@ -12,8 +12,6 @@ class HplpsModel extends Model
     protected $table = 'hplps';
     protected $fillable = [
         'ppbe_id',
-        'ls_id',
-        'lhp_id',
         'date',
         'surveyor_id',
         'inspection_date_start',

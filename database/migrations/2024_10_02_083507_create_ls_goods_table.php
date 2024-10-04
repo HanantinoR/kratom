@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePpbeGoodsTable extends Migration
+class CreateLsGoodsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreatePpbeGoodsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ppbe_goods', function (Blueprint $table) {
+        Schema::create('ls_goods', function (Blueprint $table) {
             $table->id();
-            $table->integer('ppbe_id')->constrained('ppbe')->onDelete('cascade');
+            $table->foreignId('ls_id')->constrained('ls')->onDelete('cascade');
             $table->integer('processed_level_id')->nullable();
             $table->string('description')->nullable();
             $table->string('quantity_kg')->nullable();
             $table->string('fob_value')->nullable();
-            $table->string('per_kilogram')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ class CreatePpbeGoodsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ppbe_goods');
+        Schema::dropIfExists('ls_goods');
     }
 }

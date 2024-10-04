@@ -22,7 +22,7 @@ class LSDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->editColumn('code', function($row) {
-                return '<a href="'.route('ppbe.edit',$row->id).'">'.$row->code.'</a>';
+                return '<a href="'.route('ppbe.edit',$row->id).'" class="btn btn-soft-primary">'.$row->code.'</a>';
             })
             // ->editColumn('userProfile.company_name', function($query) {
             //     return $query->userProfile->company_name ?? '-';
@@ -64,19 +64,19 @@ class LSDataTable extends DataTable
                 } else {
                     if(in_array($status,['verified','verified_signed_ls','print_ls','accepted_ls']))
                     {
-                        $status_submitted = 'Pengajuan Pemeriksaan Verifikasi';
+                        $status_submitted = 'Verifikasi Pengajuan Pemeriksaan ';
                         $merk_status .= $success.$success_icon.$status_submitted.'</span><br>';
                     } else {
-                        $status_submitted = 'Menunggu Pengajuan Pemeriksaan';
+                        $status_submitted = 'Menunggu Verifikasi Pemeriksaan';
                         $merk_status .=  $secondary.$info_icon.$status_submit.'</span><br>';
                     }
 
                     if(in_array($status,['verified_signed_ls','print_ls','accepted_ls']))
                     {
-                        $status_verified = 'Sudah Mendapatkan Nomor LS';
+                        $status_verified = 'Sudah Verifikasi LS';
                         $merk_status .= $success.$success_icon.$status_verified.'</span><br>';
                     } else {
-                        $status_verified = 'Menunggu Verifikasi Tanda Tangan';
+                        $status_verified = 'Menunggu Verifikasi LS';
                         $merk_status .=  $secondary.$info_icon.$status_verified.'</span><br>';
                     }
 
@@ -111,8 +111,8 @@ class LSDataTable extends DataTable
             //     });
             // })
             ->addColumn('action',function($query){
-                return view('hplps.action',[
-                    'id' => $query->id,
+                return view('ls.action',[
+                    'id' => $query->hplps->id,
                     'status' => $query->hplps_status
                 ]);
             })
@@ -130,7 +130,7 @@ class LSDataTable extends DataTable
         $model = PPBEModel::join('company','company.id','=','ppbe.company_id')
                         ->leftjoin('hplps','hplps.ppbe_id','=','ppbe.id')
                         ->select('ppbe.id','ppbe.code','ppbe.date','company.company_name','ppbe.inspection_office_id','ppbe.status as ppbe_status','ppbe.created_at','hplps.status as hplps_status')
-                        ->whereIn('ppbe.status',array('verified','verified_ls','verified_lhp','assignment', 'print_assignment_letter'));
+                        ->whereIn('hplps.status',array('verified', 'verified_signed_ls','print_ls','accepted_ls'));
         $query = $model->newQuery();
         if ($search = request()->get('ppbe_search')) {
             $query->where('ppbe.code', 'like', "%{$search}%");

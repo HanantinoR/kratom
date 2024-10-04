@@ -55,8 +55,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('export/{id}',[PPBEController::class,'ppbe'])->name('ppbe.export');
         Route::get('pdf_export/{id}',[PPBEController::class,'pdf_export'])->name('ppbe.pdf');
         Route::get('ls/{id}', [PPBEController::class, 'ls_pdf'])->name('ppbe.ls_pdf');
-        // Route::get('ls/{id}', function(){
-        //     return view('ppbe.ls');
+        // Route::get('export/{id}', function(){
+        //     return view('ppbe.export');
         // });
     });
 
@@ -77,7 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
         route::post('save', [HPLPSController::class,'save'])->name('hplps.save');
         route::get('verify/{id}',[HPLPSController::class,'verify'])->name('hplps.verify');
         route::put('update/{id}',[HPLPSController::class,'update'])->name('hplps.update');
-        route::put('detail/{id}',[HPLPSController::class,'show'])->name('hplps.detail');
+        route::get('{state}/{id}',[HPLPSController::class,'show'])->name('hplps.detail');
         Route::post('/upload', [HPLPSController::class, 'uploadFile'])->name('hplps.upload');
     });
 
@@ -88,6 +88,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     route::group(['prefix' => 'ls' ], function(){
         Route::get('index',[LsController::class,'index'])->name('ls.daftar');
+        Route::post('save',[LsController::class,'save'])->name('ls.save');
     });
 
     // Users Module

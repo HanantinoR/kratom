@@ -28,20 +28,20 @@ class HPLPSController extends Controller
         return $dataTable->render('global.datatable', compact('pageTitle','auth_user','assets'));
     }
 
-    public function show($id)
+    public function show($state,$id)
     {
-        $assets = ['hplps','file'];
+        $assets = ['hplps','file','ls_verify'];
         $data = PPBEModel::with('goods','ppbe_history','company','assignments','hplps','hplps.goods','hplps.memory','hplps.usage')->findOrFail($id);
         $data_company = PerijinanModel::where('id',$data->company_id)->get();
         $history_quota = HistoryQuotaModel::where('id',$data->company_id)->orderBy('created_at','desc')->first();
 
-        return view('hplps.verify',compact('assets','data','data_company','id','history_quota'));
+        return view('hplps.detail',compact('assets','data','data_company','id','state','history_quota'));
     }
 
     public function edit($id)
     {
         $assets = ['hplps','hplps_edit','file'];
-        $data = PPBEModel::with('goods','ppbe_history','company','assignments')->findOrFail($id);
+        $data = PPBEModel::with('goods','ppbe_history','company','assignments','hplps','hplps.goods','hplps.memory','hplps.usage')->findOrFail($id);
         $data_company = PerijinanModel::where('id',$data->company_id)->get();
         $history_quota = HistoryQuotaModel::where('id',$data->company_id)->orderBy('created_at','desc')->first();
         // dd($ppbe);
@@ -230,8 +230,8 @@ class HPLPSController extends Controller
             }
 
             return redirect()->route('hplps.daftar')->with('success', 'Pengajuan berhasil Kirim.');
-        } catch (\Throwable $th) {
-            dd($th);
+        } catch (\Exception $e) {
+            DB::Rollback();
         }
     }
 
