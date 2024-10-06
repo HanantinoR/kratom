@@ -14,10 +14,11 @@
 
         ?>
 
-        {{-- {{dd($data->hplps->status)}} --}}
+        {{-- {{dd($data)}} --}}
         {!! Form::model($data, ['route' => ['hplps.save'], 'method' => 'POST' , 'enctype' => 'multipart/form-data','id'=>'form_edit', 'novalidate', 'class' => 'needs-validation']) !!}
         {{ Form::hidden('ppbe_id', old('ppbe_id', $id), ['class' => 'form-control text-black', 'id' => 'ppbe_id', 'readonly']) }}
-        @if($data->hplps->status === "verified")
+        @if( isset($data->hplps))  
+        {{-- || $data->hplps->status === "verified" --}}
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12">
                     <div class="card">
@@ -891,14 +892,16 @@
                                     {{ Form::text('origin_port_id', old('origin_port_id', $data->origin_port_id), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'readonly']) }}
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="loading_port_id" class="form-label">Pelabuhan Muat: <span class="text-danger">*</span></label>
-                                    {{ Form::text('loading_port_id', old('loading_port_id', $data->loading_port_id), ['class' => 'form-control text-black', 'id' => 'loading_port_id', 'readonly']) }}
+                                    <label for="loading_port_name" class="form-label">Pelabuhan Muat: <span class="text-danger">*</span></label>
+                                    {{ Form::text('loading_port_name', old('loading_port_name', $loading_port[$data->loading_port_id]->name), ['class' => 'form-control text-black', 'id' => 'loading_port_name', 'readonly']) }}
+                                    {{-- {{ Form::hidden('loading_port_id', old('loading_port_id', $data->loading_port_id), ['class' => 'form-control text-black', 'id' => 'loading_port_id']) }} --}}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="destination_port_id" class="form-label">Pelabuhan Tujuan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('destination_port_id', old('destination_port_id', $data->destination_port_id), ['class' => 'form-control text-black', 'id' => 'destination_port_id', 'readonly']) }}
+                                    <label for="destination_port_name" class="form-label">Pelabuhan Tujuan: <span class="text-danger">*</span></label>
+                                    {{ Form::text('destination_port_name', old('destination_port_name', $destination_port[$data->destination_port_id]->name), ['class' => 'form-control text-black', 'id' => 'destination_port_name', 'readonly']) }}
+                                    {{-- {{ Form::hidden('destination_port_id', old('destination_port_id', $data->destination_port_id), ['class' => 'form-control text-black', 'id' => 'destination_port_id', 'readonly']) }} --}}
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="country_destination_id" class="form-label">Negara Tujuan: <span class="text-danger">*</span></label>
@@ -1511,12 +1514,12 @@
                             </div> --}}
                         </div>
                         <div class="card-footer d-flex justify-content-center">
-                            @if ($data->hplps->status === 'verified')
+                            {{-- @if ($data->hplps->status === 'verified')
                                 {{ Form::hidden('status_hpl', old('status_hpl','verified'), ['class' => 'form-control text-black tps_0', 'id' => 'status_hpl', 'required','disabled']) }}
                                 <button type="submit" class="btn btn-success me-2" id="send_hpl_btn">save</button>
                             @else
-                                <button type="button" class="btn btn-primary me-2" id="send_hpl_btn"> Ajukan</button>
-                            @endif
+                            @endif --}}
+                            <button type="button" class="btn btn-primary me-2" id="send_hpl_btn"> Ajukan</button>
                             <button type="button" class="btn btn-secondary"> Kembali</button>
                         </div>
                     </div>

@@ -14,6 +14,13 @@ use App\Models\HplpsMemorizationsModel;
 use App\Models\BcopsUsageModel;
 use App\Models\PpbeHistoryModel;
 use App\Models\HistoryQuotaModel;
+use App\Models\KantorCabang;
+use App\Models\PelabuhanMuat;
+use App\Models\PelabuhanTujuan;
+use App\Models\Negara;
+use App\Models\KabupatenKota;
+use App\Models\Provinsi;
+use App\Models\MataUang;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -44,8 +51,15 @@ class HPLPSController extends Controller
         $data = PPBEModel::with('goods','ppbe_history','company','assignments','hplps','hplps.goods','hplps.memory','hplps.usage')->findOrFail($id);
         $data_company = PerijinanModel::where('id',$data->company_id)->get();
         $history_quota = HistoryQuotaModel::where('id',$data->company_id)->orderBy('created_at','desc')->first();
+        $office_branch = KantorCabang::get();
+        $provinces = Provinsi::get();
+        $destination_port = PelabuhanTujuan::get();
+        $loading_port = PelabuhanMuat::get();
+        $cities = KabupatenKota::get();
+        $countries = Negara::get();
+        $currencies = MataUang::get();
         // dd($ppbe);
-        return view('hplps.edit',compact('assets','data','data_company','id','history_quota'));
+        return view('hplps.edit',compact('assets','data','data_company','id','history_quota', 'cities', 'countries', 'office_branch', 'provinces', 'destination_port', 'loading_port', 'currencies'));
     }
 
     public function save(Request $request)

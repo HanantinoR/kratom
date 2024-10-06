@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $('.select2').select2();
     $('.edit_readonly').on('click',function(){
         var value_btn = $(this).attr('name');
         if(value_btn === "merk_btn")

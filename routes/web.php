@@ -8,6 +8,7 @@ use App\Http\Controllers\HPLPSController;
 use App\Http\Controllers\PerijinanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LsController;
+use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
@@ -108,6 +109,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'bcops'], function(){
         Route::get('daftar', [BcopsController::class, 'daftar'])->name('bcops.daftar');
         Route::post('tambah', [BcopsController::class, 'tambah'])->name('bcops.tambah');
+    });
+
+    //Master
+    Route::group(['prefix' => 'master'], function(){
+        Route::get('kota_cabang', [MasterDataController::class, 'kota_cabang'])->name('master.kota_cabang');
+        Route::get('mata_uang', [MasterDataController::class, 'mata_uang'])->name('master.mata_uang');
+        Route::get('negara', [MasterDataController::class, 'negara'])->name('master.negara');
+        Route::get('pelabuhan_muat', [MasterDataController::class, 'pelabuhan_muat'])->name('master.pelabuhan_muat');
+        Route::get('pelabuhan_tujuan', [MasterDataController::class, 'pelabuhan_tujuan'])->name('master.pelabuhan_tujuan');
+        Route::get('analisis_pemeriksaan', [MasterDataController::class, 'analisis_pemeriksaan'])->name('master.analisis_pemeriksaan');
+        Route::get('kesimpulan_pemeriksaan', [MasterDataController::class, 'kesimpulan_pemeriksaan'])->name('master.kesimpulan_pemeriksaan');
+        Route::get('provinsi', [MasterDataController::class, 'provinsi'])->name('master.provinsi');
+        Route::get('kota_kabupaten', [MasterDataController::class, 'kabupaten_kota'])->name('master.kabupaten_kota');
     });
 });
 

@@ -4,6 +4,7 @@ $(document).ready(function(){
     $('.office_id').select2();
     $('.type_kemasan').select2();
     $('.form_select2').select2();
+    $('.select2').select2();
     $('.dropify').dropify({
         messages: {
             'default': '',

@@ -11,6 +11,13 @@ use App\Models\PpbeGoodsModel;
 use App\Models\PPBEModel;
 use App\Models\PpbeHistoryModel;
 use App\Models\HistoryQuotaModel;
+use App\Models\KantorCabang;
+use App\Models\PelabuhanMuat;
+use App\Models\PelabuhanTujuan;
+use App\Models\Negara;
+use App\Models\KabupatenKota;
+use App\Models\Provinsi;
+use App\Models\MataUang;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
@@ -43,7 +50,15 @@ class PPBEController extends Controller
         $assets = ['ppbe','file'];
         $roles = Role::where('status',1)->get()->pluck('title', 'id');
         $data_company = PerijinanModel::get();
-        return view('ppbe.tambah',compact('roles','assets','data_company'));
+        $office_branch = KantorCabang::get();
+        $provinces = Provinsi::get();
+        $destination_port = PelabuhanTujuan::get();
+        $loading_port = PelabuhanMuat::get();
+        $cities = KabupatenKota::get();
+        $countries = Negara::get();
+        $currencies = MataUang::get();
+
+        return view('ppbe.tambah',compact('roles','assets','data_company', 'cities', 'countries', 'office_branch', 'provinces', 'destination_port', 'loading_port', 'currencies'));
     }
 
     /**
