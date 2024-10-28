@@ -10,6 +10,7 @@ class LsGoodsModel extends Model
     use HasFactory;
 
     protected $table = 'ls_goods';
+
     protected $fillable =[
         'ls_id',
         'processed_level_id',
@@ -17,4 +18,9 @@ class LsGoodsModel extends Model
         'quantity_kg',
         'fob_value',
     ];
+
+    public function ls()
+    {
+        return $this->belongsTo(LsModel::class, 'ls_id');
+    }
 }

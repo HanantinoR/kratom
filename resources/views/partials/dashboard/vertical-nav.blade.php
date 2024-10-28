@@ -305,8 +305,8 @@
                               </g>
                           </svg>
                       </i>
-                    <i class="sidenav-mini-icon"> LP </i>
-                    <span class="item-name">Penolakan</span>
+                    <i class="sidenav-mini-icon"> HP </i>
+                    <span class="item-name">Pemeriksaan</span>
                 </a>
             </li>
         </ul>
@@ -410,7 +410,7 @@
         </a>
         <ul class="sub-nav collapse" id="bcops-pages" data-bs-parent="#bcops">
             <li class="nav-item">
-                <a class="nav-link {{activeRoute(route('bcops.daftar'))}}" href="{{route('bcops.daftar')}}">
+                <a class="nav-link {{activeRoute(route('bcops.umum_daftar'))}}" href="{{route('bcops.umum_daftar')}}">
                     <i class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                             <g>
@@ -418,8 +418,53 @@
                             </g>
                         </svg>
                     </i>
-                    <i class="sidenav-mini-icon"> D </i>
-                    <span class="item-name">Daftar</span>
+                    <i class="sidenav-mini-icon"> U </i>
+                    <span class="item-name">Umum</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="sub-nav collapse" id="bcops-pages" data-bs-parent="#bcops">
+            <li class="nav-item">
+                <a class="nav-link {{activeRoute(route('bcops.surveyor_daftar'))}}" href="{{route('bcops.surveyor_daftar')}}">
+                    <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                    <i class="sidenav-mini-icon"> S </i>
+                    <span class="item-name">Surveyor</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="sub-nav collapse" id="bcops-pages" data-bs-parent="#bcops">
+            <li class="nav-item">
+                <a class="nav-link {{activeRoute(route('bcops.hplps_usage'))}}" href="{{route('bcops.hplps_usage')}}">
+                    <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                    <i class="sidenav-mini-icon"> H </i>
+                    <span class="item-name">HPLPS</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="sub-nav collapse" id="bcops-pages" data-bs-parent="#bcops">
+            <li class="nav-item">
+                <a class="nav-link {{activeRoute(route('bcops.pengembalian'))}}" href="{{route('bcops.pengembalian')}}">
+                    <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                    <i class="sidenav-mini-icon"> P </i>
+                    <span class="item-name">Pengembalian</span>
                 </a>
             </li>
         </ul>

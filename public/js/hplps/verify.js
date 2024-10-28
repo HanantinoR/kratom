@@ -4,7 +4,6 @@ $(document).ready(function(){
         selectOnClose: true,
         width: 'resolve',
         dropdownParent: $('#verifikasiHPLModal')
-
     });
     $('#verify_btn').click(function(){
         $('#verifikasiHPLModal').modal('show');

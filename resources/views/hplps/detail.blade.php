@@ -684,7 +684,7 @@
                 <h5 class="modal-title" id="verifyLSModalLabel">Modal title</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::model($data, ['route' => ['ls.save', $id], 'method' => 'POST' , 'enctype' => 'multipart/form-data','id'=>"form_approval"]) !!}
+            {!! Form::model($data, ['route' => ['ls.save'], 'method' => 'POST' , 'enctype' => 'multipart/form-data','id'=>"form_approval"]) !!}
                 <div class="modal-body">
                     <div class="row">
                         {{Form::hidden('hplps_id',old('hplps_id',$id),['class'=>'form-control','id'=>'hplps_id','placeholder'=>'Catatan'])}}

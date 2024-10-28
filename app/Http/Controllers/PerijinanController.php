@@ -21,7 +21,7 @@ class PerijinanController extends Controller
     public function index(PerijinanDataTable $dataTable)
     {
         $pageTitle = trans('global-message.list_form_title',['form' => trans('perijinan.title')] );
-        $assets = ['data-table','perijinan_list'];
+        $assets = ['data-table','perijinan_list','company_search'];
         $headerAction = "<a href=".route('perijinan.create')." class='btn btn-sm btn-primary' role='button'>Add Perijinan</a>";
         return $dataTable->render('global.datatable', compact('pageTitle','assets', 'headerAction'));
     }

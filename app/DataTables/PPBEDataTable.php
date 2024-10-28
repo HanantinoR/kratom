@@ -28,8 +28,8 @@ class PPBEDataTable extends DataTable
             //     return $query->userProfile->company_name ?? '-';
             // })
             ->editColumn('status', function($query) {
-                // dd($query->inspection_date);
-                $status =$query->ppbe_status  ;
+                // dd($query);
+                $status =$query->status  ;
                 $status_draft = '';
                 $status_submitted = '';
                 $status_verified = '';

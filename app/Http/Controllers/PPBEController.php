@@ -35,7 +35,7 @@ class PPBEController extends Controller
     {
         $pageTitle = trans('global-message.list_form_title',['form' => trans('ppbe.title')] );
         $auth_user = AuthHelper::authSession();
-        $assets = ['data-table','ppbe_list'];
+        $assets = ['data-table','ppbe_list','ppbe_search','company_search'];
         // $headerAction = '<a href="'.route('users.create').'" class="btn btn-sm btn-primary" role="button">Add UserS</a>';
         return $dataTable->render('global.datatable', compact('pageTitle','auth_user','assets'));
     }
@@ -572,23 +572,5 @@ class PPBEController extends Controller
 
     }
 
-    public function ls_pdf($id){
-        $data =[
-            'title' => 'test',
-            'content' =>'coba'
-        ];
-        $documentPDF = View::make('ppbe.ls',['data'=>$data])->render();
 
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml($documentPDF);
-
-        // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser
-        return $dompdf->stream('ppbe.ls',['Attachment'=>false]);
-    }
 }

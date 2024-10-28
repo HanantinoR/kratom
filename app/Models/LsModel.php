@@ -10,6 +10,7 @@ class LsModel extends Model
     use HasFactory;
 
     protected $table = 'ls';
+
     protected $fillable = [
         'ppbe_id',
         'hplps_id',
@@ -67,10 +68,10 @@ class LsModel extends Model
 
     public function goods()
     {
-        return $this->hasMany(HplpsGoodsModel::class,'ls_id');
+        return $this->hasMany(LsGoodsModel::class,'ls_id');
     }
 
-    public function memorizations()
+    public function memorys()
     {
         return $this->hasMany(LsMemorizationsModel::class,'ls_id');
     }

@@ -24,6 +24,9 @@ class LSDataTable extends DataTable
             ->editColumn('code', function($row) {
                 return '<a href="'.route('ppbe.edit',$row->id).'" class="btn btn-soft-primary">'.$row->code.'</a>';
             })
+            ->editColumn('code_above', function($row) {
+                return '<a href="'.route('ls.detail',$row->ls_id).'" class="btn btn-soft-primary">'.$row->code_above.'</a>';
+            })
             // ->editColumn('userProfile.company_name', function($query) {
             //     return $query->userProfile->company_name ?? '-';
             // })
@@ -113,10 +116,12 @@ class LSDataTable extends DataTable
             ->addColumn('action',function($query){
                 return view('ls.action',[
                     'id' => $query->hplps->id,
-                    'status' => $query->hplps_status
+                    'status' => $query->hplps_status,
+                    'code_above' => $query->code_above,
+                    'ls_id' => $query->ls_id
                 ]);
             })
-            ->rawColumns(['action','status','code']);
+            ->rawColumns(['action','status','code','code_above']);
     }
 
     /**
@@ -129,7 +134,10 @@ class LSDataTable extends DataTable
     {
         $model = PPBEModel::join('company','company.id','=','ppbe.company_id')
                         ->leftjoin('hplps','hplps.ppbe_id','=','ppbe.id')
-                        ->select('ppbe.id','ppbe.code','ppbe.date','company.company_name','ppbe.inspection_office_id','ppbe.status as ppbe_status','ppbe.created_at','hplps.status as hplps_status')
+                        ->leftjoin('ls','ls.hplps_id','=','hplps.id')
+                        ->select('ppbe.id','hplps.id as hplps_id','ls.id as ls_id','ppbe.code','ppbe.date','company.company_name','ppbe.inspection_office_id',
+                            'ppbe.status as ppbe_status','ppbe.created_at','hplps.status as hplps_status','ls.status as ls_status',
+                            'ls.code_above')
                         ->whereIn('hplps.status',array('verified', 'verified_signed_ls','print_ls','accepted_ls'));
         $query = $model->newQuery();
         if ($search = request()->get('ppbe_search')) {
@@ -180,6 +188,7 @@ class LSDataTable extends DataTable
         return [
             ['data' => 'id', 'name' => 'id', 'title' => 'id','orderable' => false],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status','searchable'=>false],
+            ['data' => 'code_above', 'name' => 'code_above', 'title' => 'Nomor LS'],
             ['data' => 'code', 'name' => 'code', 'title' => 'Nomor PPBE'],
             ['data' => 'date', 'name' => 'date', 'title' => 'Tanggal PPBE','searchable'=>false],
             ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Perusahaan','orderable' => false],

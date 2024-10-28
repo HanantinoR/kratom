@@ -10,6 +10,7 @@ class LsMemorizationsModel extends Model
     use HasFactory;
 
     protected $table = 'ls_memorizations';
+
     protected $fillable =[
         'ls_id',
         'type',
@@ -24,4 +25,9 @@ class LsMemorizationsModel extends Model
         'tps_hijau',
         'thread_seal',
     ];
+
+    public function ls()
+    {
+        return $this->belongsTo(LsModel::class, 'ls_id');
+    }
 }

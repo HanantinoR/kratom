@@ -10,6 +10,7 @@ use App\Models\PPBEModel;
 use App\Models\PenugasanModel;
 use App\Models\PpbeHistoryModel;
 use Illuminate\Support\Facades\View;
+use App\Models\User;
 use Dompdf\Dompdf;
 
 class PenugasanController extends Controller
@@ -18,10 +19,11 @@ class PenugasanController extends Controller
     {
         $pageTitle = trans('global-message.list_form_title',['form' => trans('penugasan.title')] );
         $auth_user = AuthHelper::authSession();
-        $assets = ['data-table','penugasan_list'];
+        $assets = ['data-table','penugasan_list','ppbe_search','company_search'];
+        $users = user::where('status','active')->get();
         $headerAction = '<a href="surat-penugasan" class="btn btn-sm btn-primary me-2" role="button" target="_blank">Print Surat Penugasan</a>
                         <a href="surat-tugas" class="btn btn-sm btn-warning me-2" role="button" target="_blank">Print Surat Tugas</a>';
-        return $dataTable->render('global.datatable', compact('pageTitle','auth_user','assets','headerAction'));
+        return $dataTable->render('global.datatable', compact('pageTitle','auth_user','users','assets','headerAction'));
     }
 
     public function save(Request $request)
@@ -85,7 +87,6 @@ class PenugasanController extends Controller
     public function getDataPpbe($id)
     {
         $ppbe = PenugasanModel::where('ppbe_id',$id)->first();
-
         return response()->json([
             'ppbe' => $ppbe,
         ],200);

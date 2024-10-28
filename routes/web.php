@@ -55,7 +55,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('verify/{id}',[PPBEController::class,'verify_ppbe'])->name('ppbe.verify');
         Route::get('export/{id}',[PPBEController::class,'ppbe'])->name('ppbe.export');
         Route::get('pdf_export/{id}',[PPBEController::class,'pdf_export'])->name('ppbe.pdf');
-        Route::get('ls/{id}', [PPBEController::class, 'ls_pdf'])->name('ppbe.ls_pdf');
         // Route::get('export/{id}', function(){
         //     return view('ppbe.export');
         // });
@@ -82,14 +81,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/upload', [HPLPSController::class, 'uploadFile'])->name('hplps.upload');
     });
 
-    Route::group(['prefix'=>'pengajuan'],function(){
-        Route::get('pdf_export/{id}',[PengajuanController::class,'pdf_export'])->name('pengajuan.pdf');
-        // Route::get('ppbe/{id}', [PengajuanController::class, 'ppbe'])->name('pengajuan.ppbe');
-    });
+    // Route::group(['prefix'=>'pengajuan'],function(){
+    //     Route::get('pdf_export/{id}',[PengajuanController::class,'pdf_export'])->name('pengajuan.pdf');
+    //     // Route::get('ppbe/{id}', [PengajuanController::class, 'ppbe'])->name('pengajuan.ppbe');
+    // });
 
     route::group(['prefix' => 'ls' ], function(){
         Route::get('index',[LsController::class,'index'])->name('ls.daftar');
+        Route::get('detail/{id}',[LsController::class,'show'])->name('ls.detail');
         Route::post('save',[LsController::class,'save'])->name('ls.save');
+        Route::get('cetak/{code_above}', [LsController::class, 'export_pdf'])->name('ls.sertifikat');
     });
 
     // Users Module
@@ -107,8 +108,14 @@ Route::group(['middleware' => 'auth'], function () {
     });
     //BCOPS MODULE
     Route::group(['prefix' => 'bcops'], function(){
-        Route::get('daftar', [BcopsController::class, 'daftar'])->name('bcops.daftar');
-        Route::post('tambah', [BcopsController::class, 'tambah'])->name('bcops.tambah');
+        Route::get('daftar', [BcopsController::class, 'daftar_umum'])->name('bcops.umum_daftar');
+        Route::post('tambah_umum', [BcopsController::class, 'tambah_umum'])->name('bcops.umum_tambah');
+        Route::post('exists_umum', [BcopsController::class, 'check_umum'])->name('bcops.umum_check');
+        Route::get('surveyor', [BcopsController::class, 'daftar_surveyor'])->name('bcops.surveyor_daftar');
+        Route::post('tambah_surveyor', [BcopsController::class, 'tambah_surveyor'])->name('bcops.surveyor_tambah');
+        Route::post('exists_surveyor', [BcopsController::class, 'check_surveyor'])->name('bcops.surveyor_umum');
+        Route::get('usage', [BcopsController::class, 'usage_hplps'])->name('bcops.hplps_usage');
+        Route::get('pengembalian', [BcopsController::class, 'pengembalian'])->name('bcops.pengembalian');
     });
 
     //Master

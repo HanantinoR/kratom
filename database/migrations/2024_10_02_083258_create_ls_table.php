@@ -50,10 +50,10 @@ class CreateLsTable extends Migration
             $table->string('packing_total')->nullable();
             $table->string('packing_type')->nullable();
             $table->string('signer_ls_id')->nullable();//int
-            $table->int('is_canceled')->nullable();
+            $table->integer('is_canceled')->nullable();
             $table->string('canceled_reason')->nullable();
             $table->string('file_cancel')->nullable();
-            $table->int('is_perubahan')->nullable();//int
+            $table->integer('is_perubahan')->nullable();//int
             $table->string('mexamination_conclusions_id')->nullable();//int
             $table->string('status')->nullable();
             $table->string('surveyor_reports_id')->nullable();//int
