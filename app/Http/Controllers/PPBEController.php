@@ -11,6 +11,7 @@ use App\Models\PpbeGoodsModel;
 use App\Models\PPBEModel;
 use App\Models\PpbeHistoryModel;
 use App\Models\HistoryQuotaModel;
+use App\Models\CompanyModel;
 use App\Models\KantorCabang;
 use App\Models\PelabuhanMuat;
 use App\Models\PelabuhanTujuan;
@@ -535,7 +536,12 @@ class PPBEController extends Controller
             'title' => 'Test PPBE',
             'content' =>'ISIPPBE'
         ];
-        $documentPDF = View::make('ppbe.export',['data'=>$data])->render();
+
+        $data_ppbe = PPBEModel::where('id', $id)->first();
+        $data_company = CompanyModel::where('id', $data_ppbe->company_id)->first();
+        $data_ppbe_goods = PPBEGoodsModel::where('ppbe_id', $data_ppbe->id)->get();
+        // dd($data_ppbe_goods);
+        $documentPDF = View::make('ppbe.export',['data'=>$data, 'data_ppbe' => $data_ppbe, 'data_company' => $data_company, 'data_ppbe_goods' => $data_ppbe_goods])->render();
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml($documentPDF);

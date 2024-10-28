@@ -58,14 +58,12 @@ class HPLPSController extends Controller
         $cities = KabupatenKota::get();
         $countries = Negara::get();
         $currencies = MataUang::get();
-        // dd($ppbe);
+        // dd($currencies);
         return view('hplps.edit',compact('assets','data','data_company','id','history_quota', 'cities', 'countries', 'office_branch', 'provinces', 'destination_port', 'loading_port', 'currencies'));
     }
 
     public function save(Request $request)
     {
-
-        // dd($request);
         $auth_user = AuthHelper::authSession();
         $validate = Validator::make($request->all(),[
             'barang.*.nomor_hs' => "required",

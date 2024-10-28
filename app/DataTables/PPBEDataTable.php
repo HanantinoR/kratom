@@ -90,7 +90,7 @@ class PPBEDataTable extends DataTable
                         $merk_status .=  $secondary.$info_icon.$status_assignment.'</span><br>';
                     }
 
-                    if(!empty($query->inspection_date))
+                    if(!empty($query->hpl_date))
                     {
                         $status_assignment = 'Sudah Dilakukan pemeriksaan '.date("d-m-Y", strtotime($query->assignment_date));
                         $merk_status .= $success.$success_icon.$status_assignment.'</span><br>';

@@ -16,4 +16,8 @@ class MataUang extends Model
         'users_id',
         'is_active',
     ];
+
+    public function ppbe(){
+        return $this->belongsTo(PPBEModel::class, 'id');
+    }
 }

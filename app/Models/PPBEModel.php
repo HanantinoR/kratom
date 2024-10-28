@@ -62,7 +62,7 @@ class PPBEModel extends Model
         'submitted_date',
         'approved_date',
         'assignment_date',
-        'inspection_date'
+        'hpl_date'
     ];
 
     public function getStatusNameAttribute()
@@ -116,7 +116,8 @@ class PPBEModel extends Model
         return $result;
     }
 
-    public function getInspectionDateAttribute()
+    //ngentot ni yang buad
+    public function getHplDateAttribute()
     {
         $result = null;
         if (in_array($this->status, ['print_assignment_letter', 'assignment'])) {
@@ -125,6 +126,39 @@ class PPBEModel extends Model
         }
 
         return $result;
+    }
+
+    public function getCurrency(){
+        $currency = MataUang::where('id', $this->fob_currency)->first();
+
+        return $currency;
+    }
+
+    public function getCountry(){
+        $country = Negara::where('id', $this->country_id)->first();
+
+        return $country;
+    }
+
+    public function getCountryDestination(){
+        $country_destination = Negara::where('id', $this->country_destination_id)->first();
+        return $country_destination;
+    }
+
+    public function getLoadingPort(){
+        $loading_port = PelabuhanMuat::where('id', $this->loading_port_id)->first();
+
+        return $loading_port;
+    }
+
+    public function getDestinationPort(){
+        $destination_port = PelabuhanTujuan::where('id', $this->destination_port_id)->first();
+
+        return $destination_port;
+    }
+
+    public function currency(){
+        return $this->hasOne(MataUang::class, 'fob_currency');
     }
 
     public function goods()
