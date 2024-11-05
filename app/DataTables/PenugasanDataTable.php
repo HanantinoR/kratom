@@ -43,7 +43,13 @@ class PenugasanDataTable extends DataTable
             // ->filterColumn('ls_code', function($query, $keyword){
             //     return $query->where('ls_code', 'like', "{$keyword}");
             // })
-            ->addColumn('action', 'penugasan.action')
+            ->addColumn('action',function($query){
+                return view('penugasan.action',[
+                    'id' => $query->id,
+                    'status' => $query->status
+                ]);
+            })
+            // ->addColumn('action', 'penugasan.action')
             ->rawColumns(['action','status']);
     }
 

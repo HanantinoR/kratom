@@ -52,6 +52,8 @@ Route::group(['middleware' => 'auth'], function () {
     route::resource('ppbe', PPBEController::class);
     route::group(['prefix'=>'ppbe'],function(){
         Route::post('draft',[PPBEController::class,'save_draft'])->name('ppbe.draft');
+        Route::get('destination/{id}',[PPBEController::class,'getDestination'])->name('ppbe.destination_id');
+        Route::get('city/{id}',[PPBEController::class,'getcity'])->name('ppbe.city_id');
         Route::get('verify/{id}',[PPBEController::class,'verify_ppbe'])->name('ppbe.verify');
         Route::get('export/{id}',[PPBEController::class,'ppbe'])->name('ppbe.export');
         Route::get('pdf_export/{id}',[PPBEController::class,'pdf_export'])->name('ppbe.pdf');
@@ -66,8 +68,8 @@ Route::group(['middleware' => 'auth'], function () {
         // route::get('surat-tugas',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
         Route::post('save',[PenugasanController::class,'save'])->name('penugasan.save');
         Route::get('data_ppbe/{id}',[PenugasanController::class,'getDataPpbe'])->name('ppbe.assignment');
-        route::get('surat-tugas',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
-        route::get('surat-penugasan',[PenugasanController::class,'surat_penugasan'])->name('penugasan.surat-penugasan');
+        route::get('surat-tugas/{id}',[PenugasanController::class,'surat_tugas'])->name('penugasan.surat_tugas');
+        route::get('surat-penugasan/{id}',[PenugasanController::class,'surat_penugasan'])->name('penugasan.surat-penugasan');
     });
 
 

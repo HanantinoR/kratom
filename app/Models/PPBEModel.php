@@ -43,7 +43,7 @@ class PPBEModel extends Model
         'stuffing_timezone',
         'stuffing_address',
         'status',
-        // 'checkbox_data',
+        'checkbox_data',
         'memorize_type',
         'memorize_size',
         'memorize_total',

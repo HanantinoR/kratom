@@ -1,5 +1,5 @@
 <div class="flex align-items-center list-user-action">
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-md-6">
             <button type="button" id="assign_btn" onclick="openModalFunction({{$id}})" class="btn btn-sm btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Ubah">
                 <svg height="24" width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -9,5 +9,13 @@
             </button>
         </div>
     </div>
+    @if ($status == "assignment")
+        <div class="row mb-2">
+            <a type="button" href="surat-penugasan/{{$id}}" class="btn btn-sm btn-primary" target="_blank">Print Surat Penugasan</a>
+        </div>
+        <div class="row">
+            <a type="button" href="surat-tugas/{{$id}}" class="btn btn-sm btn-warning" target="_blank">Print Surat Tugas</a>
+        </div>
+    @endif
 </div>
 

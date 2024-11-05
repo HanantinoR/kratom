@@ -17,8 +17,9 @@ class CreatePpbeAssignmentTable extends Migration
             $table->id();
             $table->integer('ppbe_id')->constrained('ppbe')->onDelete('cascade');
             $table->integer('surveyor_id')->constrained('users')->onDelete('cascade');
-            $table->string('intervention_type')->nullable();
+            $table->integer('intervention_type')->nullable();
             $table->string('letter_number')->nullable();
+            $table->date('penugasan_date')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

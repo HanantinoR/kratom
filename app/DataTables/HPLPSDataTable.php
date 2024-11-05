@@ -21,6 +21,7 @@ class HPLPSDataTable extends DataTable
 
         return datatables()
             ->eloquent($query)
+            ->addIndexColumn()
             // ->editColumn('userProfile.country', function($query) {
             //     return $query->userProfile->country ?? '-';
             // })
@@ -178,7 +179,7 @@ class HPLPSDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            ['data' => 'id', 'name' => 'id', 'title' => 'id','orderable' => false],
+            ['data' => 'DT_RowIndex', 'title' => 'No', 'orderable' => false, 'searchable' => false],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status','searchable'=>false],
             ['data' => 'code', 'name' => 'code', 'title' => 'Nomor PPBE'],
             ['data' => 'date', 'name' => 'date', 'title' => 'Tanggal PPBE','searchable'=>false],

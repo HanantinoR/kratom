@@ -167,7 +167,7 @@
                                             <td>{{ Form::text('barang[0][uraian]', old('barang[0][uraian]'), ['class' => 'form-control text-black','id'=>'barang[0][uraian]' ,'placeholder' => 'Uraian', 'required']) }}</td>
                                             <td>{{ Form::text('barang[0][jumlah_total]', old('barang[0][jumlah_total]'), ['class' => 'form-control text-black','id'=>'barang[0][jumlah_total]' ,'placeholder' => 'Jumlah Total', 'required']) }}</td>
                                             <td>{{ Form::text('barang[0][nilai_fob]', old('barang[0][nilai_fob]'), ['class' => 'form-control text-black calculateFOB','id'=>'barang[0][nilai_fob]' ,'placeholder' => 'FOB', 'required']) }}</td>
-                                            <td>{{ Form::text('barang[0][per_kilogram]', old('barang[0][per_kilogram]'), ['class' => 'form-control text-black calculateFOB','id'=>'barang[0][per_kilogram]' ,'placeholder' => 'perKilo', 'required']) }}</td>
+                                            <td>{{ Form::text('barang[0][per_kilogram]', old('barang[0][per_kilogram]'), ['class' => 'form-control text-black','id'=>'barang[0][per_kilogram]' ,'placeholder' => 'perKilo', 'required']) }}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-icon btn-success btn_tambah" id="tambah_row" type="button">
                                                     <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -250,7 +250,15 @@
                         <div class="row">
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="origin_port_id">Pelabuhan asal: <span class="text-danger">*</span></label>
-                                {{ Form::text('origin_port_id', old('origin_port_id'), ['class' => 'form-control text-black','id'=>'origin_port_id' ,'placeholder' => 'Pelabuhan Muat', 'required']) }}
+                                {{-- {{ Form::text('origin_port_id', old('origin_port_id'), ['class' => 'form-control text-black','id'=>'origin_port_id' ,'placeholder' => 'Pelabuhan Muat', 'required']) }} --}}
+                                <select name="origin_port_id" class="form-control select2" id="origin_port_id" placeholder="Pelabuhan Asal">
+                                    <option value="">Pilih Pelabuhan Asal</option>
+                                    @foreach($loading_port as $key => $port)
+                                        <option value="{{ $port->id }}" {{ old('origin_port_id') === $port->id ? 'selected' : '' }}>
+                                            {{ $port->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="loading_port_id">Pelabuhan Muat: <span class="text-danger">*</span></label>
@@ -296,11 +304,11 @@
                                 <label for="destination_port_id" class="form-label">Pelabuhan Tujuan</label>
                                 <select name="destination_port_id" class="form-control select2" id="destination_port_id" placeholder="Negara Pelabuhan">
                                     <option value="">Pilih Pelabuhan</option>
-                                    @foreach($destination_port as $key => $port)
+                                    {{-- @foreach($destination_port as $key => $port)
                                         <option value="{{ $port->id }}" {{ old('destination_port_id') === $port->id ? 'selected' : '' }}>
                                             {{ $port->name }}
                                         </option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                                 {{-- {{ Form::text('destination_port_id', old('destination_port_id'), ['class' => 'form-control text-black','id'=>'destination_port_id' ,'placeholder' => 'Pelabuhan Tujuan', 'required']) }} --}}
                             </div>
@@ -395,11 +403,11 @@
                                 <label class="form-label" for="inspection_city_id">Kabupaten: <span class="text-danger">*</span></label>
                                 <select name="inspection_city_id" class="form-control select2" id="inspection_city_id" placeholder="Kota/Kabupaten">
                                     <option value="">Pilih Kota/Kabupaten</option>
-                                    @foreach($cities as $key => $city)
+                                    {{-- @foreach($cities as $key => $city)
                                         <option value="{{ $city->id }}" {{ old('inspection_city_id') === $city->id ? 'selected' : '' }}>
                                             {{ $city->name }}
                                         </option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                                 {{-- {{ Form::text('inspection_city_id', old('inspection_city_id'), ['class' => 'form-control text-black','id'=>'inspection_city_id' ,'placeholder' => 'Kabupaten', 'required']) }} --}}
                             </div>

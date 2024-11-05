@@ -39,6 +39,7 @@ $(document).ready(function(){
             },
         });
     });
+
     var count = 0
     $('.btn_tambah').click(function(){
         count = count+1;
@@ -48,7 +49,7 @@ $(document).ready(function(){
                 <td> <input type="text" name="barang[`+count+ `][uraian]" class="form-control text-black " id="barang[`+count+`][uraian]" placeholder="Uraian" required></td>
                 <td> <input type="text" name="barang[`+count+ `][jumlah_total]" class="form-control text-black " id="barang[`+count+`][jumlah_total]" placeholder="Jumlah Total" required></td>
                 <td> <input type="text" name="barang[`+count+ `][nilai_fob]" class="form-control text-black calculateFOB" id="barang[`+count+`][nilai_fob]" placeholder="Nilai FOB" required></td>
-                <td> <input type="text" name="barang[`+count+ `][per_kilogram]" class="form-control text-black calculateFOB" id="barang[`+count+`][per_kilogram]" placeholder="perKilo" required></td>
+                <td> <input type="text" name="barang[`+count+ `][per_kilogram]" class="form-control text-black" id="barang[`+count+`][per_kilogram]" placeholder="perKilo" required></td>
                 <td>
                     <button class="btn btn-sm btn-icon btn-danger rmv_tambah" id="" type="button">
                         <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -106,6 +107,50 @@ $(document).ready(function(){
             }
         });
     });
+
+    $('#country_destination_id').on('change',function(){
+        const id = $(this).find(":selected").val();
+        if(id){
+            $.ajax({
+                url: '/ppbe/destination/' + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    $('#destination_port_id').empty(); // Clear previous options
+                    $('#destination_port_id').append('<option value="">Pilih Pelabuhan Tujuan</option>'); // Add default option
+                    $.each(response, function(key, value) {
+                        $('#destination_port_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#destination_port_id').empty(); // Clear if no city is selected
+            $('#destination_port_id').append('<option value="">Pilih Pelabuhan Tujuan</option>'); // Add default option
+        }
+    });
+
+    $('#inspection_province_id').on('change',function(){
+        const id = $(this).find(":selected").val();
+        if(id) {
+            $.ajax({
+                url: '/ppbe/city/' + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    $('#inspection_city_id').empty(); // Clear previous options
+                    $('#inspection_city_id').append('<option value="">Pilih Pelabuhan Tujuan</option>'); // Add default option
+                    $.each(response, function(key, value) {
+                        $('#inspection_city_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#inspection_city_id').empty(); // Clear if no city is selected
+            $('#inspection_city_id').append('<option value="">Select District</option>'); // Add default option
+        }
+    })
 });
 
 

@@ -68,15 +68,17 @@ class PPBEController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
-        // dd($request->save_btn);
+        // dd($request);
         $auth_user = AuthHelper::authSession();
         $validate = Validator::make($request->all(),[
             'barang.*.nomor_hs' => "required",
             'barang.*.uraian' => "required",
             'barang.*.jumlah_total' => "required",
             'barang.*.nilai_fob' => "required",
+            'barang.*.per_kilogram' => "required",
             'date' => "required",
             'company_id' => "required",
             'merk' => "required",
@@ -174,6 +176,7 @@ class PPBEController extends Controller
                     'country_destination_id' => $request->country_destination_id ,
                     'destination_port_id' => $request->destination_port_id ,
                     'loading_port_id' => $request->loading_port_id ,
+                    'origin_port_id' => $request->origin_port_id ,
                     'goods_storage' => $request->goods_storage ,
                     'inspection_office_id' => $request->inspection_office_id ,
                     'inspection_date' => $request->inspection_date ,
@@ -206,6 +209,7 @@ class PPBEController extends Controller
                 'description'=> $value['uraian'],
                 'quantity_kg'=> $value['jumlah_total'],
                 'fob_value'=> $value['nilai_fob'],
+                'per_kilogram'=> $value['per_kilogram'],
             ]);
         }
 
@@ -254,8 +258,16 @@ class PPBEController extends Controller
         $data = PPBEModel::with('goods','ppbe_history','company')->findOrFail($id);
         $data_company = PerijinanModel::where('id',$data->company_id)->get();
         $history_quota = HistoryQuotaModel::where('id',$data->company_id)->orderBy('created_at','desc')->first();
+        $data_company = PerijinanModel::get();
+        $office_branch = KantorCabang::get();
+        $provinces = Provinsi::get();
+        $destination_port = PelabuhanTujuan::get();
+        $loading_port = PelabuhanMuat::get();
+        $cities = KabupatenKota::get();
+        $countries = Negara::get();
+        $currencies = MataUang::get();
         // dd($ppbe);
-        return view('ppbe.verify',compact('assets','data','data_company','id','history_quota'));
+        return view('ppbe.verify',compact('assets','data','data_company','id','history_quota','cities', 'countries', 'office_branch', 'provinces', 'destination_port', 'loading_port', 'currencies'));
 
     }
 
@@ -265,14 +277,22 @@ class PPBEController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function edit($id)
     {
         $assets = ['ppbe','file'];
         $data = PPBEModel::with('goods','ppbe_history','company')->findOrFail($id);
         $data_company = PerijinanModel::where('id',$data->company_id)->get();
         $history_quota = HistoryQuotaModel::where('id',$data->company_id)->orderBy('created_at','desc')->first();
-        // dd($ppbe);
-        return view('ppbe.edit',compact('assets','data','data_company','id','history_quota'));
+        $data_company = PerijinanModel::get();
+        $office_branch = KantorCabang::get();
+        $provinces = Provinsi::get();
+        $destination_port = PelabuhanTujuan::get();
+        $loading_port = PelabuhanMuat::get();
+        $cities = KabupatenKota::get();
+        $countries = Negara::get();
+        $currencies = MataUang::get();
+        return view('ppbe.edit',compact('assets','data','data_company','id','history_quota','cities', 'countries', 'office_branch', 'provinces', 'destination_port', 'loading_port', 'currencies'));
 
         //buat 1 lagi untuk verifikasi
 
@@ -287,6 +307,7 @@ class PPBEController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->checkbox_data);
         DB::beginTransaction();
         $auth_user = AuthHelper::authSession();
         $dataPPBE = PPBEModel::with('goods','company')->findOrFail($id);
@@ -303,6 +324,7 @@ class PPBEController extends Controller
                 $data_update['status'] = $status;
                 $data_update['notes'] = $status_descript;
                 $data_update['code'] = $code;
+                $data_update['checkbox_data'] = $request->checkbox_data;
 
                 $data_quota = HistoryQuotaModel::where('company_id',$dataPPBE->company_id)->orderBy("created_at",'desc')->first();
                 $data_goods = $dataPPBE->goods;
@@ -467,7 +489,7 @@ class PPBEController extends Controller
             $ppbe_history = PpbeHistoryModel::create([
                 'ppbe_id'=> $dataPPBE->id,
                 'request_id'=> $auth_user->id,
-                // 'approver_id'=> $request->,
+                // 'approver_id'=> $auth->id,
                 'status'=> $status,
                 'status_description'=> $status_descript,
                 // 'new_status'=> $request->,
@@ -497,6 +519,7 @@ class PPBEController extends Controller
             DB::commit();
             return redirect()->route('ppbe.index')->with('success', 'Pengajuan berhasil Dirubah.');
         } catch (\Exception $e) {
+            dd($e);
             DB::Rollback();
         }
 
@@ -578,5 +601,15 @@ class PPBEController extends Controller
 
     }
 
+    public function getDestination($id)
+    {
+        $destination_port = PelabuhanTujuan::where('country_id',$id)->get(['id','code','name']);
+        return response()->json($destination_port);
+    }
 
+    public function getcity($id)
+    {
+        $city = KabupatenKota::where('province_id',$id)->get();
+        return response()->json($city);
+    }
 }

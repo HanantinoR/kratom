@@ -252,8 +252,11 @@
     </div>
 </x-app-layout>
 @if ($assets[1] == 'penugasan_list')
+    <?php
+        $intervention = ["1" => "PEMERIKSAAN", "2" =>"PENGAWASAN", "3" => "PEMERIKSAAN & PENGAWASAN"]
+    ?>
     <div class="modal fade" id="assignmentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="assignmentModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             {!! Form::open(['route' => ['penugasan.save'],'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
                 <div class="modal-content">
                     <div class="modal-header">
@@ -278,7 +281,13 @@
                             </div>
                             <div class="col-lg-3">
                                 <label class="form-label" for="intervention_type">Jenis Intervensi: <span class="text-danger">*</span></label>
-                                {{ Form::text('intervention_type', old('intervention_type'), ['class' => 'form-control text-black m-0','id'=>'intervention_type' ,'placeholder' => 'Intervensi', 'required']) }}
+                                <select name="intervention_type" class="form-control select2_modal" id="intervention_type" placeholder="Select Company Name" style="width: 100%">
+                                    <option value="">Select Intervention</option>
+                                    <option value="1">PEMERIKSAAN</option>
+                                    <option value="2">PENGAWASAN</option>
+                                    <option value="3">PEMERIKSAAN & PENGAWASAN</option>
+                                </select>
+                                {{-- {{ Form::select('intervention_type',$intervention ,old('intervention_type'), ['class' => 'form-control text-black m-0','id'=>'intervention_type' ,'placeholder' => 'Intervensi', 'required']) }} --}}
                             </div>
                             <div class="col-lg-3">
                                 <label class="form-label" for="letter_number">No Surat Penugasan ERP: <span class="text-danger">*</span></label>
@@ -286,7 +295,8 @@
                             </div>
                             <div class="col-lg-3">
                                 <label class="form-label" for="penugasan_date">Tanggal Penugasan: <span class="text-danger">*</span></label>
-                                {{ Form::text('penugasan_date', old('penugasan_date'), ['class' => 'form-control text-black m-0','id'=>'penugasan_date' ,'placeholder' => 'Tanggal', 'required']) }}
+                                <input type="datetime-local" name="penugasan_date" id="penugasan_date" class="form-control text-black m-0 penugasan_date">
+                                {{-- {{ Form::date('penugasan_date', old('penugasan_date'), ['class' => 'form-control text-black m-0 penugasan_date','id'=>'penugasan_date' ,'placeholder' => 'Tanggal', 'required']) }} --}}
                             </div>
                         </div>
                     </div>
@@ -553,8 +563,9 @@ $(document).ready(function(){
                 if(response.ppbe != null)
                 {
                     $('#surveyor_id').val(response.ppbe.surveyor_id).trigger('change');
-                    $('#intervention_type').val(response.ppbe.intervention_type);
+                    $('#intervention_type').val(response.ppbe.intervention_type).trigger('change');
                     $('#letter_number').val(response.ppbe.letter_number);
+                    $('#penugasan_date').val(response.ppbe.penugasan_date);
                 }
             }
         });

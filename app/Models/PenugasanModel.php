@@ -15,6 +15,7 @@ class PenugasanModel extends Model
         "surveyor_id",
         "intervention_type",
         "letter_number",
+        "penugasan_date",
         "ppbe_id",
         "created_by",
         "updated_by"

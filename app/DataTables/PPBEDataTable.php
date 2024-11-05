@@ -21,6 +21,10 @@ class PPBEDataTable extends DataTable
 
         return datatables()
             ->eloquent($query)
+            ->addIndexColumn()
+            ->editColumn('code', function($row) {
+                return '<a href="'.route('ppbe.edit',$row->id).'" class="btn btn-soft-primary">'.$row->code.'</a>';
+            })
             // ->editColumn('userProfile.country', function($query) {
             //     return $query->userProfile->country ?? '-';
             // })
@@ -124,8 +128,14 @@ class PPBEDataTable extends DataTable
             //         $q->where('country', 'like', "%{$keyword}%");
             //     });
             // })
-            ->addColumn('action', 'ppbe.action')
-            ->rawColumns(['action','status']);
+            // ->addColumn('action', 'ppbe.action')
+            ->addColumn('action',function($query){
+                return view('ppbe.action',[
+                    'id' => $query->id,
+                    'status' => $query->status
+                ]);
+            })
+            ->rawColumns(['action','status','code']);
     }
 
     /**
@@ -188,7 +198,7 @@ class PPBEDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            ['data' => 'id', 'name' => 'id', 'title' => 'id','orderable' => false],
+            ['data' => 'DT_RowIndex', 'title' => 'No', 'orderable' => false, 'searchable' => false],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status','searchable'=>false],
             ['data' => 'code', 'name' => 'code', 'title' => 'Nomor PPBE'],
             ['data' => 'date', 'name' => 'date', 'title' => 'Tanggal PPBE','searchable'=>false],

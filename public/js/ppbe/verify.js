@@ -39,7 +39,6 @@ $(document).ready(function(){
             Invoice:file_invoice,
             PackingList:file_packing_list
         }
-        console.log(JSON.stringify(checkboxData));
     }
 
     $('#verify-btn').on('click',function(e){
@@ -57,7 +56,14 @@ $(document).ready(function(){
                 icon: 'error',
             });
         } else {
+            let dataTrue = {
+                nib:file_nib ? "on":"off",
+                invoince:file_invoice ? "on":"off",
+                packing_list:file_packing_list ? "on":"off"
+            };
+
             $('#verifikasiModal').modal('show');
+            $('#checkbox_data').val(JSON.stringify(dataTrue));
         }
     }
 

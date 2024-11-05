@@ -92,10 +92,16 @@ class PenugasanController extends Controller
         ],200);
     }
 
-    public function surat_tugas(){
+    public function surat_tugas($id){
+        $tugas = PPBEModel::with(['goods'])
+            ->join("ppbe_assignment","ppbe_assignment.ppbe_id", "=", "ppbe.id")
+            ->join("users","ppbe_assignment.surveyor_id","=","users.id")
+            ->join("company","company.id", "=","ppbe.company_id")
+            ->where("ppbe_assignment.id",$id)->get();
         $data =[
             'title' => 'Surat Tugas',
-            'content' =>'Penugasan'
+            'content' =>'Surat Tugas',
+            'tugas' => $tugas
         ];
         $documentPDF = View::make('penugasan.surat-tugas',['data'=>$data])->render();
 
@@ -112,10 +118,15 @@ class PenugasanController extends Controller
         return $dompdf->stream('penugasan.surat-tugas',['Attachment'=>false]);
     }
 
-    public function surat_penugasan(){
+    public function surat_penugasan($id){
+        $penugasan = PPBEModel::with(['goods'])
+            ->join("ppbe_assignment","ppbe_assignment.ppbe_id", "=", "ppbe.id")
+            ->join("users","ppbe_assignment.surveyor_id","=","users.id")
+            ->where("ppbe_assignment.id",$id)->get();
         $data =[
             'title' => 'Surat Penugasan',
-            'content' =>'Penugasan'
+            'content' =>'Penugasan',
+            'penugasan' => $penugasan
         ];
         $documentPDF = View::make('penugasan.surat-penugasan',['data'=>$data])->render();
 

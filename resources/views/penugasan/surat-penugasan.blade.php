@@ -45,7 +45,7 @@
                 width: 200px;
                 margin-top: 10px;
                 margin-left: auto;
-                
+
             }
             .signature-line {
                 border-bottom: 1px dotted #000;
@@ -74,8 +74,8 @@
                 border: 1px solid #000;
                 box-sizing: border-box;
                 flex-grow: 1;
-                flex-shrink: 1; 
-                margin-right: 10px; 
+                flex-shrink: 1;
+                margin-right: 10px;
             }
             .left-section {
                 float:left;
@@ -95,20 +95,22 @@
         </style>
     </head>
     <body>
+        {{-- {{dd($data['penugasan'])}} --}}
         <h2 style="text-align: center!important">Daftar Penugasan Surveyor</h2>
-        <p>Hari dan Tanggal: 17 Agustus 2024</p>
-        <p style="margin-top:-15px">Wilayah: Bandung</p>
+        <p>Hari dan Tanggal: {{date("d F Y",strtotime($data['penugasan'][0]->date))}}</p>
+        <p style="margin-top:-15px">Wilayah: .....</p>
 
         <table class="table" style="font-size: 13px">
             <thead style="background:yellow">
                 <tr>
-                   <td rowspan="2">No.</td> 
-                   <td rowspan="2">No. PPBE</td> 
+                   <td rowspan="2">No.</td>
+                   <td rowspan="2">No. PPBE</td>
                    <td rowspan="2">Nama Eksportir</td>
+                   <td rowspan="2">Lokasi Pemeriksaan</td>
                    <td colspan="3">Barang Ekspor</td>
                    <td rowspan="2">Jenis Intervensi</td>
                    <td rowspan="2">Nama Surveyor/NPP</td>
-                   <td colspan="3">Cara Pengapalan</td> 
+                   <td colspan="3">Cara Pengapalan</td>
                 </tr>
                 <tr>
                     <td>Jenis</td>
@@ -116,36 +118,57 @@
                     <td>JML & Jenis Kemasan</td>
                     <td>FCL</td>
                     <td>LCL</td>
-                    <td>Conv</td>
+                    <td>Konv</td>
                 </tr>
             </thead>
             <tbody>
+                @foreach ($data['penugasan'] as $index => $penugasan)
                 <tr>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
+                    <td>{{$index+1}}</td>
+                    <td>{{$penugasan->code}}</td>
+                    <td>{{$penugasan->buyer_name}}</td>
+                    <td>{{$penugasan->inspection_address}}</td>
+                    <td style="width: 10%">
+                        @foreach ($penugasan->goods as $good)
+                            {{$good->processed_level_id}} {{$good->description}} <br>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach ($penugasan->goods as $good)
+                            {{$good->quantity_kg}} KG<br>
+                        @endforeach
+                    </td>
+                    <td>{{$penugasan->packing_total}}
+                        @php
+                            $type_kemasan = ['1'=>'BALE','2'=>'CARTON','3'=>'BUNDLE','4'=>'PALLET'];
+                        @endphp
+                        @if (isset($type_kemasan[$penugasan->packing_type]))
+                            {{$type_kemasan[$penugasan->packing_type]}}
+                        @endif</td>
+                    <td>
+                        @php
+                            $type = ['1'=>'PEMERIKSAAN','2'=>'PENGAWASAN','3'=>'PEMERIKSAAN & PENGAWASAN'];
+                        @endphp
+                        @if (isset($type[$penugasan->intervention_type]))
+                            {{$type[$penugasan->intervention_type]}}
+                        @endif
+                    </td>
+                    <td>{{$penugasan->first_name}} {{$penugasan->last_name}}</td>
+                    @if($penugasan->memorize_type === 1)
+                        <td>{{$penugasan->memorize_total}}x{{$penugasan->memorize_size}}</td>
+                        <td></td>
+                        <td></td>
+                    @elseif($penugasan->memorize_type === 2)
+                        <td></td>
+                        <td>{{$penugasan->memorize_size}}x{{$penugasan->memorize_total}}</td>
+                        <td></td>
+                    @else
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    @endif
                 </tr>
-                <tr>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                    <td><br></td>
-                </tr>
+                @endforeach
             </tbody>
         </table>
         <p style="font-size:12px">Catatan:</p>
@@ -153,12 +176,11 @@
         <p style="font-size:12px; margin-top:-10px">   1. Pengawasan Barang Ekspor</p>
         <p style="font-size:12px; margin-top:-10px">   2. Pengawasan Stuffing</p>
         <p style="font-size:12px; margin-top:-10px">   3. Pemeriksaan Barang Ekspor dan Pengawasan Stuffing</p>
-
         <div class="">
             <p style="font-size:15px">Disiapkan oleh Koord. Operasi:</p>
             <br><br><br>
-            <div class="">(TESTING ORANG)</div>
-            <div>NPP: 99.123.5123</div>
+            <div class="">...........</div>
+            <div>NPP: ..............</div>
         </div>
     </body>
 </html>

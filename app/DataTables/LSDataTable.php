@@ -21,6 +21,7 @@ class LSDataTable extends DataTable
 
         return datatables()
             ->eloquent($query)
+            ->addIndexColumn()
             ->editColumn('code', function($row) {
                 return '<a href="'.route('ppbe.edit',$row->id).'" class="btn btn-soft-primary">'.$row->code.'</a>';
             })
@@ -186,7 +187,7 @@ class LSDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            ['data' => 'id', 'name' => 'id', 'title' => 'id','orderable' => false],
+            ['data' => 'DT_RowIndex', 'title' => 'No', 'orderable' => false, 'searchable' => false],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status','searchable'=>false],
             ['data' => 'code_above', 'name' => 'code_above', 'title' => 'Nomor LS'],
             ['data' => 'code', 'name' => 'code', 'title' => 'Nomor PPBE'],
