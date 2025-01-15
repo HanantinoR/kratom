@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('.select2').select2({
+    $('.select2Modal').select2({
         placeholder: "Select",
         selectOnClose: true,
         width: 'resolve',

@@ -13,8 +13,8 @@
                               </svg>
                            </div>
                            <div class="progress-detail">
-                              <p  class="mb-2">Total Sales</p>
-                              <h4 class="counter" style="visibility: visible;">$560K</h4>
+                              <p  class="mb-2">Total PPBE</p>
+                              <h4 class="counter" style="visibility: visible;">1132</h4>
                            </div>
                         </div>
                      </div>
@@ -28,8 +28,8 @@
                               </svg>
                            </div>
                            <div class="progress-detail">
-                              <p  class="mb-2">Total Profit</p>
-                              <h4 class="counter">$185K</h4>
+                              <p  class="mb-2">Total LS</p>
+                              <h4 class="counter">1015</h4>
                            </div>
                         </div>
                      </div>
@@ -43,8 +43,8 @@
                               </svg>
                            </div>
                            <div class="progress-detail">
-                              <p  class="mb-2">Total Cost</p>
-                              <h4 class="counter">$375K</h4>
+                              <p  class="mb-2">Total LHP</p>
+                              <h4 class="counter">23</h4>
                            </div>
                         </div>
                      </div>
@@ -58,13 +58,13 @@
                               </svg>
                            </div>
                            <div class="progress-detail">
-                              <p  class="mb-2">Revenue</p>
-                              <h4 class="counter">$742K</h4>
+                              <p  class="mb-2">Perubahan</p>
+                              <h4 class="counter">50</h4>
                            </div>
                         </div>
                      </div>
                   </li>
-                  <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="1100">
+                  {{-- <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="1100">
                      <div class="card-body">
                         <div class="progress-widget">
                            <div id="circle-progress-05" class="circle-progress-01 circle-progress circle-progress-primary text-center" data-min-value="0" data-max-value="100" data-value="50" data-type="percent">
@@ -108,21 +108,21 @@
                            </div>
                         </div>
                      </div>
-                  </li>
+                  </li> --}}
                </ul>
                <div class="swiper-button swiper-button-next"></div>
                <div class="swiper-button swiper-button-prev"></div>
             </div>
          </div>
       </div>
-      <div class="col-md-12 col-lg-8">
+      <div class="col-md-12 col-lg-12">
          <div class="row">
             <div class="col-md-12">
                <div class="card" data-aos="fade-up" data-aos-delay="800">
                   <div class="card-header d-flex justify-content-between flex-wrap">
                      <div class="header-title">
-                        <h4 class="card-title">$855.8K</h4>
-                        <p class="mb-0">Gross Sales</p>
+                        <h4 class="card-title">1015</h4>
+                        <p class="mb-0">LS</p>
                      </div>
                      <div class="d-flex align-items-center align-self-center">
                         <div class="d-flex align-items-center text-primary">
@@ -132,7 +132,7 @@
                               </g>
                            </svg>
                            <div class="ms-2">
-                              <span class="text-secondary">Sales</span>
+                              <span class="text-secondary">Hijau</span>
                            </div>
                         </div>
                         <div class="d-flex align-items-center ms-3 text-info">
@@ -142,19 +142,19 @@
                               </g>
                            </svg>
                            <div class="ms-2">
-                              <span class="text-secondary">Cost</span>
+                              <span class="text-secondary">Putih</span>
                            </div>
                         </div>
                      </div>
                      <div class="dropdown">
-                        <a href="#" class="text-secondary dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{-- <a href="#" class="text-secondary dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                         This Week
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
                            <li><a class="dropdown-item" href="#">This Week</a></li>
                            <li><a class="dropdown-item" href="#">This Month</a></li>
                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
+                        </ul> --}}
                      </div>
                   </div>
                   <div class="card-body">
@@ -232,7 +232,7 @@
                   </div>
                </div>
             </div>
-            <div class="col-md-12 col-lg-12">
+            {{-- <div class="col-md-12 col-lg-12">
                <div class="card overflow-hidden" data-aos="fade-up" data-aos-delay="400">
                   <div class="card-header d-flex justify-content-between flex-wrap">
                      <div class="header-title">
@@ -412,10 +412,10 @@
                      </div>
                   </div>
                </div>
-            </div>
+            </div> --}}
          </div>
       </div>
-      <div class="col-md-12 col-lg-4">
+      {{-- <div class="col-md-12 col-lg-4">
          <div class="row">
             <div class="col-md-6 col-lg-12">
                <div class="card credit-card-widget" data-aos="fade-up" data-aos-delay="900">
@@ -564,6 +564,6 @@
                </div>
             </div>
          </div>
-      </div>
+      </div> --}}
    </div>
 </x-app-layout>

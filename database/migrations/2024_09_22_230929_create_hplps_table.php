@@ -15,7 +15,7 @@ class CreateHplpsTable extends Migration
     {
         Schema::create('hplps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ppbe_id')->constrained('ppbe')->onDelete('cascade')->nullable();
+            $table->foreignId('ppbe_id')->nullable()->constrained('ppbe')->onDelete('cascade');
             // $table->foreignId('ls_id')->constrained('ls')->onDelete('cascade')->nullable();
             // $table->foreignId('lhp_id')->constrained('lhp')->onDelete('cascade')->nullable();
             $table->datetime('date')->nullable();

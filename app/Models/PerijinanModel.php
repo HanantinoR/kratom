@@ -12,24 +12,19 @@ class PerijinanModel extends Model
     protected $table = 'company';
     protected $fillable = [
         'nib',
+        'npwp',
         'nomor_et',
-        'nomor_pe',
         'date_nib',
         'date_et',
-        'date_pe',
-        'company_name',
-        'company_quota',
-        'company_provincy',
-        'company_city',
+        'name',
+        'quota',
+        'province_id',
+        'city_id',
         'company_address',
-        'company_factory',
-        'company_inspection_office',
-        'company_pic',
-        'company_position',
-        'company_npwp',
-        'company_telp',
-        'company_hp',
-        'company_email',
+        'factory_address',
+        'branch_office',
+        'pic',
+        'position',
         'status',
         'file_et',
         'file_pe',
@@ -45,9 +40,9 @@ class PerijinanModel extends Model
         return $this->hasMany(PerijinanHistoryModel::class,'company_id');
     }
 
-    public function kuota()
+    public function pe()
     {
-        return $this->hasMany(HistoryQuotaModel::class,'company_id');
+        return $this->hasMany(PerijinanPEModel::class,'company_id');
     }
 
 }

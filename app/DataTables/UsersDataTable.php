@@ -19,17 +19,29 @@ class UsersDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('userProfile.country', function($query) {
-                return $query->userProfile->country ?? '-';
+            ->addIndexColumn()
+            ->editColumn('full_name',function($query){
+                // dd($query);
+                return $query->first_name." ".$query->last_name;
             })
-            ->editColumn('userProfile.company_name', function($query) {
-                return $query->userProfile->company_name ?? '-';
+            ->editColumn('company.name', function($query) {
+                return $query->name ?? '-';
             })
             ->editColumn('status', function($query) {
+                // dd($query);
                 $status = 'warning';
                 switch ($query->status) {
                     case 'active':
+                        $name = "Aktif";
                         $status = 'primary';
+                        break;
+                    case '1':
+                        $name = "Aktif";
+                        $status = "primary";
+                        break;
+                    case '0':
+                        $name = "Tidak Aktif";
+                        $status = "danger";
                         break;
                     case 'inactive':
                         $status = 'danger';
@@ -38,26 +50,26 @@ class UsersDataTable extends DataTable
                         $status = 'dark';
                         break;
                 }
-                return '<span class="text-capitalize badge bg-'.$status.'">'.$query->status.'</span>';
+                return '<span class="text-capitalize badge bg-'.$status.'">'.$name.'</span>';
             })
-            ->editColumn('created_at', function($query) {
-                return date('Y/m/d',strtotime($query->created_at));
+            // ->filterColumn('full_name', function($query, $keyword) {
+            //     dd($query,$keyword);
+            //     $sql = "CONCAT(users.first_name,' ',users.last_name)  like ?";
+            //     return $query->whereRaw($sql, ["%{$keyword}%"]);
+            // })
+            // ->filterColumn('company.name', function($query, $keyword) {
+            //     return $query->orWhereHas('userProfile', function($q) use($keyword) {
+            //         $q->where('company_name', 'like', "%{$keyword}%");
+            //     });
+            // })
+            // ->addColumn('action', 'users.action')
+            ->addColumn('action',function($query){
+                // dd($query);
+                return view('users.action',[
+                    'id' => $query->user_id,
+                    'status' => $query->status
+                ]);
             })
-            ->filterColumn('full_name', function($query, $keyword) {
-                $sql = "CONCAT(users.first_name,' ',users.last_name)  like ?";
-                return $query->whereRaw($sql, ["%{$keyword}%"]);
-            })
-            ->filterColumn('userProfile.company_name', function($query, $keyword) {
-                return $query->orWhereHas('userProfile', function($q) use($keyword) {
-                    $q->where('company_name', 'like', "%{$keyword}%");
-                });
-            })
-            ->filterColumn('userProfile.country', function($query, $keyword) {
-                return $query->orWhereHas('userProfile', function($q) use($keyword) {
-                    $q->where('country', 'like', "%{$keyword}%");
-                });
-            })
-            ->addColumn('action', 'users.action')
             ->rawColumns(['action','status']);
     }
 
@@ -69,7 +81,20 @@ class UsersDataTable extends DataTable
      */
     public function query()
     {
-        $model = User::query()->with('userProfile');
+        // $model = User::query();
+
+        $model = User::leftjoin('roles','roles.name',"=","users.user_type")
+                    ->leftjoin('company','company.id',"=","users.company_id")
+                    ->select('users.id as user_id','roles.id as role_id','roles.Title as user_role', 'users.email','users.status',
+                        'company.name','users.first_name','users.last_name');
+        // dd($model);
+        $query = $model->newQuery();
+
+        // if(auth()->user()->user_type !== "admin")
+        // {
+        //     // $model->where('branch_office',auth()->user()->branch_office);
+        //     dd('a');
+        // }
         return $this->applyScopes($model);
     }
 
@@ -85,7 +110,7 @@ class UsersDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('<"row align-items-center"<"col-md-2" l><"col-md-6" B><"col-md-4"f>><"table-responsive my-3" rt><"row align-items-center" <"col-md-6" i><"col-md-6" p>><"clear">')
-            
+
                     ->parameters([
                         "processing" => true,
                         "autoWidth" => false,
@@ -100,14 +125,12 @@ class UsersDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            ['data' => 'id', 'name' => 'id', 'title' => 'id'],
+            ['data' => 'DT_RowIndex', 'title' => 'No', 'orderable' => false, 'searchable' => false],
             ['data' => 'full_name', 'name' => 'full_name', 'title' => 'FULL NAME', 'orderable' => false],
-            ['data' => 'phone_number', 'name' => 'phone_number', 'title' => 'Phone Number'],
             ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
-            ['data' => 'userProfile.country', 'name' => 'userProfile.country', 'title' => 'Country'],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status'],
-            ['data' => 'userProfile.company_name', 'name' => 'userProfile.company_name', 'title' => 'Company'],
-            ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Join Date'],
+            ['data' => 'user_role', 'name' => 'user_role', 'title' => 'Role'],
+            ['data' => 'company.name', 'name' => 'company.name', 'title' => 'Company'],
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

@@ -23,4 +23,9 @@ class LsGoodsModel extends Model
     {
         return $this->belongsTo(LsModel::class, 'ls_id');
     }
+
+    public function hs()
+    {
+        return $this->belongsTo(HSLevel::class,'processed_level_id');
+    }
 }

@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    $('.company_id').select2();
     $('.fob_currency').select2();
     $('.office_id').select2();
     $('.type_kemasan').select2();
@@ -22,30 +21,45 @@ $(document).ready(function(){
                 $('#company_id').val(response.company.id);
                 $('#nib').val(response.company.nib);
                 $('#nomor_et').val(response.company.nomor_et);
-                $('#nomor_pe').val(response.company.nomor_pe);
                 $('#date_nib').val(response.company.date_nib);
                 $('#date_et').val(response.company.date_et);
-                $('#date_pe').val(response.company.date_pe);
-                $('#company_email').val(response.company.company_email);
-                $('#company_telp').val(response.company.company_telp);
-                $('#company_hp').val(response.company.company_hp);
-                $('#company_npwp').val(response.company.company_npwp);
+                $('#npwp').val(response.company.npwp);
                 $('#company_address').text(response.company.company_address);
-                $('#company_pic').val(response.company.company_pic);
-                $('#company_position').val(response.company.company_position);
-                $('#company_quota_remaining').val(response.quota.company_quota_remaining);
-                $('#company_quota_used').val(response.quota.company_quota_used);
-
+                $('#pic').val(response.company.pic);
+                $('#position').val(response.company.position);
+                if(response.company.pe.length === 0)
+                {
+                    swal.fire({
+                        title: "Perhatian",
+                        text: "Mohon Lakukan Pengecekan PE Terlebih dahulu",
+                        icon: "warning"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "/ppbe"
+                        }
+                    });
+                }
+                $.each(response.company.pe,function(key, value){
+                    $('#pe_id').append('<option value="' + value.id + '">' + value.nomor_pe + '</option>');
+                });
             },
         });
     });
 
+    $('#pe_id').change(function(){
+        const pe_id = $('#pe_id').val();
+
+        console.log(pe_id);
+        // $.ajax({
+        //     url:"/data_pe/"+
+        // })
+    })
     var count = 0
     $('.btn_tambah').click(function(){
         count = count+1;
         $("#form_barang tbody").append(`
             <tr>
-                <td> <input type="text" name="barang[`+count+ `][nomor_hs]" class="form-control text-black " id="barang[`+count+`][nomor_hs]" placeholder="Nomor HS" required></td>
+                <td>`+htmlHsLevel(count)+`</td>
                 <td> <input type="text" name="barang[`+count+ `][uraian]" class="form-control text-black " id="barang[`+count+`][uraian]" placeholder="Uraian" required></td>
                 <td> <input type="text" name="barang[`+count+ `][jumlah_total]" class="form-control text-black " id="barang[`+count+`][jumlah_total]" placeholder="Jumlah Total" required></td>
                 <td> <input type="text" name="barang[`+count+ `][nilai_fob]" class="form-control text-black calculateFOB" id="barang[`+count+`][nilai_fob]" placeholder="Nilai FOB" required></td>
@@ -59,6 +73,9 @@ $(document).ready(function(){
                 </td>
             </tr>
         `)
+
+
+    $('.select2').select2();
     })
 
     $("#form_barang").on('click', '.rmv_tambah', function() {
@@ -80,6 +97,20 @@ $(document).ready(function(){
             totalFOB = totalFOB + valueFOB
         });
         $('#fob_total').val(totalFOB);
+    }
+
+    function htmlHsLevel(counter){
+        var hs_levels = window.hsData;
+
+        let html = '<select name="barang['+counter+'][nomor_hs]" class="form-control select2" id="barang['+counter+'][nomor_hs]" placeholder="Select Company Name" style="width: 125%;"><option value="">Pilih HS</option>';
+
+        $.each (hs_levels,function(index, level){
+            html += '<option value=" '+ level.id + '"> '+ level.hs + ' </option>'
+        })
+
+        html += `</select>`;
+
+        return html;
     }
 
     $('#flexCheckDefault3').on('change',function(){
@@ -116,7 +147,6 @@ $(document).ready(function(){
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    console.log(response);
                     $('#destination_port_id').empty(); // Clear previous options
                     $('#destination_port_id').append('<option value="">Pilih Pelabuhan Tujuan</option>'); // Add default option
                     $.each(response, function(key, value) {
@@ -140,7 +170,7 @@ $(document).ready(function(){
                 success: function(response) {
                     console.log(response);
                     $('#inspection_city_id').empty(); // Clear previous options
-                    $('#inspection_city_id').append('<option value="">Pilih Pelabuhan Tujuan</option>'); // Add default option
+                    $('#inspection_city_id').append('<option value="">Pilih Kota/Kabupaten</option>'); // Add default option
                     $.each(response, function(key, value) {
                         $('#inspection_city_id').append('<option value="' + value.id + '">' + value.name + '</option>');
                     });
@@ -150,10 +180,46 @@ $(document).ready(function(){
             $('#inspection_city_id').empty(); // Clear if no city is selected
             $('#inspection_city_id').append('<option value="">Select District</option>'); // Add default option
         }
-    })
+    });
+
+    $('#invoice_date').on('change',function(){
+        var tanggal_invoice = $('#invoice_date');
+        checkTanggal(tanggal_invoice);
+    });
+
+    $('#packing_list_date').on('change',function(){
+        var tanggal_packing_list = $('#packing_list_date');
+        checkTanggal(tanggal_packing_list);
+    });
 });
 
 
+    function checkTanggal(tanggal_dokumen) {
+        var tanggal_pengajuan = $('#date_ppbe').val();
+        if(!tanggal_pengajuan)
+        {
+            swal.fire({
+                title: "Perhatian",
+                text: "Mohon Isi Tanggal Pengajuan Terlebih Dahulu",
+                icon: "warning"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    tanggal_dokumen.val("");
+                }
+            });
+        } else if(tanggal_dokumen.val() > tanggal_pengajuan)
+        {
+            swal.fire({
+                title: "Peringatan",
+                text: "Tanggal Invoice/Packing List Tidak Boleh Lebih dari Tanggal Pengajuan",
+                icon: "error"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    tanggal_dokumen.val("");
+                }
+            });
+        }
+    }
 // querySelector('input[name="inspection_date"]');
     let listwaktu = document.getElementsByClassName('datePicker');
     $('.datePicker').each(function(index, element){

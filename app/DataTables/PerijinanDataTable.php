@@ -25,6 +25,7 @@ class PerijinanDataTable extends DataTable
         return datatables()
         ->eloquent($query)
         ->editColumn('status', function($query) {
+            // dd($query['status']);
             $statusColor = 'warning';
             switch ($query['status']) {
                 case '1':
@@ -33,7 +34,11 @@ class PerijinanDataTable extends DataTable
                 case '0':
                     $statusColor = 'danger';
                     break;
+                case 'pending':
+                    $statusColor = 'warning';
+                    break;
             }
+            // $status ="";
             switch($query['status']){
                 case '1':
                     $status = "Aktif";
@@ -41,7 +46,11 @@ class PerijinanDataTable extends DataTable
                 case '0';
                     $status = "Tidak Aktif";
                     break;
+                case 'pending':
+                    $status = "Pending";
+                    break;
             }
+            // dd($status);
             return '<span class="text-capitalize badge bg-'.$statusColor.'">'.$status.'</span>';
         })
         ->editColumn('pengajuan_date', function($query) {
@@ -62,11 +71,11 @@ class PerijinanDataTable extends DataTable
      */
     public function query()
     {
-        $model = PerijinanModel::query();
+        $model = PerijinanModel::select('id','nib','nomor_et','npwp','name','status');
         $query = $model->newQuery();
 
         if ($search = request()->get('company_name_search')) {
-            $query->where('company_name', 'like', "%{$search}%");
+            $query->where('name', 'like', "%{$search}%");
         }
 
 
@@ -104,12 +113,8 @@ class PerijinanDataTable extends DataTable
             ['data' => 'id', 'name' => 'id', 'title' => 'Number'],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status Perijinan', 'orderable' => false],
             ['data' => 'nib', 'name' => 'nib', 'title' => 'NIB'],
-            ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Nama Perusahaan'],
+            ['data' => 'name', 'name' => 'name', 'title' => 'Nama Perusahaan'],
             ['data' => 'nomor_et', 'name' => 'nomor_et', 'title' => 'Nomor ET'],
-            ['data' => 'nomor_pe', 'name' => 'nomor_pe', 'title' => 'Nomor PE'],
-            ['data' => 'company_npwp', 'name' => 'company_npwp', 'title' => 'NPWP'],
-            ['data' => 'date_nib', 'name' => 'date_nib', 'title' => 'Tanggal NIB'],
-            ['data' => 'company_email', 'name' => 'company_email', 'title' => 'E-mail'],
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

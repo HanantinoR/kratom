@@ -4,19 +4,186 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PerijinanModel;
+use App\Models\PerijinanPEModel;
+use App\Models\PerijinanPEDetailModel;
 use App\Models\HistoryQuotaModel;
+use App\Http\Requests\PerijinanRequest;
+use Illuminate\Support\Facades\Validator;
+use App\Helpers\AuthHelper;
 
 class MasterCompanyController extends Controller
 {
     public function getCompany($id)
     {
         // dd($id);
-        $company = PerijinanModel::where('id',$id)->first();
-        $check_kuota = HistoryQuotaModel::where('company_id',$id)->orderBy('created_at','desc')->first();
+        $company = PerijinanModel::with(['pe'=>function($query){
+            $query->where('status','aktif');
+        }])->where('id',$id)->first();
 
         return response()->json([
             'company' => $company,
-            'quota' => $check_kuota
         ],200);
     }
+
+    public function check_et_pe (Request $request)
+    {
+        $auth_user = AuthHelper::authSession();
+        // $validatorData = Validator::make($request->all(),[
+        //     'nib' => "required",
+        //     'date_nib' => "required",
+        //     'date_et' => "required",
+        //     'npwp' => "required"
+        // ],[
+        //     'nib' => 'masih kosong broo',
+        //     'date_nib' => 'masih kosong broo',
+        //     'date_et' => 'masih kosong broo',
+        //     'npwp' => 'masih kosong broo',
+        // ]);
+        // // dd(json_decode($validatorData->errors()));
+
+        // if($validatorData->fails())
+        // {
+        //     return response()->json([
+        //         'result' => 'error',
+        //         'title' => 'Error',
+        //         'message' => $validatorData->errors()
+        //     ], 422);
+        // }
+
+        $nib = $request->nib;
+        $npwp = $request->npwp;
+        $izin = $request->izin;
+        $date_nib = $request->date_nib;
+        $date_et = $request->date_et;
+        $kode = "A01";
+        $result_data = $this->check_izin($nib,$npwp,$izin);
+        $json_data = json_decode($result_data);
+
+        // if ($json_data->kepatuhan->kode === "A01")
+        if($kode = "A01")
+        {
+            //untuk ET
+            if(strpos($izin,"ET") !== false) {
+                $company_data = PerijinanModel::where('nomor_et',$izin)->count();
+                if($company_data > 0) {
+                    return response()->json([
+                        'message' => 'Data Sudah Pernah dilakukan Pengecekan Harap Check List Perijinan',
+                        'result' => 'error',
+                        'title' => 'Error'
+                    ],400);
+                }
+
+                $company = PerijinanModel::create([
+                    'nib'=> $nib,
+                    'npwp'=> $npwp,
+                    'nomor_et'=> $izin,
+                    'date_nib'=> $date_nib,
+                    'name'=> $json_data->header->nama_perusahaan,
+                    'status' => "pending"
+                    // 'result_et' => $json_data
+                ]);
+
+                $type_izin =  "et";
+            } else {
+                //untuk PE
+                $company_data = PerijinanModel::where('nib',$nib)->first();
+                $company_pe_data = PerijinanPEModel::where('nomor_pe',$izin)->count();
+                if($company_pe_data > 0)
+                {
+                    return response()->json([
+                        'message' => 'Data PE sudah terdaftar, Silahkan Cek Detail',
+                        'result' => 'warning',
+                        'title' => 'Error'
+                    ],400);
+                }
+
+                if($request->hasFile('file_pe'))
+                {
+                    $path = 'pe_file';
+                    $file1 = $request->file('file_pe');
+                    $file1Name = time() . '_file_pe_' . $file1->getClientOriginalName();
+                    $file1Path = $file1->storeAs($path, $file1Name, 'local');
+                }
+
+                $company_pe = PerijinanPEModel::create([
+                    'company_id'=> $company_data->id,
+                    'nomor_pe'=> $izin,
+                    'result_pe'=>$result_data,
+                    'file_pe'=>$file1Name,
+                    'created_by'=>$auth_user->id,
+                    'permit_date' => $json_data->header->tgl_izin,
+                    'date_start' => $json_data->header->tgl_awal,
+                    'date_end' => $json_data->header->tgl_akhir,
+                    'status' => "aktif"
+                ]);
+
+
+                foreach ($json_data->komoditas as $key => $value) {
+                    $company_pe_detail = PerijinanPEDetailModel::create([
+                        'pe_id' => $company_pe->id,
+                        'hs' => $value->pos_tarif,
+                        'detail' => $value->ur_barang,
+                        'volume_total' => $value->jml_volume,
+                        'volume_sisa' => $value->sisa_volume,
+                        'volume_tersedia' => $value->avail_volume,
+                        // 'tgl_berlaku' => $value->tgl_berlaku,
+                        'terpakai_ls' => $value->terpakai_ls,
+                        'booking_ls' => $value->terpakai_booking
+                    ]);
+                }
+
+                $type_izin =  "pe";
+            }
+            //saving ET or PE
+            return response()->json([
+                'type' => $type_izin,
+                // 'message' => 'mantap',
+                'message' => $json_data->kepatuhan,
+                'result' => 'success',
+                'title' => 'Success'
+            ],200);
+        }
+
+        return response()->json([
+            'kode' => $json_data->kepatuhan->kode,
+            'message' => $json_data->kepatuhan->keterangan,
+            'result' => 'error',
+            'title' => 'Error'
+        ],400);
+    }
+
+    function check_izin($nib,$npwp,$izin)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://services.kemendag.go.id/surveyor/v1.0.dev/check_izin',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{
+            "nib": "'.$nib.'",
+            "npwp": "'.$npwp.'",
+            "no_izin": "'.$izin.'",
+            "flProbis": "E",
+            "username": "superintending"
+        }',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json',
+            'x-Gateway-APIKey: d55c6de7-ee74-4da5-8da8-3ec9cd8f22d8',
+        ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        return $response;
+    }
+
+
+
 }

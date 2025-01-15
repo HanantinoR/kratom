@@ -35,106 +35,126 @@
                                     {{ Form::text('nomor_penganjuan', old('nomor_penganjuan'), ['class' => 'form-control','id'=>'nomor_pengajuan' ,'placeholder' => 'Nomor PPBE', 'readonly']) }}
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="date">Tanggal Pengajuan PPBE: <span class="text-danger">*</span></label>
-                                    {{ Form::text('date', old('date'), ['class' => 'form-control datePicker text-black','id'=>'date' ,'placeholder' => 'Tanggal PPBE', 'required']) }}
+                                    <label class="form-label" for="date_ppbe">Tanggal Pengajuan PPBE: <span class="text-danger">*</span></label>
+                                    {{ Form::date('date_ppbe', old('date_ppbe'), ['class' => 'form-control date_ppbePicker text-black','id'=>'date_ppbe' ,'placeholder' => 'Tanggal PPBE', 'required']) }}
                                 </div>
                             </div>
                             <hr>
                             <h5 class="mb-4 text-secondary">DATA PEMOHON</h5>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_id">Nama Perusahaan: <span class="text-danger">*</span></label>
-                                    {{-- {{ Form::select('company[name]', $data_company , old('company[name]') ? old('company[name]') : $data ?? 'user', ['class' => 'form-control company_id', 'placeholder' => 'Select Company Name']) }} --}}
-                                    <select name="company_id" class="form-control select2" id="company_id" placeholder="Select Company Name">
-                                        <option value="">Select Company Name</option>
-                                        @foreach($data_company as $key => $company)
-                                            <option value="{{ $company->id }}" {{ old('company_id') === $company->id ? 'selected' : '' }}>
-                                                {{ $company->company_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="company_quota_used">Kuota Pemakaian: <span class="text-danger">*</span></label>
-                                            {{ Form::text('company_quota_used', old('company_quota_used'), ['class' => 'form-control text-black','id'=>'company_quota_used' ,'placeholder' => 'Kuota Pemakaian', 'readonly']) }}
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="company_quota_remaining">Sisa Kuota: <span class="text-danger">*</span></label>
-                                            {{ Form::text('company_quota_remaining', old('company_quota_remaining'), ['class' => 'form-control text-black','id'=>'company_quota_remaining' ,'placeholder' => 'Kuota Sisa', 'readonly']) }}
-                                        </div>
+                            @if ($auth_user->user_type === "user")
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="company_id">Nama Perusahaan: <span class="text-danger">*</span></label>
+                                        {{ Form::text('company_id', $data_company->id,  ['class' => 'form-control', 'placeholder' => '','hidden']) }}
+                                        {{ Form::text('name', $data_company->name , ['class' => 'form-control text-black','readonly']) }}
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label for="pe_id" class="form-label">PE</label>
+                                        {{Form::text('pe_name',$data_company->pe[0]->nomor_pe,['class'=> 'form-control text-black','disabled'])}}
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_email">Email: <span class="text-danger">*</span></label>
-                                    {{ Form::email('company_email', old('company_email'), ['class' => 'form-control text-black','id'=>'company_email' ,'placeholder' => 'E-Mail ', 'readonly', 'rows'=>'2']) }}
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_telp">Telephone: <span class="text-danger">*</span></label>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            {{ Form::text('company_telp', old('company_telp'), ['class' => 'form-control text-black','id'=>'company_telp' ,'placeholder' => 'Telephone', 'readonly']) }}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {{ Form::text('company_hp', old('company_hp'), ['class' => 'form-control text-black','id'=>'company_hp' ,'placeholder' => 'Telephone', 'readonly']) }}
-                                        </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="nib">NIB: <span class="text-danger">*</span></label>
+                                        {{ Form::text('nib', $data_company->nib, ['class' => 'form-control text-black','id'=>'nib' ,'placeholder' => 'NIB', 'readonly']) }}
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="date_nib">Tanggal NIB: <span class="text-danger">*</span></label>
+                                        {{ Form::text('date_nib', $data_company->date_nib, ['class' => 'form-control text-black','id'=>'date_nib' ,'placeholder' => 'Tanggal NIB', 'readonly']) }}
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="nib">NIB: <span class="text-danger">*</span></label>
-                                    {{ Form::text('nib', old('nib'), ['class' => 'form-control text-black','id'=>'nib' ,'placeholder' => 'NIB', 'readonly']) }}
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="nomor_et">Nomor ET: <span class="text-danger">*</span></label>
+                                        {{ Form::text('nomor_et', $data_company->nomor_et, ['class' => 'form-control text-black','id'=>'nomor_et' ,'placeholder' => 'ET', 'readonly']) }}
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="date_et">Tanggal ET: <span class="text-danger">*</span></label>
+                                        {{ Form::text('date_et', $data_company->date_et, ['class' => 'form-control text-black','id'=>'date_et' ,'placeholder' => 'Tanggal ET', 'readonly']) }}
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="date_nib">Tanggal NIB: <span class="text-danger">*</span></label>
-                                    {{ Form::text('date_nib', old('date_nib'), ['class' => 'form-control text-black','id'=>'date_nib' ,'placeholder' => 'Tanggal NIB', 'readonly']) }}
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="npwp">NPWP: <span class="text-danger">*</span></label>
+                                        {{ Form::text('npwp', $data_company->npwp, ['class' => 'form-control text-black','id'=>'npwp' ,'placeholder' => 'NPWP', 'readonly']) }}
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="company_address">Alamat: <span class="text-danger">*</span></label>
+                                        {{ Form::textarea('company_address', $data_company->company_address, ['class' => 'form-control text-black','id'=>'company_address' ,'placeholder' => 'Alamat', 'readonly', 'rows'=>'2']) }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="nomor_et">Nomor ET: <span class="text-danger">*</span></label>
-                                    {{ Form::text('nomor_et', old('nomor_et'), ['class' => 'form-control text-black','id'=>'nomor_et' ,'placeholder' => 'ET', 'readonly']) }}
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="pic">Nama: <span class="text-danger">*</span></label>
+                                        {{ Form::text('pic', $data_company->pic, ['class' => 'form-control text-black','id'=>'pic' ,'placeholder' => 'Penanggung Jawab', 'readonly']) }}
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="position">Jabatan: <span class="text-danger">*</span></label>
+                                        {{ Form::text('position', $data_company->position, ['class' => 'form-control text-black','id'=>'position' ,'placeholder' => 'Jabatan', 'readonly']) }}
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="date_et">Tanggal ET: <span class="text-danger">*</span></label>
-                                    {{ Form::text('date_et', old('date_et'), ['class' => 'form-control text-black','id'=>'date_et' ,'placeholder' => 'Tanggal ET', 'readonly']) }}
+                            @else
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="company_id">Nama Perusahaan: <span class="text-danger">*</span></label>
+                                        {{-- {{ Form::select('company[name]', $data_company , old('company[name]') ? old('company[name]') : $data ?? 'user', ['class' => 'form-control company_id', 'placeholder' => 'Select Company Name']) }} --}}
+                                        <select name="company_id" class="form-control select2" id="company_id" placeholder="Select Company Name">
+                                            <option value="">Select Company Name</option>
+                                            @foreach($data_company as $key => $company)
+                                                <option value="{{ $company->id }}" {{ old('company_id') === $company->id ? 'selected' : '' }}>
+                                                    {{ $company->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label for="pe_id" class="form-label">PE</label>
+                                        <select name="pe_id" id="pe_id" class="form-control select2">
+                                            <option value="">Pilih PE</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="nomor_pe">Nomor PE: <span class="text-danger">*</span></label>
-                                    {{ Form::text('nomor_pe', old('nomor_pe'), ['class' => 'form-control text-black','id'=>'nomor_pe' ,'placeholder' => 'PE', 'readonly']) }}
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="nib">NIB: <span class="text-danger">*</span></label>
+                                        {{ Form::text('nib', old('nib'), ['class' => 'form-control text-black','id'=>'nib' ,'placeholder' => 'NIB', 'readonly']) }}
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="date_nib">Tanggal NIB: <span class="text-danger">*</span></label>
+                                        {{ Form::text('date_nib', old('date_nib'), ['class' => 'form-control text-black','id'=>'date_nib' ,'placeholder' => 'Tanggal NIB', 'readonly']) }}
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="date_pe">Tanggal PE: <span class="text-danger">*</span></label>
-                                    {{ Form::text('date_pe', old('date_pe'), ['class' => 'form-control text-black','id'=>'date_pe' ,'placeholder' => 'Tanggal PE', 'readonly']) }}
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="nomor_et">Nomor ET: <span class="text-danger">*</span></label>
+                                        {{ Form::text('nomor_et', old('nomor_et'), ['class' => 'form-control text-black','id'=>'nomor_et' ,'placeholder' => 'ET', 'readonly']) }}
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="date_et">Tanggal ET: <span class="text-danger">*</span></label>
+                                        {{ Form::text('date_et', old('date_et'), ['class' => 'form-control text-black','id'=>'date_et' ,'placeholder' => 'Tanggal ET', 'readonly']) }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_npwp">NPWP: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_npwp', old('company_npwp'), ['class' => 'form-control text-black','id'=>'company_npwp' ,'placeholder' => 'NPWP', 'readonly']) }}
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="npwp">NPWP: <span class="text-danger">*</span></label>
+                                        {{ Form::text('npwp', old('npwp'), ['class' => 'form-control text-black','id'=>'npwp' ,'placeholder' => 'NPWP', 'readonly']) }}
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="company_address">Alamat: <span class="text-danger">*</span></label>
+                                        {{ Form::textarea('company_address', old('company_address'), ['class' => 'form-control text-black','id'=>'company_address' ,'placeholder' => 'Alamat', 'readonly', 'rows'=>'2']) }}
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_address">Alamat: <span class="text-danger">*</span></label>
-                                    {{ Form::textarea('company_address', old('company_address'), ['class' => 'form-control text-black','id'=>'company_address' ,'placeholder' => 'Alamat', 'readonly', 'rows'=>'2']) }}
+                                <div class="row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="pic">Nama: <span class="text-danger">*</span></label>
+                                        {{ Form::text('pic', old('pic'), ['class' => 'form-control text-black','id'=>'pic' ,'placeholder' => 'Penanggung Jawab', 'readonly']) }}
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <label class="form-label" for="position">Jabatan: <span class="text-danger">*</span></label>
+                                        {{ Form::text('position', old('position'), ['class' => 'form-control text-black','id'=>'position' ,'placeholder' => 'Jabatan', 'readonly']) }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_pic">Nama: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_pic', old('company_pic'), ['class' => 'form-control text-black','id'=>'company_pic' ,'placeholder' => 'Penanggung Jawab', 'readonly']) }}
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_position">Jabatan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_position', old('company_position'), ['class' => 'form-control text-black','id'=>'company_position' ,'placeholder' => 'Jabatan', 'readonly']) }}
-                                </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -163,7 +183,20 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ Form::text('barang[0][nomor_hs]', old('barang[0][nomor_hs]'), ['class' => 'form-control text-black','id'=>'barang[0][nomor_hs]' ,'placeholder' => 'Nomor HS', 'required']) }}</td>
+                                            <td>
+                                                <script>
+                                                    window.hsData = @json($hs_levels);  // Pass the users data from Laravel to JS
+                                                </script>
+                                                {{-- {{ Form::text('barang[0][nomor_hs]', old('barang[0][nomor_hs]'), ['class' => 'form-control text-black','id'=>'barang[0][nomor_hs]' ,'placeholder' => 'Nomor HS', 'required']) }} --}}
+                                                <select name="barang[0][nomor_hs]" class="form-control select2" id="barang[0][nomor_hs]" placeholder="Select Company Name" style="width: 125%;">
+                                                    <option value="">Select HS</option>
+                                                    @foreach($hs_levels as $key => $level)
+                                                        <option value="{{ $level->id }}" {{ old('barang[0][nomor_hs]') === $level->id ? 'selected' : '' }}>
+                                                            {{ $level->hs }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
                                             <td>{{ Form::text('barang[0][uraian]', old('barang[0][uraian]'), ['class' => 'form-control text-black','id'=>'barang[0][uraian]' ,'placeholder' => 'Uraian', 'required']) }}</td>
                                             <td>{{ Form::text('barang[0][jumlah_total]', old('barang[0][jumlah_total]'), ['class' => 'form-control text-black','id'=>'barang[0][jumlah_total]' ,'placeholder' => 'Jumlah Total', 'required']) }}</td>
                                             <td>{{ Form::text('barang[0][nilai_fob]', old('barang[0][nilai_fob]'), ['class' => 'form-control text-black calculateFOB','id'=>'barang[0][nilai_fob]' ,'placeholder' => 'FOB', 'required']) }}</td>
@@ -223,7 +256,7 @@
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="invoice_date">Tanggal Invoice: <span class="text-danger">*</span></label>
-                                {{ Form::text('invoice_date', old('invoice_date'), ['class' => 'form-control text-black datePicker','id'=>'invoice_date' ,'placeholder' => 'Tanggal Invoice', 'required']) }}
+                                {{ Form::date('invoice_date', old('invoice_date'), ['class' => 'form-control text-black','id'=>'invoice_date' ,'placeholder' => 'Tanggal Invoice', 'required']) }}
                             </div>
                         </div>
                         <div class="row">
@@ -233,7 +266,7 @@
                             </div>
                             <div class="form-group col-md-6 col-sm-12">
                                 <label class="form-label" for="packing_list_date">Tanggal Packing List <span class="text-danger">*</span></label>
-                                {{ Form::text('packing_list_date', old('packing_list_date'), ['class' => 'form-control text-black datePicker','id'=>'packing_list_date' ,'placeholder' => 'Tanggal Invoice', 'required']) }}
+                                {{ Form::date('packing_list_date', old('packing_list_date'), ['class' => 'form-control text-black','id'=>'packing_list_date' ,'placeholder' => 'Tanggal Invoice', 'required']) }}
                             </div>
                         </div>
                         <hr>
@@ -381,7 +414,7 @@
                                         {{ Form::text('inspection_date', old('inspection_date'), ['class' => 'form-control text-black datePicker','id'=>'inspection_date' ,'placeholder' => 'Tanggal' ,'required']) }}
                                     </div>
                                     <div class="col-md-3">
-                                        {{ Form::select('inspection_timezone', $date ,old('inspection_timezone'), ['class' => 'form-control  text-black','id'=>'inspection_timezone' ,'placeholder' => 'WAKTU', 'required']) }}
+                                        {{ Form::select('inspection_timezone', $date ,old('inspection_timezone'), ['class' => 'form-control  text-black select2','id'=>'inspection_timezone' ,'placeholder' => 'WAKTU', 'required']) }}
                                     </div>
                                 </div>
                             </div>
@@ -449,7 +482,7 @@
                                         {{ Form::text('stuffing_date', old('stuffing_date'), ['class' => 'form-control text-black datePicker','id'=>'stuffing_date' ,'placeholder' => 'Tanggal' ,'required']) }}
                                     </div>
                                     <div class="col-md-3">
-                                        {{ Form::select('stuffing_timezone', $date ,old('stuffing_timezone'), ['class' => 'form-control text-black','id'=>'stuffing_timezone' ,'placeholder' => 'WAKTU', 'required']) }}
+                                        {{ Form::select('stuffing_timezone', $date ,old('stuffing_timezone'), ['class' => 'form-control text-black select2','id'=>'stuffing_timezone' ,'placeholder' => 'WAKTU', 'required']) }}
                                     </div>
                                 </div>
                             </div>
@@ -468,33 +501,33 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3">
-                                {{ Form::select('memorize_type', $type ,old('memorize_type'), ['class' => 'form-control text-black','id'=>'memorize_type' ,'placeholder' => 'Type Pengapalan', 'required']) }}
+                                {{ Form::select('memorize_type', $type ,old('memorize_type'), ['class' => 'form-control text-black select2','id'=>'memorize_type' ,'placeholder' => 'Type Pengapalan', 'required']) }}
                             </div>
                             <div class="col-md-3">
-                                {{ Form::select('memorize_size', $size ,old('memorize_size'), ['class' => 'form-control text-black','id'=>'memorize_size' ,'placeholder' => 'Ukuran Pengapalan', 'required']) }}
+                                {{ Form::select('memorize_size', $size ,old('memorize_size'), ['class' => 'form-control text-black select2','id'=>'memorize_size' ,'placeholder' => 'Ukuran Pengapalan', 'required']) }}
                             </div>
                             <div class="col-md-3">
                                 {{ Form::text('memorize_total', old('memorize_total'), ['class' => 'form-control text-black','id'=>'memorize_total' ,'placeholder' => 'Total' ,'required']) }}
                             </div>
                             <div class="col-md-3">
-                                {{ Form::select('memorize_skenario', $skenario ,old('memorize_skenario'), ['class' => 'form-control text-black','id'=>'memorize_skenario' ,'placeholder' => 'Skenario', 'required']) }}
+                                {{ Form::select('memorize_skenario', $skenario ,old('memorize_skenario'), ['class' => 'form-control text-black select2','id'=>'memorize_skenario' ,'placeholder' => 'Skenario', 'required']) }}
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="file_nib">NIB: <span class="text-danger">*</span></label>
-                                {{ Form::file('file_nib',['class' => 'dropify', 'id'=>'file_nib','placeholder' => 'input',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip",'required']) }}
+                                {{ Form::file('file_nib',['class' => 'form-control', 'id'=>'file_nib','placeholder' => 'input',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip",'required']) }}
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="file_invoice">Invoice: <span class="text-danger">*</span></label>
-                                {{ Form::file('file_invoice',['class' => 'dropify', 'id'=>'file_invoice','placeholder' => 'input', "data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip",'required']) }}
+                                {{ Form::file('file_invoice',['class' => 'form-control', 'id'=>'file_invoice','placeholder' => 'input', "data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip",'required']) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="file_packing_list">Paking List: <span class="text-danger">*</span></label>
-                                {{ Form::file('file_packing_list',['class' => 'dropify', 'id'=>'file_packing_list','placeholder' => 'input',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ,'required']) }}
+                                {{ Form::file('file_packing_list',['class' => 'form-control', 'id'=>'file_packing_list','placeholder' => 'input',"data-max-file-size"=>"2M","accept"=>".jpg,.png,.pdf,.zip", "data-allowed-file-extensions"=>"pdf jpeg jpg png zip" ,'required']) }}
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="file_invoice">ET & PE: <span class="text-danger">*</span></label>

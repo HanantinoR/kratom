@@ -18,4 +18,15 @@ class PpbeGoodsModel extends Model
         'fob_value',
         'per_kilogram',
     ];
+
+    public function ppbe()
+    {
+        return $this->belongsTo(PPBEModel::class,'ppbe_id');
+    }
+
+    public function hs()
+    {
+        return $this->belongsTo(HSLevel::class,'processed_level_id');
+    }
+
 }

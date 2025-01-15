@@ -35,8 +35,8 @@
                                     {{ Form::text('nomor_penganjuan', old('nomor_penganjuan'), ['class' => 'form-control text-black','id'=>'nomor_pengajuan' ,'placeholder' => 'Nomor PPBE', 'readonly']) }}
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="date">Tanggal Pengajuan PPBE: <span class="text-danger">*</span></label>
-                                    {{ Form::text('date', old('date'), ['class' => 'form-control text-black datePicker','id'=>'date' ,'placeholder' => 'Tanggal PPBE', 'readonly']) }}
+                                    <label class="form-label" for="date_ppbe">Tanggal Pengajuan PPBE: <span class="text-danger">*</span></label>
+                                    {{ Form::text('date_ppbe', old('date_ppbe'), ['class' => 'form-control text-black datePicker','id'=>'date_ppbe' ,'placeholder' => 'Tanggal PPBE', 'readonly']) }}
                                 </div>
                             </div>
                             <hr>
@@ -44,43 +44,25 @@
                             <div class="row">
                                 <div class="form-group col-md-6 col-sm-12">
                                     <label class="form-label" for="company_id">Nama Perusahaan: <span class="text-danger">*</span></label>
-                                    <select name="company_id" class="form-control text-black company_id" id="company_id" placeholder="Select Company Name" disabled>
+                                    <select name="company_id" class="form-control text-black select2" id="company_id" placeholder="Select Company Name" disabled>
                                         <option value="">Select Company Name</option>
                                         @foreach($data_company as $key => $company)
                                             <option value="{{ $company->id }}" {{ $data->company_id === $company->id ? 'selected' : '' }}>
-                                                {{ $company->company_name }}
+                                                {{ $company->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="company_quota_used">Kuota Pemakaian: <span class="text-danger">*</span></label>
-                                            {{ Form::text('company_quota_used', old('company_quota_used',$history_quota->company_quota_used), ['class' => 'form-control text-black','id'=>'company_quota_used' ,'placeholder' => 'Kuota Pemakaian', 'readonly']) }}
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="company_quota_remaining">Sisa Kuota: <span class="text-danger">*</span></label>
-                                            {{ Form::text('company_quota_remaining', old('company_quota_remaining',$history_quota->company_quota_remaining), ['class' => 'form-control text-black','id'=>'company_quota_remaining' ,'placeholder' => 'Kuota Sisa', 'readonly']) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_email">Email: <span class="text-danger">*</span></label>
-                                    {{ Form::email('company_email', old('company_email',$data->company->company_email), ['class' => 'form-control text-black','id'=>'company_email' ,'placeholder' => 'E-Mail ', 'readonly', 'rows'=>'2']) }}
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_telp">Telephone: <span class="text-danger">*</span></label>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            {{ Form::text('company_telp', old('company_telp',$data->company->company_telp), ['class' => 'form-control text-black','id'=>'company_telp' ,'placeholder' => 'Telephone', 'readonly']) }}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {{ Form::text('company_hp', old('company_hp',$data->company->company_hp), ['class' => 'form-control text-black','id'=>'company_hp' ,'placeholder' => 'Telephone', 'readonly']) }}
-                                        </div>
-                                    </div>
+                                    <label for="pe_id" class="form-label">PE</label>
+                                    <select name="pe_id" id="pe_id" class="form-control select2" disabled>
+                                        <option value="">Pilih PE</option>
+                                        @foreach ($data_pe as $key => $pe)
+                                            <option value="{{$pe->id}}" {{$data->company_pe_id === $pe->id ? 'selected' : ''}}>
+                                                {{$pe->nomor_pe}}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -103,21 +85,10 @@
                                     {{ Form::text('date_et', old('date_et',$data->company->date_et), ['class' => 'form-control text-black','id'=>'date_et' ,'placeholder' => 'Tanggal NIB', 'readonly']) }}
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="nomor_pe">Nomor PE: <span class="text-danger">*</span></label>
-                                    {{ Form::text('nomor_pe', old('nomor_pe',$data->company->nomor_pe), ['class' => 'form-control text-black','id'=>'nomor_pe' ,'placeholder' => 'PE', 'readonly']) }}
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="date_pe">Tanggal PE: <span class="text-danger">*</span></label>
-                                    {{ Form::text('date_pe', old('date_pe',$data->company->date_pe), ['class' => 'form-control text-black','id'=>'date_pe' ,'placeholder' => 'Tanggal NIB', 'readonly']) }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_npwp">NPWP: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_npwp', old('company_npwp',$data->company->company_npwp), ['class' => 'form-control text-black','id'=>'company_npwp' ,'placeholder' => 'NPWP', 'readonly']) }}
+                                    <label class="form-label" for="npwp">NPWP: <span class="text-danger">*</span></label>
+                                    {{ Form::text('npwp', old('npwp',$data->company->npwp), ['class' => 'form-control text-black','id'=>'npwp' ,'placeholder' => 'NPWP', 'readonly']) }}
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12">
                                     <label class="form-label" for="company_address">Alamat: <span class="text-danger">*</span></label>
@@ -126,12 +97,12 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_pic">Nama: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_pic', old('company_pic',$data->company->company_pic), ['class' => 'form-control text-black','id'=>'company_pic' ,'placeholder' => 'Penanggung Jawab', 'readonly']) }}
+                                    <label class="form-label" for="pic">Nama: <span class="text-danger">*</span></label>
+                                    {{ Form::text('pic', old('pic',$data->company->pic), ['class' => 'form-control text-black','id'=>'pic' ,'placeholder' => 'Penanggung Jawab', 'readonly']) }}
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12">
-                                    <label class="form-label" for="company_position">Jabatan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_position', old('company_position',$data->company->company_position), ['class' => 'form-control text-black','id'=>'company_position' ,'placeholder' => 'Jabatan', 'readonly']) }}
+                                    <label class="form-label" for="position">Jabatan: <span class="text-danger">*</span></label>
+                                    {{ Form::text('position', old('position',$data->company->position), ['class' => 'form-control text-black','id'=>'position' ,'placeholder' => 'Jabatan', 'readonly']) }}
                                 </div>
                             </div>
                         </div>
@@ -162,7 +133,17 @@
                                     <tbody>
                                         @foreach ($data->goods as $index => $good)
                                         <tr>
-                                            <td>{{ Form::text('barang['.$index.'][nomor_hs]', old('barang['.$index.'][nomor_hs]',$good->processed_level_id), ['class' => 'form-control text-black','id'=>'barang['.$index.'][nomor_hs]' ,'placeholder' => 'Nomor HS', 'readonly']) }}</td>
+                                            <td>
+                                                {{-- {{ Form::text('barang['.$index.'][nomor_hs]', old('barang['.$index.'][nomor_hs]',$good->processed_level_id), ['class' => 'form-control text-black','id'=>'barang['.$index.'][nomor_hs]' ,'placeholder' => 'Nomor HS', 'readonly']) }} --}}
+                                                <select name="barang[{{$index}}][nomor_hs]" class="form-control select2" id="barang[{{$index}}][nomor_hs]" placeholder="Select Company Name" disabled>
+                                                    <option value="">Select HS</option>
+                                                    @foreach($hs_levels as $key => $level)
+                                                        <option value="{{ $level->id }}" {{ $good->processed_level_id === $level->id ? 'selected' : '' }}>
+                                                            {{ $level->hs }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
                                             <td>{{ Form::text('barang['.$index.'][uraian]', old('barang['.$index.'][uraian]',$good->description), ['class' => 'form-control text-black','id'=>'barang['.$index.'][uraian]' ,'placeholder' => 'Uraian', 'readonly']) }}</td>
                                             <td>{{ Form::text('barang['.$index.'][jumlah_total]', old('barang['.$index.'][jumlah_total]',$good->quantity_kg), ['class' => 'form-control text-black','id'=>'barang['.$index.'][jumlah_total]' ,'placeholder' => 'Jumlah Total', 'readonly']) }}</td>
                                             <td>{{ Form::text('barang['.$index.'][nilai_fob]', old('barang['.$index.'][nilai_fob]',$good->fob_value), ['class' => 'form-control text-black calculateFOB','id'=>'barang['.$index.'][nilai_fob]' ,'placeholder' => 'FOB', 'readonly']) }}</td>
@@ -191,7 +172,7 @@
                                         {{ Form::text('packing_total', old('packing_total'), ['class' => 'form-control text-black','id'=>'packing_total' ,'placeholder' => 'Total Kemasan', 'readonly']) }}
                                     </div>
                                     <div class="col-md-4">
-                                        {{ Form::select('packing_type', $type_kemasan , old('packing_type'),  ['class' => 'form-control text-black form_select2','id'=>'packing_type' ,'placeholder' => 'Pilih!', 'disabled']) }}
+                                        {{ Form::select('packing_type', $type_kemasan , old('packing_type'),  ['class' => 'form-control text-black select2','id'=>'packing_type' ,'placeholder' => 'Pilih!', 'disabled']) }}
                                     </div>
                                 </div>
                             </div>
@@ -202,7 +183,15 @@
                                         {{ Form::text('fob_total', old('fob_total'), ['class' => 'form-control text-black text-black','id'=>'fob_total' ,'placeholder' => 'Nilai FOB', 'readonly']) }}
                                     </div>
                                     <div class="col-md-4">
-                                        {{ Form::select('fob_currency', $currency , old('fob_currency'),  ['class' => 'form-control text-black fob_currency','id'=>'fob_currency' ,'placeholder' => 'Pilih FOB', 'disabled']) }}
+                                        {{-- {{ Form::select('fob_currency', $currency , $data->fob_currency,  ['class' => 'form-control text-black fob_currency select2','id'=>'fob_currency' ,'placeholder' => 'Pilih FOB', 'disabled']) }} --}}
+                                        <select name="fob_currency" class="form-control select2" id="fob_currency" placeholder="Select FOB Currency" disabled>
+                                            <option value="">Pilih Mata Uang</option>
+                                            @foreach($currencies as $key => $currency)
+                                                <option value="{{ $currency->id }}" {{ $data->fob_currency === $currency->id ? 'selected' : '' }}>
+                                                    {{ $currency->description}} ({{ $currency->code }})
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -371,7 +360,7 @@
                                         {{ Form::text('inspection_date', old('inspection_date'), ['class' => 'form-control text-black datePicker','id'=>'inspection_date' ,'placeholder' => 'Tanggal' ,'readonly']) }}
                                     </div>
                                     <div class="col-md-3">
-                                        {{ Form::select('inspection_timezone', $date ,old('inspection_timezone'), ['class' => 'form-control text-black form_select2','id'=>'inspection_timezone' ,'placeholder' => 'WAKTU', 'disabled']) }}
+                                        {{ Form::select('inspection_timezone', $date ,old('inspection_timezone'), ['class' => 'form-control text-black select2','id'=>'inspection_timezone' ,'placeholder' => 'WAKTU', 'disabled']) }}
                                     </div>
                                 </div>
                             </div>
@@ -440,7 +429,7 @@
                                         {{ Form::text('stuffing_date', old('stuffing_date'), ['class' => 'form-control text-black datePicker','id'=>'stuffing_date' ,'placeholder' => 'Tanggal' ,'readonly']) }}
                                     </div>
                                     <div class="col-md-3">
-                                        {{ Form::select('stuffing_timezone', $date ,old('stuffing_timezone'), ['class' => 'form-control text-black form_select2','id'=>'stuffing_timezone' ,'placeholder' => 'WAKTU', 'disabled']) }}
+                                        {{ Form::select('stuffing_timezone', $date ,old('stuffing_timezone'), ['class' => 'form-control text-black select2','id'=>'stuffing_timezone' ,'placeholder' => 'WAKTU', 'disabled']) }}
                                     </div>
                                 </div>
                             </div>
@@ -551,14 +540,15 @@
                     </div>
                     <div class="card-footer">
                         <div class="row justify-content-center">
-                            <div class="col-md-3">
+                            <div class="">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-9">
+                                <a href="{{route('ppbe.pdf_draft',$id)}}" type="button" class="btn btn-success me-2"  id="print">Print Draft PPBE</a>
                                 <button type="button" class="btn btn-primary me-2"  id="verify-btn" data-id="{{$id}}" disabled>Verifikasi PPBE</button>
-                                <button type="button" class="btn btn-danger me-2"  id="reject-send" data-id="{{$id}}"data-bs-toggle="modal" data-bs-target="#RejectModal">Tolak PPBE</button>
+                                <button type="button" class="btn btn-danger me-2"  id="reject-send" data-id="{{$id}}" data-bs-toggle="modal" data-bs-target="#RejectModal">Tolak PPBE</button>
                                 <a href="{{route('ppbe.index')}}" type="button" class="btn btn-secondary me-2">Kembali</a>
                             </div>
-                            <div class="col-md-3">
+                            <div class="">
                             </div>
                         </div>
                     </div>

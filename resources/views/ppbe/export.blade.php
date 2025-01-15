@@ -9,10 +9,6 @@
             font-family: 'Helvetica', sans-serif;
             color: #333;
         }
-        h4 {
-            text-align: center;
-            color: #004085;
-        }
         .container {
             border: 2px solid #004085;
             padding: 20px;
@@ -67,7 +63,17 @@
     </style>
 </head>
 <body>
-    <h4>{{$data['title']}}</h4>
+    <table style="margin-bottom: -5%">
+        <tr>
+            <td>
+                <h4 style="width:80%">
+                    {{$data['title']}}
+                    NO.: 12.12.00001
+                </h4>
+            </td>
+            <td>asdadasdada</td>
+        </tr>
+    </table>
     <div class="container">
         <!-- Customer Info Section -->
         <h5 style="margin-top:-20px; margin-bottom:10px">I. Data Pemohon</h5>
@@ -319,19 +325,19 @@
 
         <h5 style="margin-top:0px">Bersama Ini kami Sampaikan Kelengkapan Dokumen</h5>
         <table style="width: 100%; font-size:11px; margin-top:-20px">
-            <tr>
+            <tr style="margin-top: 0px;">
                 <td style="width:5%"><input type="checkbox" name="" id=""></td>
                 <td>Copy NIB</td>
             </tr>
-            <tr>
+            <tr style="margin-top: -20px;">
                 <td style="width:5%"><input type="checkbox" name="" id=""></td>
                 <td>Copy PE</td>
             </tr>
-            <tr>
+            <tr style="margin-top: -20px;">
                 <td style="width:5%"><input type="checkbox" name="" id=""></td>
                 <td>Packing List</td>
             </tr>
-            <tr>
+            <tr style="margin-top: -20px;">
                 <td style="width:5%"><input type="checkbox" name="" id=""></td>
                 <td>Invoice</td>
             </tr>

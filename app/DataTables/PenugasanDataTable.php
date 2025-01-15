@@ -22,6 +22,7 @@ class PenugasanDataTable extends DataTable
         // dd($request->all());
         return datatables()
             ->eloquent($query)
+            ->addIndexColumn()
             ->editColumn('status', function($query) {
                 $status = 'warning';
                 switch ($query['status']) {
@@ -61,7 +62,11 @@ class PenugasanDataTable extends DataTable
      */
     public function query()
     {
-        $model = PPBEModel::whereIn('status',['approved','assignment']);
+        $model = PPBEModel::whereIn('ppbe.status',['approved','assignment'])
+                        ->leftjoin('company','company.id','=','ppbe.company_id')
+                        ->leftjoin('moffices','moffices.id','=','ppbe.inspection_office_id')
+                        ->select('ppbe.id','ppbe.company_id','company.id as company_id','ppbe.code','ppbe.date_ppbe','company.name as company_name',
+                            'moffices.name as inspection_office','ppbe.inspection_date');
         $query = $model->newQuery();
 
         if ($search = request()->get('ppbe_search')) {
@@ -69,7 +74,7 @@ class PenugasanDataTable extends DataTable
         }
 
         if ($search = request()->get('company_name_search')) {
-            $query->where('company.company_name', 'like', "%{$search}%");
+            $query->where('company.name', 'like', "%{$search}%");
         }
         // if($search = request()->get('ls_search')){
         //     $query->where('ls_number', 'like', "%{$search}%");
@@ -118,13 +123,13 @@ class PenugasanDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            ['data' => 'id', 'name' => 'id', 'title' => 'NO','orderable' => false],
+            ['data' => 'DT_RowIndex', 'title' => 'No', 'orderable' => false, 'searchable' => false],
             ['data' => 'code', 'name' => 'code', 'title' => 'Nomor PPBE'],
-            ['data' => 'date', 'name' => 'date', 'title' => 'Tanggal PPBE'],
-            // ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Nama Surveyor'],
+            ['data' => 'date_ppbe', 'name' => 'date_ppbe', 'title' => 'Tanggal PPBE'],
+            ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Nama Surveyor'],
             // ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Jenis Intervensi'],
-            ['data' => 'buyer_name', 'name' => 'buyer_name', 'title' => 'Eksportir'],
-            ['data' => 'inspection_office_id', 'name' => 'inspection_office_id', 'title' => 'Lokasi Pemeriksaan'],
+            // ['data' => 'buyer_name', 'name' => 'buyer_name', 'title' => 'Eksportir'],
+            ['data' => 'inspection_office', 'name' => 'inspection_office', 'title' => 'Lokasi Pemeriksaan'],
             ['data' => 'inspection_date', 'name' => 'inspection_date', 'title' => 'Tanggal Pemeriksaan'],
             Column::computed('action')
                   ->exportable(false)

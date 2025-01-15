@@ -308,212 +308,457 @@
             {!! Form::close() !!}
         </div>
     </div>
+@elseif (in_array('hplps_list',$assets))
+    <div class="modal fade" id="requestBookingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="requestBookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            {!! Form::open(['route' => ['hplps.booking'],'method' => 'post', 'enctype' => 'multipart/form-data','id'=>'form_request_booking']) !!}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="requestBookingModalLabel">Volume Request Booking</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-lg-6 col-md-6">
+                                <label for="req_type">Jenis Permintaan: </label>
+                                <select name="req_type" id="req_type" class="form-control select2_modal" style="width: 100%" required>
+                                    <option value="">Pilih Jenis Permintaan</option>
+                                    <option value="1">Permintaan Alokasi</option>
+                                    <option value="2">Revisi Permintaan Alokasi</option>
+                                    <option value="3">Pembatalan Permintaan Alokasi</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6">
+                                <label for="code">No PPBE</label>
+                                <input type="text" name="code" id="code" class="form-control text-black" readonly >
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6">
+                                <label for="nib">NIB</label>
+                                <input type="text" name="nib" id="nib" class="form-control text-black" readonly>
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6">
+                                <label for="npwp">NPWP</label>
+                                <input type="text" name="npwp" id="npwp" class="form-control text-black" readonly>
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6">
+                                <label for="no_pe">No PE</label>
+                                <input type="text" name="no_pe" id="no_pe" class="form-control text-black" readonly>
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6">
+                                <label for="pe_permit_date">Tanggal Izin PE</label>
+                                <input type="text" name="pe_permit_date" id="pe_permit_date" class="form-control text-black" readonly>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row request_body"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"  id="request_alokasi_btn">Request</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            {!! Form::close() !!}
+        </div>
+    </div>
+    <div class="modal fade" id="checkLabModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkLabModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            {{-- {!! Form::open(['route' => ['hplps.booking'],'method' => 'post', 'enctype' => 'multipart/form-data','id'=>'form_request_booking']) !!} --}}
+                @csrf
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="checkLabModalLabel">Check Hasil Lab</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <label for="nomer_erp">NOMOR ERP</label>
+                                <input type="text" name="nomer_erp" id="nomer_erp" class="form-control text-black">
+                                <input type="hidden" name="ppbe_id" id="ppbe_id" class="form-control text-black">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="btn" class="btn btn-primary"  id="check_lab_btn">Check</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            {{-- {!! Form::close() !!} --}}
+        </div>
+    </div>
+@elseif ($assets[1] == 'ls_list')
+    <div class="modal fade" id="lsPrintModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="lsPrintModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            {{-- {!! Form::open(['route' => ['penugasan.save'],'method' => 'post', 'enctype' => 'multipart/form-data']) !!} --}}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="lsPrintModalLabel">Nomor Order ERP </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col">
+                                <input type="hidden" name="ls_id" id="ls_id" class="ls_id text-black form-control mb-2">
+                                <input type="text" name="nomor_order_lab" id="nomor_order_lab" class="form-control text-black nomor_order_lab" placeholder="Masukan Nomor Order">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="checkHasilLab()">Check</button>
+                    </div>
+                </div>
+            {{-- {!! Form::close() !!} --}}
+        </div>
+    </div>
 @endif
-
 
 <script>
     const assets = @json($assets);
-$(document).ready(function(){
-    $('.select2').select2();
-    $('.select2_modal').select2({
-        placeholder: "Select",
-        selectOnClose: true,
-        width: 'resolve',
-        dropdownParent: $('#assignmentModal')
-    });
-    if ($.fn.DataTable.isDataTable('#dataTable')) {
-        // DataTable is already initialized
-        // You might want to destroy it before reinitializing
-        $('#dataTable').DataTable().destroy();
-    }
-
-    if('{{$assets[1]}}' == 'ppbe_list')
-    {
-        var table = $('#dataTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('ppbe.index') }}",
-                data: function(d) {
-                    d.ppbe_search  = $('#ppbe_search').val();
-                    d.company_name_search  = $('#company_name_search').val();
-                }
-            },
-            columns:[
-                {data : 'id', name : 'id'},
-                {data : 'status', name : 'status'},
-                {data : 'code', name : 'code'},
-                {data : 'date', name : 'date'},
-                {data : 'company_name', name : 'company_name'},
-                {data : 'inspection_office_id', name : 'inspection_office_id'},
-                {data : 'action', name : 'action', orderable: false, searchable: false }
-            ]
-        });
-    }
-    else if('{{$assets[1]}}' == 'perijinan_list')
-    {
-        var table = $('#dataTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('perijinan.index') }}",
-                data: function(d) {
-                    // d.ppbe_search  = $('#ppbe_search').val();
-                    d.company_name_search  = $('#company_name_search').val();
-                }
-            },
-            columns:[
-                {data : 'id', name : 'id'},
-                {data : 'status', name : 'status'},
-                {data : 'nib', name : 'nib'},
-                {data : 'company_name', name : 'company_name'},
-                {data : 'nomor_et', name : 'nomor_et'},
-                {data : 'nomor_pe', name : 'nomor_pe'},
-                {data : 'company_npwp', name : 'company_npwp'},
-                {data : 'date_nib', name : 'date_nib'},
-                {data : 'company_email', name : 'company_email'},
-                {data : 'action', name : 'action'},
-            ]
-        });
-
-
-    }
-    else if('{{$assets[1]}}' == 'inatrade_list')
-    {
-        var table = $('#dataTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('inatrade.daftar') }}",
-                data: function(d) {
-                    d.ppbe_search  = $('#ppbe_search').val();
-                    d.company_name_search  = $('#company_name_search').val();
-                    d.ls_search = $('#ls_search').val();
-                }
-            },
-            columns:[
-                {data: 'id', name: 'id'},
-                {data: 'company_name', name: 'company_name'},
-                {data: 'status', name: 'status',},
-                {data: 'ls_number', name: 'ls_number'},
-                {data: 'ls_publish_date', name: 'ls_publish_date'},
-                {data: 'ppbe_number', name: 'ppbe_number'},
-                {data: 'ppbe_publish_date', name: 'ppbe_publish_date', orderable: false, searchable: false },
-                {data: 'action', name:'action'}
-            ]
-        });
-    }
-    else if('{{$assets[1]}}' == 'penugasan_list')
-    {
-        var table = $('#dataTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('penugasan.index') }}",
-                data: function(d) {
-                    d.ppbe_search  = $('#ppbe_search').val();
-                    d.company_name_search  = $('#company_name_search').val();
-                }
-            },
-            columns:[
-                {data: 'id', name: 'id'},
-                {data: 'code', name: 'code'},
-                {data: 'date', name: 'date',},
-                {data: 'buyer_name', name: 'buyer_name'},
-                {data: 'inspection_office_id', name: 'inspection_office_id'},
-                {data: 'inspection_date', name: 'inspection_date'},
-                {data: 'action', name:'action'}
-            ]
-        });
-    }else if($.inArray('bcops',assets) != -1)
-    {
-        $('#red_verify_btn, #green_verify_btn, #lock_seal_verify_btn, #thread_verify_btn').click(function(e){
-            const id = $(this).attr('id');
-            const split_id = id.split("_");
-            split_id.splice(split_id.length-2,2);
-            seal_type = split_id.join("_");
-
-            updateStatusUmum(seal_type,id);
-
-        });
-
-        if($.inArray('bcops_umum',assets) != -1)
-        {
-            var table = 'umum';
-        } else {
-            var table = 'surveyor';
+    $(document).ready(function(){
+        if ($.fn.DataTable.isDataTable('#dataTable')) {
+            // DataTable is already initialized
+            // You might want to destroy it before reinitializing
+            $('#dataTable').DataTable().destroy();
         }
 
-        $('#form_bcops_'+table).on('submit',function(e){
-            $('#form_bcops_'+table+' input[name$="status"]').each(function(index, elemen){
-                let field_id = elemen.id;
-                let split_name = field_id.split("_");
-                split_name.pop();
-                let name_id = split_name.join("_");
-                if($('#'+field_id).val() ==="Error"){
-                    $('#'+name_id+'_series').val('');
-                    $('#'+name_id+'_init').val('');
-                    $('#'+name_id+'_total').val('');
-                }
+        if('{{$assets[1]}}' == 'ppbe_list')
+        {
+            var table = $('#dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('ppbe.index') }}",
+                    data: function(d) {
+                        d.ppbe_search  = $('#ppbe_search').val();
+                        d.company_name_search  = $('#company_name_search').val();
+                    }
+                },
+                columns:[
+                    {data : 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false},
+                    {data : 'status', name : 'status'},
+                    {data : 'code', name : 'code'},
+                    {data : 'date_ppbe', name : 'date_ppbe'},
+                    {data : 'name', name : 'name'},
+                    {data : 'inspection_office', name : 'inspection_office'},
+                    {data : 'action', name : 'action', orderable: false, searchable: false }
+                ]
+            });
+        }
+        else if('{{$assets[1]}}' == 'penugasan_list')
+        {
+            var table = $('#dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('penugasan.index') }}",
+                    data: function(d) {
+                        d.ppbe_search  = $('#ppbe_search').val();
+                        d.company_name_search  = $('#company_name_search').val();
+                    }
+                },
+                columns:[
+                    {data : 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false},
+                    {data: 'code', name: 'code'},
+                    {data: 'date_ppbe', name: 'date_ppbe',},
+                    {data: 'company_name', name: 'company_name'},
+                    {data: 'inspection_office', name: 'inspection_office'},
+                    {data: 'inspection_date', name: 'inspection_date'},
+                    {data: 'action', name:'action'}
+                ]
+            });
+        }
+        else if('{{$assets[1]}}' == 'hplps_list')
+        {
+            var table = $('#dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('hplps.daftar') }}",
+                    data: function(d) {
+                        d.ppbe_search  = $('#ppbe_search').val();
+                        d.company_name_search  = $('#company_name_search').val();
+                    }
+                },
+                columns:[
+                    {data : 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false},
+                    {data: 'status', name: 'status'},
+                    {data: 'lab_id', name: 'lab_id',},
+                    {data: 'is_request', name: 'is_request'},
+                    {data: 'code', name: 'code'},
+                    {data: 'date_ppbe', name: 'date_ppbe'},
+                    {data: 'name', name: 'name'},
+                    {data: 'inspection_office', name: 'inspection_office'},
+                    {data: 'action', name:'action'}
+                ]
+            });
+        }
+        else if('{{$assets[1]}}' == 'perijinan_list')
+        {
+            var table = $('#dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('perijinan.index') }}",
+                    data: function(d) {
+                        // d.ppbe_search  = $('#ppbe_search').val();
+                        d.company_name_search  = $('#company_name_search').val();
+                    }
+                },
+                columns:[
+                    {data : 'id', name : 'id'},
+                    {data : 'status', name : 'status'},
+                    {data : 'nib', name : 'nib'},
+                    {data : 'name', name : 'name'},
+                    {data : 'nomor_et', name : 'nomor_et'},
+                    {data : 'action', name : 'action'},
+                ]
             });
 
-            var form = this;
-            if (form.checkValidity() === false) {
-                // If the form is not valid, show validation errors
-                e.preventDefault();
-                e.stopPropagation();
-                form.reportValidity();
 
-                Swal.fire({
-                    title: 'Error',
-                    text: "Mohon Isi Minimal 1 TPS atau mohon Check Tanggal terima BCOPS",
-                    icon: 'warning',
-                });
+        }
+        else if('{{$assets[1]}}' == 'inatrade_list')
+        {
+            // var table = $('#dataTable').DataTable({
+            //     processing: true,
+            //     serverSide: true,
+            //     ajax: {
+            //         url: "{{ route('inatrade.daftar') }}",
+            //         data: function(d) {
+            //             d.ppbe_search  = $('#ppbe_search').val();
+            //             d.company_name_search  = $('#company_name_search').val();
+            //             d.ls_search = $('#ls_search').val();
+            //         }
+            //     },
+            //     columns:[
+            //         {data: 'id', name: 'id'},
+            //         {data: 'company_name', name: 'company_name'},
+            //         {data: 'status', name: 'status',},
+            //         {data: 'ls_number', name: 'ls_number'},
+            //         {data: 'ls_publish_date', name: 'ls_publish_date'},
+            //         {data: 'ppbe_number', name: 'ppbe_number'},
+            //         {data: 'ppbe_publish_date', name: 'ppbe_publish_date', orderable: false, searchable: false },
+            //         {data: 'action', name:'action'}
+            //     ]
+            // });
+        }
+        else if($.inArray('bcops',assets) != -1)
+        {
+            $('#red_verify_btn, #green_verify_btn, #lock_seal_verify_btn, #thread_verify_btn').click(function(e){
+                const id = $(this).attr('id');
+                const split_id = id.split("_");
+                split_id.splice(split_id.length-2,2);
+                seal_type = split_id.join("_");
+
+                updateStatusUmum(seal_type,id);
+
+            });
+
+            if($.inArray('bcops_umum',assets) != -1)
+            {
+                var table = 'umum';
             } else {
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Apakah Anda Yakin',
-                    text: "Anda ingin mengajukan BCOPS Ini?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, submit it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.submit();
+                var table = 'surveyor';
+            }
+
+            $('#form_bcops_'+table).on('submit',function(e){
+                $('#form_bcops_'+table+' input[name$="status"]').each(function(index, elemen){
+                    let field_id = elemen.id;
+                    let split_name = field_id.split("_");
+                    split_name.pop();
+                    let name_id = split_name.join("_");
+                    if($('#'+field_id).val() ==="Error"){
+                        $('#'+name_id+'_series').val('');
+                        $('#'+name_id+'_init').val('');
+                        $('#'+name_id+'_total').val('');
                     }
+                });
+
+                var form = this;
+                if (form.checkValidity() === false) {
+                    // If the form is not valid, show validation errors
+                    e.preventDefault();
+                    e.stopPropagation();
+                    form.reportValidity();
+
+                    Swal.fire({
+                        title: 'Error',
+                        text: "Mohon Isi Minimal 1 TPS atau mohon Check Tanggal terima BCOPS",
+                        icon: 'warning',
+                    });
+                } else {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Apakah Anda Yakin',
+                        text: "Anda ingin mengajukan BCOPS Ini?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, submit it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.submit();
+                        }
+                    });
+                }
+
+            });
+
+            $('#form_bcops_umum input').on('input',function(e){
+                let target = e.currentTarget.id.split("_");
+                target.pop();
+                target = target.join("_");
+
+                $('#'+target+'_status').val("Error").html("Error").removeClass('text-success').addClass('text-danger');
+            });
+        }
+
+        $("#ppbe_search").on("keyup", function(e) {
+            table.draw();
+        });
+        $("#ppbe_search").on("keyup", function(e) {
+            table.draw();
+        });
+        $("#company_name_search").on("keyup", function(e) {
+            table.draw();
+        });
+        $("#ls_search").on("keyup", function(e) {
+            table.draw();
+        });
+
+        $('#assign_btn').on('click',function(){
+            console.log('b');
+        });
+
+        $('#form_request_booking').on('submit',function(e){
+            e.preventDefault();
+            const type =$('#req_type').val();
+
+            if(type == "")
+            {
+                swal.fire({
+                    title:'Salah',
+                    text: "Jenis Permintaan Belum Terisi",
+                    icon: "error"
                 });
             }
 
+            Swal.fire({
+                title: 'Peringatan!',
+                text: 'Apakah Anda Yakin akan Kirim Data!',
+                icon: "warning",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                showConfirmButton: true,
+                showCancelButton: true,
+            }).then((result)=>{
+                if (result.isConfirmed){
+                    const swalLoading =  Swal.fire({
+                        title: 'Please wait...',
+                        text: 'Processing your request...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();  // Show the loading spinner
+                        }
+                    });
+
+                    var formData = new FormData(this);
+                    formData.append('_token', '{{ csrf_token() }}');
+
+                    $.ajax({
+                        // url : "{{route('hplps.booking')}}",
+                        // method:"post",
+                        url : $(this).attr('action'),
+                        method:$(this).attr('method'),
+                        data:formData,
+                        processData: false,
+                        contentType: false,
+                        success:function(response){
+                            console.log(response);
+                            swal.fire({
+                                title:'Success!',
+                                text: response.responseJSON.data,
+                                icon: "success"
+                            });
+
+                            location.reload();
+                        },
+                        error:function(response){
+                            // swalLoading.close();
+                            swal.fire({
+                                title:'Error!',
+                                text: response.responseJSON.data,
+                                icon: "error"
+                            });
+                        },
+                        complete: function() {
+                            swalLoading.close();
+                        }
+                    });
+                }
+            });
+
         });
 
-        $('#form_bcops_umum input').on('input',function(e){
-            let target = e.currentTarget.id.split("_");
-            target.pop();
-            target = target.join("_");
+        $('#check_lab_btn').click(function(e){
+            var nomor_erp = $('#nomer_erp').val();
+            var ppbe_id = $('#ppbe_id').val();
 
-            $('#'+target+'_status').val("Error").html("Error").removeClass('text-success').addClass('text-danger');
+            console.log(ppbe_id);
+            if(nomor_erp == "")
+            {
+                swal.fire({
+                    title:'Perhatian!',
+                    text: "Harap isi Nomor ERP",
+                    icon: "warning"
+                });
+            }
+
+            const swalLoading =  Swal.fire({
+                title: 'Please wait...',
+                text: 'Processing your request...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();  // Show the loading spinner
+                }
+            });
+
+            $.ajax({
+                url : "{{route('hplps.check_lab')}}",
+                method:"post",
+                data:{
+                    data_erp : nomor_erp,
+                    data_ppbe_id : ppbe_id,
+                    _token : "{{ csrf_token() }}",
+                },
+                // processData: false,
+                // contentType: false,
+                success:function(response){
+                    // swalLoading.close();
+                    swal.fire({
+                        title:'Success!',
+                        text: response.data,
+                        icon: "success"
+                    });
+                    location.reload();
+                },
+                error:function(response){
+                    // swalLoading.close();
+                    swal.fire({
+                        title:'Error!',
+                        text: response.data,
+                        icon: "error"
+                    });
+                },
+                complete: function() {
+                    swalLoading.close();
+                }
+            })
         });
-    }
-
-    $("#ppbe_search").on("keyup", function(e) {
-        table.draw();
-    });
-    $("#ppbe_search").on("keyup", function(e) {
-        table.draw();
-    });
-    $("#company_name_search").on("keyup", function(e) {
-        table.draw();
-    });
-    $("#ls_search").on("keyup", function(e) {
-        table.draw();
     });
 
-    $('#assign_btn').on('click',function(){
-        console.log('b');
-    })
-});
     function deleteData(id){
 
         // var itemId = $id;
@@ -572,6 +817,69 @@ $(document).ready(function(){
         $('#ppbe_id').val(id)
         $('#assignmentModal').modal('show');
 
+        $('.select2_modal').select2({
+            placeholder: "Select",
+            selectOnClose: true,
+            width: 'resolve',
+            dropdownParent: $('#assignmentModal')
+        });
+    }
+
+    function openRequestBookingModal(id)
+    {
+        $(".request_body").empty();
+        $("#req_type").val("");
+        $.ajax({
+            url : "{{route('hplps.data_booking',['id' => 'hplps_id'])}}".replace('hplps_id', id),
+            method:"GET",
+            data:{
+                _token : "{{ csrf_token() }}",
+            },
+            success:function(response){
+                $('#code').val(response.data.code)
+                $('#nib').val(response.data.company.nib)
+                $('#npwp').val(response.data.company.npwp)
+                $('#no_pe').val(response.data.pe.nomor_pe)
+                $('#pe_permit_date').val(response.data.pe.permit_date)
+                $.each(response.data.goods,  function(key, value){
+                    $('.request_body').append(`
+                        <div class="form-group col-lg-4 col-md-4">
+                            <label for="hs">NO HS</label>
+                            <input type="text" name="goods[hs][`+key+`]" id="hs" class="form-control text-black" value="`+value.hs.hs+`" readonly>
+                        </div>
+                        <div class="form-group col-lg-4 col-md-4">
+                            <label for="total_hs">Jumlah Volume</label>
+                            <input type="text" name="goods[total_hs][`+key+`]" id="total_hs" class="form-control text-black" value="`+value.quantity_kg+`" readonly>
+                        </div>
+                        <div class="form-group col-lg-4 col-md-4">
+                            <label for="satuan_hs">satuan</label>
+                            <input type="text" name="goods[satuan_hs][`+key+`]" id="satuan_hs" class="form-control text-black" value="KGM" readonly>
+                        </div>
+                    `)
+                });
+            }
+        });
+
+        $('#requestBookingModal').modal('show');
+        $('.select2_modal').select2({
+            placeholder: "Select",
+            selectOnClose: true,
+            width: 'resolve',
+            dropdownParent: $('#requestBookingModal')
+        });
+    }
+
+    function openLSPrintModalFuction(id)
+    {
+        $('#ls_id').val(id);
+        $('#lsPrintModal').modal('show');
+    }
+
+    function openCheckLabModal(id)
+    {
+        $('#nomer_erp').val("");
+        $('#ppbe_id').val(id);
+        $('#checkLabModal').modal('show');
     }
 
     function updateStatusUmum(seal_type,id)

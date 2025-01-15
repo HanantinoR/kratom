@@ -10,6 +10,14 @@ use App\Models\PPBEModel;
 use App\Models\HplpsModel;
 use App\Models\HplpsGoodsModel;
 use App\Models\HplpsMemorizationsModel;
+use App\Models\KantorCabang;
+use App\Models\PelabuhanMuat;
+use App\Models\PelabuhanTujuan;
+use App\Models\Negara;
+use App\Models\HSLevel;
+use App\Models\KabupatenKota;
+use App\Models\Provinsi;
+use App\Models\MataUang;
 use App\Models\LsModel;
 use App\Models\LsGoodsModel;
 use App\Models\LsMemorizationsModel;
@@ -37,7 +45,8 @@ class LsController extends Controller
         DB::beginTransaction();
         $auth_user = AuthHelper::authSession();
         $hplps = HplpsModel::with('ppbe','ppbe.goods','ppbe.company','memory','goods','usage')->findOrFail($request->hplps_id);
-
+        // dd($request);
+        // dd($hplps->ppbe->company->npwp);
         try{
             // get office_code_id  $office_code
             $no_ls = $this->generateCodeAbove($hplps); //seharusnya pake office_code
@@ -49,20 +58,18 @@ class LsController extends Controller
                 'code'=> $hplps->ppbe->code,
                 'code_above'=> $no_ls,
                 'code_below'=> $code_letter,
-                'code_date'=> $hplps->ppbe->date,
+                'code_date'=> $hplps->ppbe->date_ppbe,
                 'nib'=> $hplps->ppbe->company->nib,
                 'nomor_et'=> $hplps->ppbe->company->nomor_et,
-                'nomor_pe'=> $hplps->ppbe->company->nomor_pe,
                 'date_nib'=> $hplps->ppbe->company->date_nib,
                 'date_et'=> $hplps->ppbe->company->date_et,
-                'date_pe'=> $hplps->ppbe->company->date_pe,
                 'destination_port_id'=> $hplps->ppbe->country_destination_id,
                 'loading_port_id'=> $hplps->ppbe->loading_port_id,
                 'origin_port_id'=> $hplps->ppbe->origin_port_id,
                 'country_id'=> $hplps->ppbe->country_id,
-                'company_name'=> $hplps->ppbe->company->company_name,
+                'company_name'=> $hplps->ppbe->company->name,
                 'company_address'=> $hplps->ppbe->company->company_address,
-                'company_npwp'=> $hplps->ppbe->company->company_npwp,
+                'company_npwp'=> $hplps->ppbe->company->npwp,
                 'inspection_office_id'=> $hplps->ppbe->inspection_office_id,
                 'inspection_date'=> $hplps->inspection_date_start,
                 'inspection_address'=> $hplps->inpsection_address,
@@ -124,30 +131,45 @@ class LsController extends Controller
             return redirect()->route('ls.daftar')->with('success', 'LS berhasil Di verifikasi.');
         } catch(\Exception $e) {
             DB::rollback();
-            dd($e);
+            // dd($e);
             // return redirect()->route('ls.daftar')->with('error', 'Terdapat kesalahan pada input.');
         }
 
     }
 
     public function show($id){
+        $assets = ['ls_list'];
         $ls = LsModel::findOrFail($id);
-        dd($ls);
+        $hs_levels = HSLevel::get();
+        // $data_company = PerijinanModel::get();
+        $office_branch = KantorCabang::get();
+        $provinces = Provinsi::get();
+        $destination_port = PelabuhanTujuan::get();
+        $loading_port = PelabuhanMuat::get();
+        $cities = KabupatenKota::get();
+        $countries = Negara::get();
+        $currencies = MataUang::get();
+        return view('ls.detail',compact('assets','ls','hs_levels','cities', 'countries', 'office_branch', 'provinces', 'destination_port', 'loading_port', 'currencies'));
     }
 
     public function generateCodeBelow($hplps)
     {
         $yearSubs = substr(date('Y'), 2);
-        // $code = str_pad($office->code, 2, '0', STR_PAD_LEFT) . '.' . str_pad($office->code, 2, '0', STR_PAD_LEFT) . '.' . str_pad($office->code, 2, '0', STR_PAD_LEFT) . '.' . str_pad($office->code, 2, '0', STR_PAD_LEFT) . ' A1 ' . $yearSubs . date('m') . date('d') . date('H') . date('i') . date('s');
-        $code = '23.23.23.23 A1 ' . $yearSubs . date('m') . date('d') . date('H') . date('i') . date('s');
+        $office_id = $hplps->ppbe->inspection_office_id;
+        $office = KantorCabang::where('id', $office_id)->first();
+        $code = str_pad($office->code, 2, '0', STR_PAD_LEFT) . '.' . str_pad($office->code, 2, '0', STR_PAD_LEFT) . '.' . str_pad($office->code, 2, '0', STR_PAD_LEFT) . '.' . str_pad($office->code, 2, '0', STR_PAD_LEFT) . ' A1 ' . $yearSubs . date('m') . date('d') . date('H') . date('i') . date('s');
+        // $code = '23.23.23.23 A1 ' . $yearSubs . date('m') . date('d') . date('H') . date('i') . date('s');
 
         return $code;
     }
 
     public function generateCodeAbove($hplps)
     {
+        // dd($hplps->ppbe->inspection_office_id);
         $yearSubs = substr(date('Y'), 2);
-        // $office = Office::where('id', $officeId)->first();
+        $office_id = $hplps->ppbe->inspection_office_id;
+        $office = KantorCabang::where('id', $office_id)->first();
+        // dd($office);
         $last_ls = LsModel::whereNotNull('code_above')->orderBy('code_above', 'desc')->first();
         // $getNumberByOfficeId = $this->Master_number_LS->get_by_office_id($officeId, 1);
 
@@ -171,15 +193,15 @@ class LsController extends Controller
         //         $startNumber = intval($getNumberByOfficeId->start_number);
         //     }
         // }
-        // $code = $office->code . '.' . '1' . '.' . $yearSubs . '.' . str_pad($startNumber, 5, '0', STR_PAD_LEFT);;
-        $code = '23.' . '1' . '.' . $yearSubs . '.' . str_pad($startNumber, 5, '0', STR_PAD_LEFT);;
+        $code = $office->code . '.' . '1' . '.' . $yearSubs . '.' . str_pad($startNumber, 5, '0', STR_PAD_LEFT)."-K"    ;
+        // $code = '23.' . '1' . '.' . $yearSubs . '.' . str_pad($startNumber, 5, '0', STR_PAD_LEFT);;
 
         return $code;
     }
 
-    public function export_pdf($code_above){
+    public function export_pdf($code_above, Request $request){
         $auth_user = AuthHelper::authSession();
-        $ls = LsModel::with(['goods','memorys'])
+        $ls = LsModel::with(['goods','memorys','goods.hs'])
         ->join('mdestination_ports',"ls.destination_port_id","=","mdestination_ports.id")
         ->join('mloading_ports',"ls.loading_port_id","=","mloading_ports.id")
         ->join('mcountries','ls.country_id',"=","mcountries.id")
@@ -189,11 +211,15 @@ class LsController extends Controller
         "moffices.name as kantor_cabang")
         ->where('code_above',$code_above)->first();
 
+        $ls->update(['status'=> 'print_ls']);
+
+        // $qr_code = $this->generateQRCode($ls, $request);
         $data =[
             'title' => 'LAPORAN SURVEYOR',
             'content' =>'coba',
             'ls' => $ls,
-            'user' => $auth_user
+            'user' => $auth_user,
+            // 'qr_code' => $qr_code
         ];
         $documentPDF = View::make('ls.pdf',['data'=>$data])->render();
         $options = new Options();
@@ -209,5 +235,48 @@ class LsController extends Controller
 
         // Output the generated PDF to Browser
         return $dompdf->stream('ls.pdf',['Attachment'=>false]);
+    }
+
+
+    public function generateQRCode($ls, $request){
+        $link = $request->url();
+        // return $serverName;
+        // dd($ls);
+         $postfield = '{
+            "doc_header" : {
+                "Nomor Sertifikat": "'.$ls->code_above.'",
+                "Nomor Order": "'.$ls->code.'",
+                "Perihal" :"Laporan Surveyor Verifikasi Ekspor Produk Kratom",
+                "Tanggal TTD": "'.$ls->created_at.'",
+                "Penandatangan": "Admin"
+            },
+            "use_passcode" : "0",
+            "doc_type" : "kratom",
+            "link_doc": "'.$link.'",
+            "is_view": "1"
+        }';
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://apidev.sucofindo.co.id/verdoc2/generator/generateQR_v2',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $postfield,
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Basic '. base64_encode("Kratom:Sucofindo25"),
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $result = json_decode($response);
+        // dd($result);
+        return $result->data->qr;
     }
 }

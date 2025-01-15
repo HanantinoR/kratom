@@ -8,6 +8,10 @@ use App\Models\User;
 use App\Helpers\AuthHelper;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\UserRequest;
+use App\Models\PerijinanModel;
+use App\Models\KantorCabang;
+use App\Models\KabupatenKota;
+use App\Models\Provinsi;
 
 class UserController extends Controller
 {
@@ -32,9 +36,15 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::where('status',1)->get()->pluck('title', 'id');
 
-        return view('users.form', compact('roles'));
+        $auth_user = AuthHelper::authSession();
+        $data_company = PerijinanModel::get();
+        $provinces = Provinsi::get();
+        $cities = KabupatenKota::get();
+        $office_branch = KantorCabang::get();
+        $roles = Role::where('status',1)->get();
+        $assets = ['userscript'];
+        return view('users.form', compact('roles','data_company','cities','provinces','assets','office_branch','auth_user'));
     }
 
     /**
@@ -45,6 +55,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        // dd($request);
         $request['password'] = bcrypt($request->password);
 
         $request['username'] = $request->username ?? stristr($request->email, "@", true) . rand(100,1000);
@@ -53,12 +64,12 @@ class UserController extends Controller
 
         storeMediaFile($user,$request->profile_image, 'profile_image');
 
-        $user->assignRole('user');
+        $user->assignRole($request->user_type);
 
         // Save user Profile data...
-        $user->userProfile()->create($request->userProfile);
+        // $user->userProfile()->create($request->userProfile);
 
-        return redirect()->route('users.index')->withSuccess(__('message.msg_added',['name' => __('users.store')]));
+        return redirect()->route('users.index')->withSuccess(__('global-message.msg_added',['name' => __('users.title')]));
     }
 
     /**
@@ -69,7 +80,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $data = User::with('userProfile','roles')->findOrFail($id);
+        $data = User::with('roles')->findOrFail($id);
 
         $profileImage = getSingleMedia($data, 'profile_image');
 
@@ -84,15 +95,29 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $data = User::with('userProfile','roles')->findOrFail($id);
 
-        $data['user_type'] = $data->roles->pluck('id')[0] ?? null;
 
-        $roles = Role::where('status',1)->get()->pluck('title', 'id');
+        $auth_user = AuthHelper::authSession();
+
+        $office_branch = KantorCabang::get();
+
+        $data_company = PerijinanModel::get();
+
+        $provinces = Provinsi::get();
+
+        $cities = KabupatenKota::get();
+
+        $assets = ['userscript'];
+
+        $data = User::with('roles')->findOrFail($id);
+
+        // $data['user_type'] = $data->roles->pluck('id')[0] ?? null;
+
+        $roles = Role::where('status',1)->get();
 
         $profileImage = getSingleMedia($data, 'profile_image');
 
-        return view('users.form', compact('data','id', 'roles', 'profileImage'));
+        return view('users.form', compact('auth_user','data','id', 'roles', 'assets',    'profileImage','office_branch','data_company','cities','provinces'));
     }
 
     /**
@@ -102,17 +127,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function update(UserRequest $request, $id)
     {
         // dd($request->all());
-        $user = User::with('userProfile')->findOrFail($id);
+        $user = User::findOrFail($id);
 
-        $role = Role::find($request->user_role);
-        if(env('IS_DEMO')) {
-            if($role->name === 'admin'&& $user->user_type === 'admin') {
-                return redirect()->back()->with('error', 'Permission denied');
-            }
-        }
+        $role = Role::find($request->user_type);
+
         $user->assignRole($role->name);
 
         $request['password'] = $request->password != '' ? bcrypt($request->password) : $user->password;
@@ -130,9 +152,9 @@ class UserController extends Controller
         $user->userProfile->fill($request->userProfile)->update();
 
         if(auth()->check()){
-            return redirect()->route('users.index')->withSuccess(__('message.msg_updated',['name' => __('message.user')]));
+            return redirect()->route('users.index')->withSuccess(__('global-message.msg_updated',['name' => __('users.title')]));
         }
-        return redirect()->back()->withSuccess(__('message.msg_updated',['name' => 'My Profile']));
+        return redirect()->back()->withSuccess(__('global-message.msg_updated',['name' => 'My Profile']));
 
     }
 

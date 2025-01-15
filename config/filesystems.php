@@ -70,6 +70,8 @@ return [
         public_path('perijinan_file') => storage_path('app/perijinan_file'),
         public_path('ppbe_file') => storage_path('app/ppbe_file'),
         public_path('hplps_verify_file') => storage_path('app/hplps_verify_file'),
+        public_path('hplps_file') => storage_path('app/hplps_file'),
+        public_path('pe_file') => storage_path('app/pe_file'),
     ],
 
 ];

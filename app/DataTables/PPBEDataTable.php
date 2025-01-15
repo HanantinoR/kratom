@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use Illuminate\Http\Request;
 use App\Models\PPBEModel;
+use App\Models\User;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
@@ -22,8 +23,11 @@ class PPBEDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
+            ->editColumn('date_ppbe',function($query){
+                return date('d F Y', strtotime($query->date_ppbe));
+            })
             ->editColumn('code', function($row) {
-                return '<a href="'.route('ppbe.edit',$row->id).'" class="btn btn-soft-primary">'.$row->code.'</a>';
+                return  '<a href="'.route('ppbe.edit',$row->id).'" class="btn btn-soft-primary">'.$row->code.'</a>' ?? "-";
             })
             // ->editColumn('userProfile.country', function($query) {
             //     return $query->userProfile->country ?? '-';
@@ -58,7 +62,17 @@ class PPBEDataTable extends DataTable
                                     '</svg> '.
                                 '</i>';
 
-                if($status == 'draft'){
+                if($status == 'rejected'){
+                    $status_reject =    '<span class="text-capitalize badge bg-danger mb-2">'.
+                                            '<i class="icon me-2">'.
+                                                '<svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">'.
+                                                    '<path opacity="0.4" d="M16.34 1.99976H7.67C4.28 1.99976 2 4.37976 2 7.91976V16.0898C2 19.6198 4.28 21.9998 7.67 21.9998H16.34C19.73 21.9998 22 19.6198 22 16.0898V7.91976C22 4.37976 19.73 1.99976 16.34 1.99976Z" fill="currentColor"></path>'.
+                                                    '<path d="M15.0158 13.7703L13.2368 11.9923L15.0148 10.2143C15.3568 9.87326 15.3568 9.31826 15.0148 8.97726C14.6728 8.63326 14.1198 8.63426 13.7778 8.97626L11.9988 10.7543L10.2198 8.97426C9.87782 8.63226 9.32382 8.63426 8.98182 8.97426C8.64082 9.31626 8.64082 9.87126 8.98182 10.2123L10.7618 11.9923L8.98582 13.7673C8.64382 14.1093 8.64382 14.6643 8.98582 15.0043C9.15682 15.1763 9.37982 15.2613 9.60382 15.2613C9.82882 15.2613 10.0518 15.1763 10.2228 15.0053L11.9988 13.2293L13.7788 15.0083C13.9498 15.1793 14.1728 15.2643 14.3968 15.2643C14.6208 15.2643 14.8448 15.1783 15.0158 15.0083C15.3578 14.6663 15.3578 14.1123 15.0158 13.7703Z" fill="currentColor"></path>'.
+                                                '</svg>'.
+                                            '</i>'.
+                                        'Reject '.date("d-m-Y H:i:s", strtotime($query['created_at'])).'</span><br>';
+                    $merk_status .= $status_reject;
+                }else if($status == 'draft'){
                     $status_draft = '<span class="text-capitalize badge bg-warning mb-2">'.
                                     '<i class="icon me-2">'.
                                         '<svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">'.
@@ -96,13 +110,21 @@ class PPBEDataTable extends DataTable
 
                     if(!empty($query->hpl_date))
                     {
-                        $status_assignment = 'Sudah Dilakukan pemeriksaan '.date("d-m-Y", strtotime($query->assignment_date));
+                        $status_assignment = 'Sudah Dilakukan pemeriksaan '.date("d-m-Y", strtotime($query->hpl_date));
                         $merk_status .= $success.$success_icon.$status_assignment.'</span><br>';
                     }else {
                         $status_assignment = 'Menunggu Pemeriksaan oleh Petugas';
                         $merk_status .=  $secondary.$info_icon.$status_assignment.'</span><br>';
                     }
 
+                    if(!empty($query->ls_date))
+                    {
+                        $status_assignment = 'LS Sudah Di Verifikasi '.date("d-m-Y", strtotime($query->ls_date));
+                        $merk_status .= $success.$success_icon.$status_assignment.'</span><br>';
+                    }else {
+                        $status_assignment = 'Menunggu Verifikasi LS';
+                        $merk_status .=  $secondary.$info_icon.$status_assignment.'</span><br>';
+                    }
                 }
 
                     // dd($merk_status);
@@ -132,7 +154,8 @@ class PPBEDataTable extends DataTable
             ->addColumn('action',function($query){
                 return view('ppbe.action',[
                     'id' => $query->id,
-                    'status' => $query->status
+                    'status' => $query->status,
+                    'user_type' => auth()->user()->user_type
                 ]);
             })
             ->rawColumns(['action','status','code']);
@@ -148,17 +171,29 @@ class PPBEDataTable extends DataTable
     {
         $model = PPBEModel::join('company','company.id','=','ppbe.company_id')
                         ->leftjoin('hplps','hplps.ppbe_id','=','ppbe.id')
-                        ->select('ppbe.id','ppbe.code','ppbe.date','company.company_name','ppbe.inspection_office_id','ppbe.status as status','ppbe.created_at','hplps.status as hplps_status');
+                        ->leftjoin('ls','ls.ppbe_id','=','ppbe.id')
+                        ->leftjoin('moffices','moffices.id','=','ppbe.inspection_office_id')
+                        ->select('ppbe.id','ppbe.code','ppbe.date_ppbe','ppbe.company_id','company.id as company_id','company.name','ppbe.inspection_office_id',
+                            'ppbe.status as status','ppbe.created_at','hplps.status as hplps_status','ls.status as ls_status','moffices.name as inspection_office');
         $query = $model->newQuery();
         if ($search = request()->get('ppbe_search')) {
             $query->where('ppbe.code', 'like', "%{$search}%");
         }
 
         if ($search = request()->get('company_name_search')) {
-            $query->where('company.company_name', 'like', "%{$search}%");
+            $query->where('company.name', 'like', "%{$search}%");
         }
 
-        // dd()
+        if(auth()->user()->user_type === "user")
+        {
+            // $model->where('branch_office',auth()->user()->branch_office);
+            $query->where('ppbe.company_id',auth()->user()->company_id);
+        }
+
+        if(auth()->user()->user_type === "koordinator_cabang")
+        {
+            $query->where('ppbe.inspection_office_id',auth()->user()->branch_office);
+        }
         // return $query;
         return $this->applyScopes($model);
     }
@@ -201,9 +236,9 @@ class PPBEDataTable extends DataTable
             ['data' => 'DT_RowIndex', 'title' => 'No', 'orderable' => false, 'searchable' => false],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status','searchable'=>false],
             ['data' => 'code', 'name' => 'code', 'title' => 'Nomor PPBE'],
-            ['data' => 'date', 'name' => 'date', 'title' => 'Tanggal PPBE','searchable'=>false],
-            ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Perusahaan','orderable' => false],
-            ['data' => 'inspection_office_id', 'name' => 'inspection_office_id', 'title' => 'Kantor Cabang','searchable'=>false],
+            ['data' => 'date_ppbe', 'name' => 'date_ppbe', 'title' => 'Tanggal PPBE','searchable'=>false],
+            ['data' => 'name', 'name' => 'name', 'title' => 'Perusahaan','orderable' => false],
+            ['data' => 'inspection_office', 'name' => 'inspection_office', 'title' => 'Kantor Cabang','searchable'=>false],
             // ['data' => 'userProfile.company_name', 'name' => 'userProfile.company_name', 'title' => 'Company'],
             // ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Join Date'],
             Column::computed('action')

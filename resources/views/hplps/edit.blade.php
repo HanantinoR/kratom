@@ -8,6 +8,7 @@
             // $stuffing = ["JAKARTA"=>'JAKARTA','SURABAYA' => 'SURABAYA'];
             $date = ['WIB'=>'WIB','WITA'=>'WITA','WIT'=>'WIT'];
             $type = ['1' => 'FCL','2' => 'LCL','3' => 'KONV'];
+            $tps = ['1' => 'TPS MERAH','2' => 'TPS HIJAU','3' => 'LOCK SEAL','4' => 'THREAD SEAL'];
             $size = ['20' => '20', '40' => '40'];
             $type_kemasan = ['1'=>'BALE','2'=>'CARTON','3'=>'BUNDLE','4'=>'PALLET'];
             $skenario = ['1' => '1', '2' => '2','3'=>'3'];
@@ -17,8 +18,7 @@
         {{-- {{dd($data)}} --}}
         {!! Form::model($data, ['route' => ['hplps.save'], 'method' => 'POST' , 'enctype' => 'multipart/form-data','id'=>'form_edit', 'name' => 'edit_hplps','novalidate', 'class' => 'needs-validation']) !!}
         {{ Form::hidden('ppbe_id', old('ppbe_id', $id), ['class' => 'form-control text-black', 'id' => 'ppbe_id', 'readonly']) }}
-        @if( isset($data->hplps))  
-        {{-- || $data->hplps->status === "verified" --}}
+        @if(isset($data->hplps))
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12">
                     <div class="card">
@@ -36,14 +36,14 @@
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <label for="inspection_date" class="form-label">Tanggal: <span class="text-danger">*</span></label>
-                                            <input type="datetime-local" id="inspection_date" name="inspection_date" class="form-control text-black" value="{{ old('inspection_date', now()->format('Y-m-d\H:i')) }}">
-                                            {{-- {{ Form::datetimeLocal('inspection_date', old('inspection_date',$data->insepction_date), ['class' => 'form-control text-black', 'id' => 'inspection_date', 'readonly']) }} --}}
+                                            <input type="datetime-local" id="inspection_date" name="inspection_date" class="form-control text-black" value="{{ old('inspection_date', date('Y-m-d\TH:i', strtotime($data->assignments->penugasan_date)))}}" readonly>
+                                            {{-- {{ Form::datetimeLocal('inspection_date', old('inspection_date',$data->insepction_date), ['class' => 'form-control text-black', 'id' => 'inspection_date', 'required']) }} --}}
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <label for="npp" class="form-label">NPP/Surveyor Pemeriksa: <span class="text-danger">*</span></label>
-                                            {{ Form::text('npp', old('npp', '16.83.13133 - DOYS ADAM CHRISMAWAN'), ['class' => 'form-control text-black', 'id' => 'npp', 'readonly']) }}
+                                            {{ Form::text('npp', old('npp', $surveyor->first_name." ".$surveyor->last_name), ['class' => 'form-control text-black', 'id' => 'npp', 'readonly']) }}
                                         </div>
                                     </div>
                                 </div>
@@ -54,53 +54,92 @@
                                     <label for="no_ppbe" class="form-label">NO PPBE: <span class="text-danger">*</span></label>
                                     <a href="{{route('ppbe.edit',$data->id)}}" target="_blank"><h4 class="ms-4 mt-2 text-info text-center">{{$data->code}}</h4></a>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="company_name" class="form-label">Nama Eksportir: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_name', old('company_name',$data->company->company_name), ['class' => 'form-control text-black', 'id' => 'nama_eksp', 'readonly']) }}
+                                    <label for="npwp" class="form-label">NPWP: <span class="text-danger">*</span></label>
+                                    {{ Form::text('npwp', old('npwp',$data->company->npwp), ['class' => 'form-control text-black', 'id' => 'npwp', 'readonly']) }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="name" class="form-label">Nama Eksportir: <span class="text-danger">*</span></label>
+                                    {{ Form::text('name', old('name',$data->company->name), ['class' => 'form-control text-black', 'id' => 'nama_eksp', 'readonly']) }}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="company_npwp" class="form-label">NPWP: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_npwp', old('company_npwp',$data->company->company_npwp), ['class' => 'form-control text-black', 'id' => 'company_npwp', 'readonly']) }}
+                                    <label for="position" class="form-label">Jabatan Petugas Eksportir: <span class="text-danger">*</span></label>
+                                    {{ Form::text('position', old('position',$data->company->position), ['class' => 'form-control text-black', 'id' => 'company_position', 'readonly']) }}
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="company_pic" class="form-label">Nama Petugas Eksportir: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_pic', old('company_pic', $data->company->company_pic), ['class' => 'form-control text-black', 'id' => 'company_pic', 'readonly']) }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="company_telp" class="form-label">Np. Hp: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_telp', old('company_telp', $data->company->company_telp), ['class' => 'form-control text-black', 'id' => 'company_telp', 'readonly']) }}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="company_position" class="form-label">Jabatan Petugas Eksportir: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_position', old('company_position',$data->company->company_position), ['class' => 'form-control text-black', 'id' => 'company_position', 'readonly']) }}
+                                    <label for="pic" class="form-label">Nama Petugas Eksportir: <span class="text-danger">*</span></label>
+                                    {{ Form::text('pic', old('pic', $data->company->pic), ['class' => 'form-control text-black', 'id' => 'pic', 'readonly']) }}
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="origin_port_id" class="form-label">Pelabuhan asal: <span class="text-danger">*</span></label>
-                                    {{ Form::text('origin_port_id', old('origin_port_id', $data->origin_port_id), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'readonly']) }}
+                                    {{-- {{ Form::text('origin_port_id', old('origin_port_id', $data->origin_port_id), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'readonly']) }} --}}
+                                    <select name="origin_port_id" class="form-control text-black select2" id="origin_port_id" placeholder="Pelabuhan Asal" disabled>
+                                        <option value="">Pilih Pelabuhan Asal</option>
+                                        @foreach($loading_port as $key => $port)
+                                            <option value="{{ $port->id }}" {{ $data->origin_port_id === $port->id ? 'selected' : '' }}>
+                                                {{ $port->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="loading_port_id" class="form-label">Pelabuhan Muat: <span class="text-danger">*</span></label>
-                                    {{ Form::text('loading_port_id', old('loading_port_id', $data->loading_port_id), ['class' => 'form-control text-black', 'id' => 'loading_port_id', 'readonly']) }}
+                                    {{-- {{ Form::text('loading_port_id', old('loading_port_id', $data->loading_port_id), ['class' => 'form-control text-black', 'id' => 'loading_port_id', 'readonly']) }} --}}
+                                    <select name="loading_port_id" class="form-control text-black select2" id="loading_port_id" placeholder="Pelabuhan Muat" disabled>
+                                        <option value="">Pilih Pelabuhan Muat</option>
+                                        @foreach($loading_port as $key => $port)
+                                            <option value="{{ $port->id }}" {{ $data->loading_port_id === $port->id ? 'selected' : '' }}>
+                                                {{ $port->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="destination_port_id" class="form-label">Pelabuhan Tujuan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('destination_port_id', old('destination_port_id', $data->destination_port_id), ['class' => 'form-control text-black', 'id' => 'destination_port_id', 'readonly']) }}
+                                    {{-- {{ Form::text('destination_port_id', old('destination_port_id', $data->destination_port_id), ['class' => 'form-control text-black', 'id' => 'destination_port_id', 'readonly']) }} --}}
+                                    <select name="destination_port_id" class="form-control text-black select2" id="destination_port_id" placeholder="Negara Pelabuhan" disabled>
+                                        <option value="">Pilih Pelabuhan Tujuan</option>
+                                        @foreach($destination_port as $key => $port)
+                                            <option value="{{ $port->id }}" {{ $data->destination_port_id === $port->id ? 'selected' : '' }}>
+                                                {{ $port->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="country_destination_id" class="form-label">Negara Tujuan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('country_destination_id', old('country_destination_id', $data->country_destination_id), ['class' => 'form-control text-black', 'id' => 'country_destination_id', 'readonly']) }}
+                                    <label for="country_destination_id" class="form-label">Negara Pelabuhan Tujuan: <span class="text-danger">*</span></label>
+                                    <select name="country_destination_id" class="form-control text-black select2" id="country_destination_id" placeholder="Negara Tujuan" disabled>
+                                        <option value="">Pilih Negara Tujuan</option>
+                                        @foreach($countries as $key => $country)
+                                            <option value="{{ $country->id }}" {{ $data->country_destination_id === $country->id ? 'selected' : '' }}>
+                                                {{ $country->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="country_destination_id" class="form-label">Negara Tujuan: <span class="text-danger">*</span></label>
+                                    {{-- {{ Form::text('country_destination_id', old('country_destination_id', $data->country_destination_id), ['class' => 'form-control text-black', 'id' => 'country_destination_id', 'readonly']) }} --}}
+                                    <select name="country_id" class="form-control text-black select2" id="country_id" placeholder="Negara Tujuan" disabled>
+                                        <option value="">Pilih Negara Tujuan</option>
+                                        @foreach($countries as $key => $country)
+                                            <option value="{{ $country->id }}" {{ $data->country_id === $country->id ? 'selected' : '' }}>
+                                                {{ $country->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="form-group col-md-6">
                                     <label for="fob_total" class="form-label">Nilai FOB PPBE*: <span class="text-danger">*</span></label>
                                     <div class="row">
@@ -108,7 +147,7 @@
                                             {{ Form::number('fob_total', old('fob_total'), ['class' => 'form-control text-black', 'id' => 'fob_total', 'step' => '0.01', 'readonly']) }}
                                         </div>
                                         <div class="col-md-6">
-                                            {{ Form::number('fob_currency', old('fob_currency'), ['class' => 'form-control text-black', 'id' => 'fob_currency', 'step' => '0.01', 'readonly']) }}
+                                            {{ Form::text('fob_currency', old('fob_currency', $currencies[$data->fob_currency-1]->description ." (" .$currencies[$data->fob_currency-1]->code.")"), ['class' => 'form-control text-black', 'id' => 'fob_currency', 'readonly']) }}
                                         </div>
                                     </div>
                                 </div>
@@ -149,27 +188,67 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="origin_port_id" class="form-label">Pelabuhan asal: <span class="text-danger">*</span></label>
-                                    {{ Form::text('origin_port_id', old('origin_port_id', $data->origin_port_id), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'required']) }}
+                                    {{-- {{ Form::text('origin_port_id', old('origin_port_id', $data->origin_port_id), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'required']) }} --}}
+                                    <select name="origin_port_id" class="form-control select2" id="origin_port_id">
+                                        <option value="">Pilih Pelabuhan Muat</option>
+                                        @foreach($loading_port as $key => $port)
+                                            <option value="{{ $port->id }}" @if(old('origin_port_id', $data->origin_port_id) == $port->id) Selected @endif>
+                                                {{ $port->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="loading_port_id" class="form-label">Pelabuhan Muat: <span class="text-danger">*</span></label>
-                                    {{ Form::text('loading_port_id', old('loading_port_id'), ['class' => 'form-control text-black', 'id' => 'loading_port_id', 'required']) }}
+                                    {{-- {{ Form::text('loading_port_id', old('loading_port_id'), ['class' => 'form-control text-black', 'id' => 'loading_port_id', 'required']) }} --}}
+                                    <select name="loading_port_id" class="form-control select2" id="loading_port_id">
+                                        <option value="">Pilih Pelabuhan Muat</option>
+                                        @foreach($loading_port as $key => $port)
+                                            <option value="{{ $port->id }}" @if(old('loading_port_id', $data->loading_port_id) == $port->id) Selected @endif>
+                                                {{ $port->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="destination_port_id" class="form-label">Pelabuhan Tujuan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('destination_port_id', old('destination_port_id'), ['class' => 'form-control text-black', 'id' => 'destination_port_id', 'required']) }}
+                                    {{-- {{ Form::text('destination_port_id', old('destination_port_id'), ['class' => 'form-control text-black', 'id' => 'destination_port_id', 'required']) }} --}}
+                                    <select name="destination_port_id" class="form-control select2" id="destination_port_id" placeholder="Negara Pelabuhan">
+                                        <option value="">Pilih Pelabuhan</option>
+                                        @foreach($destination_port as $key => $port)
+                                            <option value="{{ $port->id }}" {{ old('destination_port_id', $data->destination_port_id) == $port->id ? 'selected' : '' }}>
+                                                {{ $port->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="country_destination_id" class="form-label">Negara Tujuan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('country_destination_id', old('country_destination_id'), ['class' => 'form-control text-black', 'id' => 'country_destination_id', 'required']) }}
+                                    {{-- {{ Form::text('country_destination_id', old('country_destination_id'), ['class' => 'form-control text-black', 'id' => 'country_destination_id', 'required']) }} --}}
+                                    <select name="country_destination_id" class="form-control select2" id="country_destination_id" placeholder="Negara Tujuan">
+                                        <option value="">Pilih Negara Pelabuhan</option>
+                                        @foreach($countries as $key => $country)
+                                            <option value="{{ $country->id }}" {{ old('country_destination_id', $data->country_destination_id) == $country->id ? 'selected' : '' }}>
+                                                {{ $country->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="country_id" class="form-label">Negara Tujuan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('country_id', old('country_id'), ['class' => 'form-control text-black', 'id' => 'country_id', 'required']) }}
+                                    {{-- {{ Form::text('country_id', old('country_id'), ['class' => 'form-control text-black', 'id' => 'country_id', 'required']) }} --}}
+                                    <select name="country_id" class="form-control select2" id="country_id" placeholder="Negara Tujuan">
+                                        <option value="">Pilih Negara Tujuan</option>
+                                        @foreach($countries as $key => $country)
+                                            <option value="{{ $country->id }}" {{ old('country_id', $data->country_id) == $country->id ? 'selected' : '' }}>
+                                                {{ $country->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                     <small class="text-gray-500">(Tercantum Pada LS)*</small>
                                 </div>
                             </div>
@@ -224,7 +303,15 @@
                                             {{ Form::text('packing_total', old('packing_total'), ['class' => 'form-control text-black', 'id' => 'packing_total', 'readonly']) }}
                                         </div>
                                         <div class="col-md-5">
-                                            {{ Form::text('packing_type', old('packing_type'), ['class' => 'form-control text-black', 'id' => 'packing_type', 'readonly']) }}
+                                            {{-- {{ Form::text('packing_type', old('packing_type'), ['class' => 'form-control text-black', 'id' => 'packing_type', 'readonly']) }} --}}
+                                            <select name="packing_type" class="form-control select2" id="packing_type" placeholder="Select FOB Currency">
+                                                <option value="">Pilih Kemasan</option>
+                                                @foreach($type_kemasan as $key => $kemasan)
+                                                    <option value="{{ $key }}" {{ $data->packing_type === $key ? 'selected' : '' }}>
+                                                        {{$kemasan}}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="col-md-1">
                                             <button type="button" class="btn btn-small btn-icon btn-warning mt-1 edit_readonly" name="packing_btn">
@@ -246,19 +333,27 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="inspection_date_start" class="form-label">Waktu Pemeriksaan: <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" id="inspection_date_start" name="inspection_date_start" class="form-control text-black" value="{{ old('inspection_date_start', $data->hplps->inspection_date_start)}}" disabled>
+                                    <input type="datetime-local" id="inspection_date_start" name="inspection_date_start" class="form-control text-black" value="{{ old('inspection_date_start', $data->hplps->inspection_date_start)}}" readonly>
                                     {{-- {{ Form::text('inspection_date_start', old('inspection_date_start',$data->inspection_date_start), ['class' => 'form-control text-black', 'id' => 'inspection_date_start', 'readonly',"data-date-format"=>"yyyy-mm-dd hh-mm"]) }} --}}
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="inspection_date_end" class="form-label">S/D: <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" id="inspection_date_end" name="inspection_date_end" class="form-control text-black" value="{{ old('inspection_date_end', $data->hplps->inspection_date_end)}}" disabled>
+                                    <input type="datetime-local" id="inspection_date_end" name="inspection_date_end" class="form-control text-black" value="{{ old('inspection_date_end', $data->hplps->inspection_date_end)}}" readonly>
                                     {{-- {{ Form::text('inspection_date_end', old('inspection_date_end'), ['class' => 'form-control text-black', 'id' => 'inspection_date_end', 'readonly']) }} --}}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="inspection_office_id" class="form-label">Kantor Pemeriksaan Barang: <span class="text-danger">*</span></label>
-                                    {{ Form::text('inspection_office_id', old('inspection_office_id'), ['class' => 'form-control text-black', 'id' => 'inspection_office_id', 'readonly']) }}
+                                    {{-- {{ Form::text('inspection_office_id', old('inspection_office_id'), ['class' => 'form-control text-black', 'id' => 'inspection_office_id', 'readonly']) }} --}}
+                                    <select name="inspection_office_id" class="form-control select2" id="inspection_office_id" placeholder="Kantor Pemeriksaan">
+                                        <option value="">Pilih Kantor Pemeriksaan</option>
+                                        @foreach($office_branch as $key => $office)
+                                            <option value="{{ $office->id }}" {{ old('inspection_office_id', $data->inspection_office_id) == $office->id ? 'selected' : '' }}>
+                                                {{ $office->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -288,11 +383,27 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="inspection_province_id" class="form-label">Provinssi (Tercantum Pada LS): <span class="text-danger">*</span></label>
-                                    {{ Form::text('inspection_province_id', old('inspection_province_id'), ['class' => 'form-control text-black', 'id' => 'inspection_province_id', 'readonly']) }}
+                                    {{-- {{ Form::text('inspection_province_id', old('inspection_province_id'), ['class' => 'form-control text-black', 'id' => 'inspection_province_id', 'readonly']) }} --}}
+                                    <select name="inspection_province_id" class="form-control select2" id="inspection_province_id" placeholder="Provinsi">
+                                        <option value="">Pilih Provinsi</option>
+                                        @foreach($provinces as $key => $province)
+                                            <option value="{{ $province->id }}" {{ old('inspection_province_id', $data->inspection_province_id) == $province->id ? 'selected' : '' }}>
+                                                {{ $province->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="inspection_city_id" class="form-label">Kab. / Kota (Tercantum Pada LS): <span class="text-danger">*</span></label>
-                                    {{ Form::text('inspection_city_id', old('inspection_city_id'), ['class' => 'form-control text-black', 'id' => 'inspection_city_id', 'readonly']) }}
+                                    {{-- {{ Form::text('inspection_city_id', old('inspection_city_id'), ['class' => 'form-control text-black', 'id' => 'inspection_city_id', 'readonly']) }} --}}
+                                    <select name="inspection_city_id" class="form-control select2" id="inspection_city_id" placeholder="Kota/Kabupaten">
+                                        <option value="">Pilih Kota/Kabupaten</option>
+                                        @foreach($cities as $key => $city)
+                                            <option value="{{ $city->id }}" {{ old('inspection_city_id', $data->inspection_city_id) == $city->id ? 'selected' : '' }}>
+                                                {{ $city->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <hr>
@@ -310,7 +421,16 @@
                                     <tbody>
                                         @foreach ($data->goods as $index => $good)
                                         <tr>
-                                            <td>{{ Form::text('barang['.$index.'][nomor_hs]', old('barang['.$index.'][nomor_hs]',$good->processed_level_id), ['class' => 'form-control text-black','id'=>'barang['.$index.'][nomor_hs]' ,'placeholder' => 'Nomor HS', 'required']) }}</td>
+                                            <td>
+                                                <select name="barang[{{$index}}][nomor_hs]" class="form-control select2" id="barang[{{$index}}][nomor_hs]" placeholder="Select Company Name" style="width: 100%">
+                                                    <option value="">Select HS</option>
+                                                    @foreach($hs_levels as $key => $level)
+                                                        <option value="{{ $level->id }}" {{ $good->processed_level_id === $level->id ? 'selected' : '' }}>
+                                                            {{ $level->hs }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
                                             <td>{{ Form::text('barang['.$index.'][uraian]', old('barang['.$index.'][uraian]',$good->description), ['class' => 'form-control text-black','id'=>'barang['.$index.'][uraian]' ,'placeholder' => 'Uraian', 'required']) }}</td>
                                             <td>{{ Form::text('barang['.$index.'][jumlah_total]', old('barang['.$index.'][jumlah_total]',$good->quantity_kg), ['class' => 'form-control text-black','id'=>'barang['.$index.'][jumlah_total]' ,'placeholder' => 'Jumlah Total', 'required']) }}</td>
                                             <td>{{ Form::text('barang['.$index.'][nilai_fob]', old('barang['.$index.'][nilai_fob]',$good->fob_value), ['class' => 'form-control text-black calculateFOB','id'=>'barang['.$index.'][nilai_fob]' ,'placeholder' => 'FOB', 'required']) }}</td>
@@ -330,11 +450,19 @@
                                 <div class="form-group col-md-8">
                                     <label for="fob_total_hpl" class="form-label">Total FOB: <span class="text-danger">*</span></label>
                                     <div class="row">
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             {{ Form::text('fob_total_hpl', old('fob_total_hpl', !empty($hplps)? $hplps->fob_total: $data->fob_total), ['class' => 'form-control text-black', 'id' => 'fob_total_hpl', 'readonly']) }}
                                         </div>
-                                        <div class="col-md-2">
-                                            {{ Form::text('fob_currency_hpl', old('fob_currency_hpl',$data->hplps->fob_currency_hpl), ['class' => 'form-control text-black', 'id' => 'fob_currency_hpl', 'required']) }}
+                                        <div class="col-md-4">
+                                            {{-- {{ Form::text('fob_currency_hpl', old('fob_currency_hpl',$data->hplps->fob_currency_hpl), ['class' => 'form-control text-black', 'id' => 'fob_currency_hpl', 'required']) }} --}}
+                                            <select name="fob_currency_hpl" class="form-control select2" id="fob_currency_hpl" placeholder="Select FOB Currency">
+                                                <option value="">Pilih Mata Uang</option>
+                                                @foreach($currencies as $key => $currency)
+                                                    <option value="{{ $currency->id }}" {{ $data->fob_currency === $currency->id ? 'selected' : '' }}>
+                                                        {{ $currency->description}} ({{ $currency->code }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -377,14 +505,14 @@
                                 </div>
                             </div>
                             <hr>
-                            <div class="row d-flex justify-content-between">
+                            {{-- <div class="row d-flex justify-content-between">
                                 <div class="col-lg-3 col-md-3">
                                     Penggunaan BCOPS
                                 </div>
                                 <div class="col-lg-3 col-md-3">
                                     Jumlah BCOPS : 0
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="row mt-2">
                                 <div class="table-responsive">
                                     <table class="table form-table table-striped table-responsive-lg table-hover" role="grid" id="form_bcops_usage">
@@ -397,23 +525,32 @@
                                         </thead>
                                         <tbody>
                                             {{-- {{dd($data->hplps->usage)}} --}}
-                                            @foreach ($data->hplps->usage as $usage)
+                                            @foreach ($data->hplps->usage as $index => $usage)
                                                 <tr>
-                                                    <td> {{ Form::text('usage[0][type]', old('usage[0][type]', $usage['type']), ['class' => 'form-control text-black', 'id' => 'usage[0][type]','required']) }}</td>
+                                                    <td>
+                                                        {{-- {{ Form::text('usage[0][type]', old('usage[0][type]', $usage['type']), ['class' => 'form-control text-black', 'id' => 'usage[0][type]','required']) }} --}}
+                                                        <select name="usage[{{$index}}][type]" class="form-control select2" id="usage[{{$index}}][type]" placeholder="Select FOB Currency" style="width:100%">
+                                                            <option value="">Pilih Segel Kemas</option>
+                                                                <option value="1" {{ old('usage['.$index.'][type]', $usage['type']) == 1 ? 'selected' : '' }}>TPS MERAH</option>
+                                                                <option value="2" {{ old('usage['.$index.'][type]', $usage['type']) == 2 ? 'selected' : '' }}>TPS HIJAU</option>
+                                                                <option value="3" {{ old('usage['.$index.'][type]', $usage['type']) == 3 ? 'selected' : '' }}>LOCK SEAL</option>
+                                                                <option value="4" {{ old('usage['.$index.'][type]', $usage['type']) == 4 ? 'selected' : '' }}>THREAD SEAL</option>
+                                                        </select>
+                                                    </td>
                                                     <td>
                                                         <div class="row">
                                                             <div class="col-lg-2 mt-2">No. Seri</div>
                                                             <div class="col-lg-3">
-                                                                {{ Form::text('usage[0][series]', old('usage[0][series]', $usage['series']), ['class' => 'form-control text-black', 'id' => 'usage[0][series]','required']) }}
+                                                                {{ Form::text('usage['.$index.'][series]', old('usage['.$index.'][series]', $usage['series']), ['class' => 'form-control text-black', 'id' => 'usage['.$index.'][series]','required']) }}
                                                             </div>
                                                             <div class="col-lg-3">
-                                                                {{ Form::text('usage[0][init]', old('usage[0][init]', $usage['series_init']), ['class' => 'form-control text-black', 'id' => 'usage[0][init]','required']) }}
+                                                                {{ Form::text('usage['.$index.'][init]', old('usage['.$index.'][init]', $usage['series_init']), ['class' => 'form-control text-black', 'id' => 'usage['.$index.'][init]','required']) }}
                                                             </div>
                                                             <div class="col-lg-1 mt-2">
                                                                 S/D
                                                             </div>
                                                             <div class="col-lg-3">
-                                                                {{ Form::text('usage[0][final]', old('usage[0][final]', $usage['series_final']), ['class' => 'form-control text-black', 'id' => 'usage[0][final]','required']) }}
+                                                                {{ Form::text('usage['.$index.'][final]', old('usage['.$index.'][final]', $usage['series_final']), ['class' => 'form-control text-black', 'id' => 'usage['.$index.'][final]','required']) }}
                                                             </div>
                                                         </div>
                                                     </td>
@@ -452,12 +589,12 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="stuffing_date_start" class="form-label">Waktu Pengawasan: <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" id="stuffing_date_start" name="stuffing_date_start" class="form-control text-black" value="{{ old('stuffing_date_start',$data->hplps->stuffing_date_start)}}" disabled>
+                                    <input type="datetime-local" id="stuffing_date_start" name="stuffing_date_start" class="form-control text-black" value="{{ old('stuffing_date_start',$data->hplps->stuffing_date_start)}}" readonly>
                                     {{-- {{ Form::text('stuffing_date_start', old('stuffing_date_start'), ['class' => 'form-control text-black', 'id' => 'stuffing_date_start', 'readonly']) }} --}}
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="stuffing_date_end" class="form-label">S/D: <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" id="stuffing_date_end" name="stuffing_date_end" class="form-control text-black" value="{{ old('stuffing_date_end', $data->hplps->stuffing_date_end)}}" disabled>
+                                    <input type="datetime-local" id="stuffing_date_end" name="stuffing_date_end" class="form-control text-black" value="{{ old('stuffing_date_end', $data->hplps->stuffing_date_end)}}" readonly>
                                     {{-- {{ Form::text('stuffing_date_end', old('stuffing_date_end'), ['class' => 'form-control text-black', 'id' => 'stuffing_date_end', 'readonly']) }} --}}
                                 </div>
                             </div>
@@ -519,7 +656,14 @@
                                             @foreach ($data->hplps->memory as $index => $memory)
                                                 <tr class="">
                                                 <td class="p-1 ">
-                                                    {{ Form::text('memorizations['.$index.'][type]', old('memorizations['.$index.'][type]',$memory['type']), ['class' => 'form-control text-black', 'id' => 'memorizations['.$index.'][type]', 'r']) }}
+                                                    {{-- {{ Form::text('memorizations['.$index.'][type]', old('memorizations['.$index.'][type]',$memory['type']), ['class' => 'form-control text-black', 'id' => 'memorizations['.$index.'][type]', 'r']) }} --}}
+                                                    <select name="memorizations[{{$index}}][type]" class="form-control select2" id="memorizations[{{$index}}][type]" placeholder="Select FOB Currency" style="width:100%">
+                                                        <option value="">Pilih Segel Kemas</option>
+                                                            <option value="1" {{ old('memorizations['.$index.'][type]', $memory['type']) == 1 ? 'selected' : '' }}>TPS MERAH</option>
+                                                            <option value="2" {{ old('memorizations['.$index.'][type]', $memory['type']) == 2 ? 'selected' : '' }}>TPS HIJAU</option>
+                                                            <option value="3" {{ old('memorizations['.$index.'][type]', $memory['type']) == 3 ? 'selected' : '' }}>LOCK SEAL</option>
+                                                            <option value="4" {{ old('memorizations['.$index.'][type]', $memory['type']) == 4 ? 'selected' : '' }}>THREAD SEAL</option>
+                                                    </select>
                                                 </td>
                                                 <td class="p-1">
                                                     {{ Form::text('memorizations['.$index.'][create_number]', old('memorizations['.$index.'][create_number]',$memory['create_number']), ['class' => 'form-control text-black', 'id' => 'memorizations['.$index.'][create_number]', 'r']) }}
@@ -722,6 +866,44 @@
                                                             </div>
                                                         </div>
                                                     @endif
+                                                    @if($memory['lock_seal'] != "" )
+                                                    @else
+                                                        <div class="lock_field" id="lock_field_0">
+                                                            <div class="row">
+                                                                <div class="col-md-8 col-lg-8">
+                                                                    <label for="memorizations[0][lock_seal_series]">Lock Seal</label>
+                                                                    <div class="row">
+                                                                        <div class="col-md-4 p-1">
+                                                                            {{ Form::text('memorizations[0][lock_seal_series][0]', old('memorizations[0][lock_seal_series][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][lock_seal_series][0]', 'required','disabled']) }}
+                                                                        </div>
+                                                                        <div class="col-md-4 p-1">
+                                                                            {{ Form::text('memorizations[0][lock_seal_init][0]', old('memorizations[0][lock_seal_init][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][lock_seal_init][0]', 'required','disabled']) }}
+                                                                        </div>
+                                                                        <div class="col-md-4 p-1">
+                                                                            {{ Form::text('memorizations[0][lock_seal_final][0]', old('memorizations[0][lock_seal_final][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][lock_seal_final][0]', 'required','disabled']) }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-lg-4 mt-4">
+                                                                    <div class="row">
+                                                                        <div class="col-md-5 col-lg-5 mt-2 me-2 p-1">
+                                                                            <button type="button" class="btn btn-sm btn-info btn_validasi_0_lock_0" target="0" id="btn_validasi_0_lock_0" disabled> Validasi</button>
+                                                                        </div>
+                                                                        <div class="col-md-2 mt-2 p-1">
+                                                                            <span class="text-danger" id="status_validasi_0_lock_0" target="0">Error</span>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <button type="button" class="btn btn-sm btn-icon btn-warning  btn_lock_seal_0 mt-2" id="btn_lock_seal_0" name="btn_lock_seal[0]" target="0" disabled>
+                                                                                <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
+                                                                                </svg>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
                                                     @if($memory['thread_seal']!= "")
                                                         @php
                                                             $seal = json_decode($memory['thread_seal']);
@@ -821,12 +1003,83 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <hr class="mt-2">
+                                <h5 class="mt-4">Upload Dokumen & Foto</h5>
+                                <div class="form-group mt-4">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6">
+                                            <label for="" class="text-black">
+                                                Dokumen Hasil Pemeriksaan Lapangan dan Lainnya
+                                            </label>
+                                            @php
+                                                $json_doc_hpl = json_decode($data->hplps->files_doc_hpl);
+                                            @endphp
+                                            @foreach ($json_doc_hpl as $key => $hpl)
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{asset('hplps_file/'.    $hpl)}}" target="_blank" class="btn btn-sm btn-icon btn-info">
+                                                            <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
+                                                            </svg>
+                                                            Download Dokumen HPL {{$key+1}}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            @endforeach
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <label for="" class="text-black">
+                                                Foto Pemeriksaan Barang
+                                            </label>
+                                            @php
+                                                $json_foto_pemeriksaan = json_decode($data->hplps->files_foto_pemeriksaan);
+                                            @endphp
+                                            @foreach ($json_foto_pemeriksaan as $key => $pemeriksaan)
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{asset('hplps_file/'.    $pemeriksaan)}}" target="_blank" class="btn btn-sm btn-icon btn-info">
+                                                            <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
+                                                            </svg>
+                                                            Download Foto Pemeriksaan {{$key+1}}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2">
+                                        <div class="col-lg-6 col-md-6">
+                                            <label for="" class="text-black">
+                                                Foto Pengawasan/Stuffing
+                                            </label>
+                                            @php
+                                                $json_foto_pengawasan = json_decode($data->hplps->files_foto_pengawasan);
+                                            @endphp
+                                            @foreach ($json_foto_pengawasan as $key => $pengawasan)
+                                                <ul>
+                                                    <li>
+                                                        <a type="button" href="{{asset('hplps_file/'.    $pengawasan)}}" target="_blank" class="btn btn-sm btn-icon btn-info">
+                                                            <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M2 16.08V7.91C2 4.38 4.271 2 7.66 2H16.33C19.72 2 22 4.38 22 7.91V16.08C22 19.62 19.72 22 16.33 22H7.66C4.271 22 2 19.62 2 16.08ZM12.75 14.27V7.92C12.75 7.5 12.41 7.17 12 7.17C11.58 7.17 11.25 7.5 11.25 7.92V14.27L8.78 11.79C8.64 11.65 8.44 11.57 8.25 11.57C8.061 11.57 7.87 11.65 7.72 11.79C7.43 12.08 7.43 12.56 7.72 12.85L11.47 16.62C11.75 16.9 12.25 16.9 12.53 16.62L16.28 12.85C16.57 12.56 16.57 12.08 16.28 11.79C15.98 11.5 15.51 11.5 15.21 11.79L12.75 14.27Z" fill="currentColor"></path>
+                                                            </svg>
+                                                            Download Foto Pengawasan {{$key+1}}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-center">
                             {{-- @if($state === "verified")
                                 <a href="{{route('hplps.edit',$id)}}" type="button" class="btn btn-warning me-2" > Perubahan Data</a>
                             @endif --}}
+                            <button type="submit" class="btn btn-success me-2" id="save_hpl"> Simpan</button>
+                            <button type="button" class="btn btn-primary me-2" id="send_hpl_btn"> Ajukan</button>
                             <button type="button" class="btn btn-secondary"> Kembali</button>
                         </div>
                     </div>
@@ -850,14 +1103,14 @@
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <label for="inspection_date" class="form-label">Tanggal: <span class="text-danger">*</span></label>
-                                            <input type="datetime-local" id="inspection_date" name="inspection_date" class="form-control text-black" value="{{ old('inspection_date', now()->format('Y-m-d\H:i')) }}">
+                                            <input type="datetime-local" id="inspection_date" name="inspection_date" class="form-control text-black" value="{{ old('inspection_date', date('Y-m-d\TH:i', strtotime($data->assignments->penugasan_date)))}}" readonly>
                                             {{-- {{ Form::datetimeLocal('inspection_date', old('inspection_date',$data->insepction_date), ['class' => 'form-control text-black', 'id' => 'inspection_date', 'required']) }} --}}
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <label for="npp" class="form-label">NPP/Surveyor Pemeriksa: <span class="text-danger">*</span></label>
-                                            {{ Form::text('npp', old('npp', $data->assignments->surveyor_id), ['class' => 'form-control text-black', 'id' => 'npp', 'readonly']) }}
+                                            {{ Form::text('npp', old('npp', $surveyor->first_name." ".$surveyor->last_name), ['class' => 'form-control text-black', 'id' => 'npp', 'readonly']) }}
                                         </div>
                                     </div>
                                 </div>
@@ -868,64 +1121,99 @@
                                     <label for="no_ppbe" class="form-label">NO PPBE: <span class="text-danger">*</span></label>
                                     <a href="{{route('ppbe.edit',$data->id)}}" target="_blank"><h4 class="ms-4 mt-2 text-info text-center">{{$data->code}}</h4></a>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="company_name" class="form-label">Nama Eksportir: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_name', old('company_name',$data->company->company_name), ['class' => 'form-control text-black', 'id' => 'nama_eksp', 'readonly']) }}
+                                    <label for="npwp" class="form-label">NPWP: <span class="text-danger">*</span></label>
+                                    {{ Form::text('npwp', old('npwp',$data->company->npwp), ['class' => 'form-control text-black', 'id' => 'npwp', 'readonly']) }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="name" class="form-label">Nama Eksportir: <span class="text-danger">*</span></label>
+                                    {{ Form::text('name', old('name',$data->company->name), ['class' => 'form-control text-black', 'id' => 'nama_eksp', 'readonly']) }}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="company_npwp" class="form-label">NPWP: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_npwp', old('company_npwp',$data->company->company_npwp), ['class' => 'form-control text-black', 'id' => 'company_npwp', 'readonly']) }}
+                                    <label for="position" class="form-label">Jabatan Petugas Eksportir: <span class="text-danger">*</span></label>
+                                    {{ Form::text('position', old('position',$data->company->position), ['class' => 'form-control text-black', 'id' => 'company_position', 'readonly']) }}
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="company_pic" class="form-label">Nama Petugas Eksportir: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_pic', old('company_pic', $data->company->company_pic), ['class' => 'form-control text-black', 'id' => 'company_pic', 'readonly']) }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="company_telp" class="form-label">Np. Hp: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_telp', old('company_telp', $data->company->company_telp), ['class' => 'form-control text-black', 'id' => 'company_telp', 'readonly']) }}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="company_position" class="form-label">Jabatan Petugas Eksportir: <span class="text-danger">*</span></label>
-                                    {{ Form::text('company_position', old('company_position',$data->company->company_position), ['class' => 'form-control text-black', 'id' => 'company_position', 'readonly']) }}
+                                    <label for="pic" class="form-label">Nama Petugas Eksportir: <span class="text-danger">*</span></label>
+                                    {{ Form::text('pic', old('pic', $data->company->pic), ['class' => 'form-control text-black', 'id' => 'pic', 'readonly']) }}
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="origin_port_id" class="form-label">Pelabuhan asal: <span class="text-danger">*</span></label>
-                                    {{ Form::text('origin_port_id', old('origin_port_id', $data->origin_port_id), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'readonly']) }}
+                                    <select name="origin_port_id" class="form-control text-black select2" id="origin_port_id" placeholder="Pelabuhan Asal" disabled>
+                                        <option value="">Pilih Pelabuhan Asal</option>
+                                        @foreach($loading_port as $key => $port)
+                                            <option value="{{ $port->id }}" {{ $data->origin_port_id === $port->id ? 'selected' : '' }}>
+                                                {{ $port->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    {{-- {{ Form::text('origin_port_id', old('origin_port_id', $loading_port[$data->origin_port_id]->name), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'readonly']) }} --}}
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="loading_port_name" class="form-label">Pelabuhan Muat: <span class="text-danger">*</span></label>
-                                    {{ Form::text('loading_port_name', old('loading_port_name', $loading_port[$data->loading_port_id]->name), ['class' => 'form-control text-black', 'id' => 'loading_port_name', 'readonly']) }}
+                                    <label for="loading_port_id" class="form-label">Pelabuhan Muat: <span class="text-danger">*</span></label>
+                                    <select name="loading_port_id" class="form-control text-black select2" id="loading_port_id" placeholder="Pelabuhan Muat" disabled>
+                                        <option value="">Pilih Pelabuhan Muat</option>
+                                        @foreach($loading_port as $key => $port)
+                                            <option value="{{ $port->id }}" {{ $data->loading_port_id === $port->id ? 'selected' : '' }}>
+                                                {{ $port->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                     {{-- {{ Form::hidden('loading_port_id', old('loading_port_id', $data->loading_port_id), ['class' => 'form-control text-black', 'id' => 'loading_port_id']) }} --}}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="destination_port_name" class="form-label">Pelabuhan Tujuan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('destination_port_name', old('destination_port_name', $destination_port[$data->destination_port_id]->name), ['class' => 'form-control text-black', 'id' => 'destination_port_name', 'readonly']) }}
+                                    <select name="destination_port_id" class="form-control text-black select2" id="destination_port_id" placeholder="Negara Pelabuhan" disabled>
+                                        <option value="">Pilih Pelabuhan</option>
+                                        @foreach($destination_port as $key => $port)
+                                            <option value="{{ $port->id }}" {{ $data->destination_port_id === $port->id ? 'selected' : '' }}>
+                                                {{ $port->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                     {{-- {{ Form::hidden('destination_port_id', old('destination_port_id', $data->destination_port_id), ['class' => 'form-control text-black', 'id' => 'destination_port_id', 'readonly']) }} --}}
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="country_destination_id" class="form-label">Negara Tujuan: <span class="text-danger">*</span></label>
-                                    {{ Form::text('country_destination_id', old('country_destination_id', $countries[$data->country_id-1]->name), ['class' => 'form-control text-black', 'id' => 'country_destination_id', 'readonly']) }}
-                                
+                                    <label for="country_destination_id" class="form-label">Negara Pelabuhan Tujuan: <span class="text-danger">*</span></label>
+                                    <select name="country_destination_id" class="form-control text-black select2" id="country_destination_id" placeholder="Negara Tujuan" disabled>
+                                        <option value="">Pilih Negara Tujuan</option>
+                                        @foreach($countries as $key => $country)
+                                            <option value="{{ $country->id }}" {{ $data->country_destination_id === $country->id ? 'selected' : '' }}>
+                                                {{ $country->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
+                                    <label for="country_destination_id" class="form-label">Negara Tujuan: <span class="text-danger">*</span></label>
+                                    <select name="country_id" class="form-control text-black select2" id="country_id" placeholder="Negara Tujuan" disabled>
+                                        <option value="">Pilih Negara Tujuan</option>
+                                        @foreach($countries as $key => $country)
+                                            <option value="{{ $country->id }}" {{ $data->country_id === $country->id ? 'selected' : '' }}>
+                                                {{ $country->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
                                     <label for="fob_total" class="form-label">Nilai FOB PPBE*: <span class="text-danger">*</span></label>
                                     <div class="row">
-                                        <div class="col-md-6"> 
+                                        <div class="col-md-6">
                                             {{ Form::text('fob_total', old('fob_total', $data->fob_total), ['class' => 'form-control text-black', 'id' => 'fob_total', 'readonly']) }}
                                         </div>
                                         <div class="col-md-6">
-                                            {{ Form::text('fob_currency', old('fob_currency', $currencies[$data->fob_currency-1]->description), ['class' => 'form-control text-black', 'id' => 'fob_currency', 'readonly']) }}
+                                            {{ Form::text('fob_currency', old('fob_currency', $currencies[$data->fob_currency-1]->description ." (" .$currencies[$data->fob_currency-1]->code.")"), ['class' => 'form-control text-black', 'id' => 'fob_currency', 'readonly']) }}
                                         </div>
                                     </div>
                                 </div>
@@ -966,7 +1254,15 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="origin_port_id" class="form-label">Pelabuhan asal: <span class="text-danger">*</span></label>
-                                    {{ Form::text('origin_port_id', old('origin_port_id', $data->origin_port_id), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'required']) }}
+                                    <select name="origin_port_id" class="form-control select2" id="origin_port_id">
+                                        <option value="">Pilih Pelabuhan Muat</option>
+                                        @foreach($loading_port as $key => $port)
+                                            <option value="{{ $port->id }}" @if(old('origin_port_id', $data->origin_port_id) == $port->id) Selected @endif>
+                                                {{ $port->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    {{-- {{ Form::text('origin_port_id', old('origin_port_id', $data->origin_port_id), ['class' => 'form-control text-black', 'id' => 'origin_port_id', 'required']) }} --}}
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="loading_port_id" class="form-label">Pelabuhan Muat: <span class="text-danger">*</span></label>
@@ -1069,7 +1365,15 @@
                                             {{ Form::text('packing_total', old('packing_total'), ['class' => 'form-control text-black', 'id' => 'packing_total', 'readonly']) }}
                                         </div>
                                         <div class="col-md-5">
-                                            {{ Form::text('packing_type', old('packing_type', $type_kemasan[$data->packing_type]), ['class' => 'form-control text-black', 'id' => 'packing_type', 'required']) }}
+                                            <select name="packing_type" class="form-control select2" id="packing_type" placeholder="Select FOB Currency">
+                                                <option value="">Pilih Kemasan</option>
+                                                @foreach($type_kemasan as $key => $kemasan)
+                                                    <option value="{{ $key }}" {{ $data->packing_type === $key ? 'selected' : '' }}>
+                                                        {{$kemasan}}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            {{-- {{ Form::text('packing_type', old('packing_type', $type_kemasan[$data->packing_type]), ['class' => 'form-control text-black', 'id' => 'packing_type', 'required']) }} --}}
                                         </div>
                                         <div class="col-md-1">
                                             <button type="button" class="btn btn-small btn-icon btn-warning mt-1 edit_readonly" name="packing_btn">
@@ -1179,7 +1483,16 @@
                                     <tbody>
                                         @foreach ($data->goods as $index => $good)
                                         <tr>
-                                            <td>{{ Form::text('barang['.$index.'][nomor_hs]', old('barang['.$index.'][nomor_hs]',$good->processed_level_id), ['class' => 'form-control text-black','id'=>'barang['.$index.'][nomor_hs]' ,'placeholder' => 'Nomor HS', 'required']) }}</td>
+                                            <td>
+                                                <select name="barang[{{$index}}][nomor_hs]" class="form-control select2" id="barang[{{$index}}][nomor_hs]" placeholder="Select Company Name" style="width: 100%">
+                                                    <option value="">Select HS</option>
+                                                    @foreach($hs_levels as $key => $level)
+                                                        <option value="{{ $level->id }}" {{ $good->processed_level_id === $level->id ? 'selected' : '' }}>
+                                                            {{ $level->hs }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
                                             <td>{{ Form::text('barang['.$index.'][uraian]', old('barang['.$index.'][uraian]',$good->description), ['class' => 'form-control text-black','id'=>'barang['.$index.'][uraian]' ,'placeholder' => 'Uraian', 'required']) }}</td>
                                             <td>{{ Form::text('barang['.$index.'][jumlah_total]', old('barang['.$index.'][jumlah_total]',$good->quantity_kg), ['class' => 'form-control text-black','id'=>'barang['.$index.'][jumlah_total]' ,'placeholder' => 'Jumlah Total', 'required']) }}</td>
                                             <td>{{ Form::text('barang['.$index.'][nilai_fob]', old('barang['.$index.'][nilai_fob]',$good->fob_value), ['class' => 'form-control text-black calculateFOB','id'=>'barang['.$index.'][nilai_fob]' ,'placeholder' => 'FOB', 'required']) }}</td>
@@ -1199,11 +1512,19 @@
                                 <div class="form-group col-md-8">
                                     <label for="fob_total_hpl" class="form-label">Total FOB: <span class="text-danger">*</span></label>
                                     <div class="row">
-                                        <div class="col-md-8">
+                                        <div class="col-md-4">
                                             {{ Form::text('fob_total_hpl', old('fob_total_hpl', !empty($hplps)? $hplps->fob_total: $data->fob_total), ['class' => 'form-control text-black', 'id' => 'fob_total_hpl', 'readonly']) }}
                                         </div>
-                                        <div class="col-md-2">
-                                            {{ Form::text('fob_currency_hpl', old('fob_currency_hpl'), ['class' => 'form-control text-black', 'id' => 'fob_currency_hpl', 'required']) }}
+                                        <div class="col-md-4">
+                                            <select name="fob_currency_hpl" class="form-control select2" id="fob_currency_hpl" placeholder="Select FOB Currency">
+                                                <option value="">Pilih Mata Uang</option>
+                                                @foreach($currencies as $key => $currency)
+                                                    <option value="{{ $currency->id }}" {{ $data->fob_currency === $currency->id ? 'selected' : '' }}>
+                                                        {{ $currency->description}} ({{ $currency->code }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            {{-- {{ Form::text('fob_currency_hpl', old('fob_currency_hpl'), ['class' => 'form-control text-black', 'id' => 'fob_currency_hpl', 'required']) }} --}}
                                         </div>
                                     </div>
                                 </div>
@@ -1228,7 +1549,7 @@
                                 </div>
                             </div>
                             <hr>
-                            <label for="">Hasil Analisis <span class="text-danger"> (Pemilihan hasil analisis akan menghasilkan LHP)</span></label>
+                            {{-- <label for="">Hasil Analisis <span class="text-danger"> (Pemilihan hasil analisis akan menghasilkan LHP)</span></label>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="checkbox-wrapper-input">
@@ -1245,15 +1566,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr>
-                            <div class="row d-flex justify-content-between">
+                            <hr> --}}
+                            {{-- <div class="row d-flex justify-content-between">
                                 <div class="col-lg-3 col-md-3">
                                     Penggunaan BCOPS
                                 </div>
                                 <div class="col-lg-3 col-md-3">
                                     Jumlah BCOPS : 0
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="row mt-2">
                                 <div class="table-responsive">
                                     <table class="table form-table table-striped table-responsive-lg table-hover" role="grid" id="form_bcops_usage">
@@ -1266,7 +1587,16 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td> {{ Form::text('usage[0][type]', old('usage[0][type]'), ['class' => 'form-control text-black', 'id' => 'usage[0][type]']) }}</td>
+                                                <td>
+                                                    {{-- {{ Form::text('usage[0][type]', old('usage[0][type]'), ['class' => 'form-control text-black', 'id' => 'usage[0][type]']) }} --}}
+                                                    <select name="usage[0][type]" class="form-control select2" id="usage[0][type]" placeholder="Select FOB Currency" style="width:100%">
+                                                        <option value="">Pilih Segel Kemas</option>
+                                                            <option value="1" >TPS MERAH</option>
+                                                            <option value="2" >TPS HIJAU</option>
+                                                            <option value="3" >LOCK SEAL</option>
+                                                            <option value="4" >THREAD SEAL</option>
+                                                    </select>
+                                                </td>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col-lg-2 mt-2">No. Seri</div>
@@ -1384,7 +1714,14 @@
                                         <tbody>
                                             <tr class="">
                                                 <td class="p-1 ">
-                                                    {{ Form::text('memorizations[0][type]', old('memorizations[0][type]'), ['class' => 'form-control text-black', 'id' => 'memorizations[0][type]', 'required']) }}
+                                                    {{-- {{ Form::text('memorizations[0][type]', old('memorizations[0][type]'), ['class' => 'form-control text-black', 'id' => 'memorizations[0][type]', 'required']) }} --}}
+                                                    <select name="memorizations[0][type]" class="form-control select2" id="memorizations[0][type]" placeholder="Select FOB Currency" style="width:100%">
+                                                        <option value="">Pilih Segel Kemas</option>
+                                                            <option value="1" >TPS MERAH</option>
+                                                            <option value="2" >TPS HIJAU</option>
+                                                            <option value="3" >LOCK SEAL</option>
+                                                            <option value="4" >THREAD SEAL</option>
+                                                    </select>
                                                 </td>
                                                 <td class="p-1">
                                                     {{ Form::text('memorizations[0][create_number]', old('memorizations[0][create_number]'), ['class' => 'form-control text-black', 'id' => 'memorizations[0][create_number]', 'required']) }}
@@ -1500,6 +1837,41 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="lock_field" id="lock_field_0">
+                                                        <div class="row">
+                                                            <div class="col-md-8 col-lg-8">
+                                                                <label for="memorizations[0][lock_seal_series]">Lock Seal</label>
+                                                                <div class="row">
+                                                                    <div class="col-md-4 p-1">
+                                                                        {{ Form::text('memorizations[0][lock_seal_series][0]', old('memorizations[0][lock_seal_series][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][lock_seal_series][0]', 'required','disabled']) }}
+                                                                    </div>
+                                                                    <div class="col-md-4 p-1">
+                                                                        {{ Form::text('memorizations[0][lock_seal_init][0]', old('memorizations[0][lock_seal_init][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][lock_seal_init][0]', 'required','disabled']) }}
+                                                                    </div>
+                                                                    <div class="col-md-4 p-1">
+                                                                        {{ Form::text('memorizations[0][lock_seal_final][0]', old('memorizations[0][lock_seal_final][0]'), ['class' => 'form-control text-black tps_0', 'id' => 'memorizations[0][lock_seal_final][0]', 'required','disabled']) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4 col-lg-4 mt-4">
+                                                                <div class="row">
+                                                                    <div class="col-md-5 col-lg-5 mt-2 me-2 p-1">
+                                                                        <button type="button" class="btn btn-sm btn-info btn_validasi_0_lock_0" target="0" id="btn_validasi_0_lock_0" disabled> Validasi</button>
+                                                                    </div>
+                                                                    <div class="col-md-2 mt-2 p-1">
+                                                                        <span class="text-danger" id="status_validasi_0_lock_0" target="0">Error</span>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <button type="button" class="btn btn-sm btn-icon btn-warning  btn_lock_seal_0 mt-2" id="btn_lock_seal_0" name="btn_lock_seal[0]" target="0" disabled>
+                                                                            <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.33 2H16.66C20.06 2 22 3.92 22 7.33V16.67C22 20.06 20.07 22 16.67 22H7.33C3.92 22 2 20.06 2 16.67V7.33C2 3.92 3.92 2 7.33 2ZM12.82 12.83H15.66C16.12 12.82 16.49 12.45 16.49 11.99C16.49 11.53 16.12 11.16 15.66 11.16H12.82V8.34C12.82 7.88 12.45 7.51 11.99 7.51C11.53 7.51 11.16 7.88 11.16 8.34V11.16H8.33C8.11 11.16 7.9 11.25 7.74 11.4C7.59 11.56 7.5 11.769 7.5 11.99C7.5 12.45 7.87 12.82 8.33 12.83H11.16V15.66C11.16 16.12 11.53 16.49 11.99 16.49C12.45 16.49 12.82 16.12 12.82 15.66V12.83Z" fill="currentColor"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="thread_field" id="thread_field_0">
                                                         <div class="row">
                                                             <div class="col-md-8 col-lg-8">
@@ -1548,43 +1920,37 @@
                                     </table>
                                 </div>
                             </div>
-                            {{-- <style>
-                                #my-dropzone {
-                                    border: 2px dashed #0087F7;
-                                    padding: 20px;
-                                    width: 100%;
-                                    text-align: center;
-                                    cursor: pointer;
-                                    margin-bottom: 20px;
-                                }
-                                .remove-file {
-                                    cursor: pointer;
-                                    color: red;
-                                    margin-left: 10px;
-                                }
-                                .image-item {
-                                    display: flex;
-                                    align-items: center;
-                                    margin-top: 10px;
-                                }
-                            </style>
+                            <hr>
                             <h5 class="mt-4">Upload Dokumen & Foto</h5>
-                            <i class="tx-danger tx-11">(Ekstention File : jpeg, png, jpg, .pdf, .zip)</i>
+                            <i class="tx-danger tx-11">(Ekstention File : jpeg, png, jpg, .pdf)</i>
                             <div class="form-group mt-4">
                                 <div class="row">
-                                    <label for="" class="col-sm-2 col-md-2">
-                                        Dokumen Hasil Pemeriksaan Lapangan dan Lainnya
-                                        <br><i class="tx-info tx-11">Maksimum: 10MB</i>
-                                    </label>
-                                    <div class="col-md-3 col-sm-3">
-                                        <div id="my-dropzone" class="dropzone">
-                                            <div class="dz-message">Drag and drop files here or click to upload.</div>
-                                        </div>
-                                        <div class="image-preview">
-                                        </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <label for="" class="text-black">
+                                            Dokumen Hasil Pemeriksaan Lapangan dan Lainnya
+                                        </label>
+                                        <br><i class="text-info text-sm-left">Maksimum: 5MB</i>
+                                        <input type="file" name="files_doc_hpl[]" id="files" class="form-control" multiple>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <label for="" class="text-black">
+                                            Foto Pemeriksaan Barang
+                                        </label>
+                                        <br><i class="text-info text-sm-left">Maksimum: 5MB</i>
+                                        <input type="file" name="files_foto_pemeriksaan[]" id="files" class="form-control" multiple>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
+                            <div class="form-group mt-2">
+                                    <div class="col-lg-6 col-md-6">
+                                        <label for="" class="text-black">
+                                            Foto Pengawasan/Stuffing
+                                        </label>
+                                        <br><i class="text-info text-sm-left">Maksimum: 10MB</i>
+                                        <input type="file" name="files_foto_pengawasan[]" id="files" class="form-control" multiple>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer d-flex justify-content-center">
                             {{-- @if ($data->hplps->status === 'verified')
@@ -1592,6 +1958,7 @@
                                 <button type="submit" class="btn btn-success me-2" id="send_hpl_btn">save</button>
                             @else
                             @endif --}}
+                            <button type="submit" class="btn btn-success me-2" id="save_hpl"> Simpan</button>
                             <button type="button" class="btn btn-primary me-2" id="send_hpl_btn"> Ajukan</button>
                             <button type="button" class="btn btn-secondary"> Kembali</button>
                         </div>
@@ -1599,9 +1966,6 @@
                 </div>
             </div>
         @endif
-        {{-- <div class="flex justify-end mt-4">
-            {{ Form::submit('Submit', ['class' => 'btn btn-primary']) }}
-        </div> --}}
         {!! Form::close() !!}
     </div>
 </x-app-layout>

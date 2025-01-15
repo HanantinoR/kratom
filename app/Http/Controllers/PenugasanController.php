@@ -20,7 +20,8 @@ class PenugasanController extends Controller
         $pageTitle = trans('global-message.list_form_title',['form' => trans('penugasan.title')] );
         $auth_user = AuthHelper::authSession();
         $assets = ['data-table','penugasan_list','ppbe_search','company_search'];
-        $users = user::where('status','active')->get();
+        $users = user::where('status','1')->get();
+        // dd($users);
         $headerAction = '<a href="surat-penugasan" class="btn btn-sm btn-primary me-2" role="button" target="_blank">Print Surat Penugasan</a>
                         <a href="surat-tugas" class="btn btn-sm btn-warning me-2" role="button" target="_blank">Print Surat Tugas</a>';
         return $dataTable->render('global.datatable', compact('pageTitle','auth_user','users','assets','headerAction'));

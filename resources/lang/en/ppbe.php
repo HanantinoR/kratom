@@ -15,4 +15,5 @@ return [
     'title' => 'Daftar',
     'store' => 'PBBE added successfully!',
     'update' => 'PBBE updated successfully!',
+    'pe_failed' => 'PE masih Kosong, Harap Hubungi Kantor Cabang untuk mengisi PE'
 ];

@@ -31,6 +31,10 @@ class HplpsModel extends Model
         'hpl_feedback_file',
         'request_id',
         'verify_id',
+        'files_doc_hpl',
+        'files_foto_pemeriksaan',
+        'files_foto_pengawasan',
+
     ];
 
     protected $appends = [

@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PerijinanModel;
+use App\Models\PerijinanPEModel;
 use App\Models\HistoryQuotaModel;
 use App\Models\PerijinanHistoryModel;
+use App\Models\KantorCabang;
 use App\DataTables\PerijinanDataTable;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use App\Models\KabupatenKota;
+use App\Models\Provinsi;
+use App\Helpers\AuthHelper;
 
 class PerijinanController extends Controller
 {
@@ -31,12 +36,20 @@ class PerijinanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function create()
     {
         $assets = ['perijinan','file'];
+
+        $office_branch = KantorCabang::get();
+
+        $provinces = Provinsi::get();
+
+        $cities = KabupatenKota::get();
+
         $roles = Role::where('status',1)->get()->pluck('title', 'id');
 
-        return view('perijinan.tambah', compact('roles','assets'));
+        return view('perijinan.tambah', compact('roles','assets','office_branch','provinces','cities'));
     }
 
     /**
@@ -45,29 +58,22 @@ class PerijinanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
-        // dd($request);
+        $auth_user = AuthHelper::authSession();
+        // dd($auth_user);
         $validatedData = Validator::make($request->all(),[
-            // 'name' => 'required|string|max:255',
-            // 'email' => 'required|email|unique:users,email',
-            // 'password' => 'required|string|min:8|confirmed',
-            'nomor_pe' => 'required',
-            'company_provincy' => 'required|not_in:0|min:1',
-            'company_city' => 'required|not_in:0|min:1',
+            'province_id' => 'required|not_in:0|min:1',
+            'city_id' => 'required|not_in:0|min:1',
             'file_et' => 'required|file|mimes:jpg,png,pdf|max:2048',
-            'file_pe' => 'required|file|mimes:jpg,png,pdf|max:2048',
             'file_nib' => 'required|file|mimes:jpg,png,pdf|max:2048',
             'file_npwp' => 'required|file|mimes:jpg,png,pdf|max:2048',
             'file_ktp' => 'required|file|mimes:jpg,png,pdf|max:2048',
         ], [
-            // 'name.required' => 'The name field is mandatory.',
-            // 'email.email' => 'The email address is not valid.',
-            // 'password.confirmed' => 'The password confirmation does not match.',
-            'company_provincy.not_in' => 'tolong pilih provinsi broo',
-            'company_city.not_in' => 'tolong pilih City broo',
+            'province_id.not_in' => 'tolong pilih provinsi broo',
+            'city_id.not_in' => 'tolong pilih City broo',
             'file_et' => 'kurang broo',
-            'file_pe' => 'mana neeeeh',
             'file_nib' => 'kurang broo',
             'file_npwp' => 'mana neeeeh',
             'file_ktp' => 'kurang broo',
@@ -89,13 +95,6 @@ class PerijinanController extends Controller
             $file1 = $request->file('file_et');
             $file1Name = time() . '_file_et_' . $file1->getClientOriginalName();
             $file1Path = $file1->storeAs($path, $file1Name, 'local');
-        }
-        if($request->hasFile('file_pe'))
-        {
-            // dd('b');
-            $file2 = $request->file('file_pe');
-            $file2Name = time() . '_file_pe_' . $file2->getClientOriginalName();
-            $file2Path = $file2->storeAs($path, $file2Name, 'local');
         }
         if($request->hasFile('file_nib'))
         {
@@ -119,43 +118,22 @@ class PerijinanController extends Controller
             $file5Path = $file5->storeAs($path, $file5Name, 'local');
         }
         // dd('b');
-        $perijinan = PerijinanModel::create([
-            'nib'=> $request->nib,
-            'nomor_et'=> $request->nomor_et,
-            'nomor_pe'=> $request->nomor_pe,
-            'date_nib'=> $request->date_nib,
-            'date_et'=> $request->date_et,
-            'date_pe'=> $request->date_pe,
-            'company_name'=> $request->company_name,
-            'company_quota'=> $request->company_quota,
-            'company_provincy'=> $request->company_provincy,
-            'company_city'=> $request->company_city,
+        $perijinan = PerijinanModel::updateOrCreate(
+            ['nomor_et'=> $request->nomor_et],
+            [
+            'province_id'=> $request->province_id,
+            'city_id'=> $request->city_id,
             'company_address'=> $request->company_address,
-            'company_factory'=> $request->company_factory,
-            'company_inspection_office'=> $request->company_inspection_office,
-            'company_pic'=> $request->company_pic,
-            'company_position'=> $request->company_position,
-            'company_npwp'=> $request->company_npwp,
-            'company_telp'=> $request->company_telp,
-            'company_hp'=> $request->company_hp,
-            'company_email'=> $request->company_email,
+            'factory_address'=> $request->factory_address,
+            'branch_office'=> $request->branch_office,
+            'pic'=> $request->pic,
+            'position'=> $request->position,
             'status'=> $request->status,
             'file_et'=> $file1Name,
-            'file_pe'=> $file2Name,
             'file_nib'=> $file3Name,
             'file_npwp'=> $file4Name,
             'file_ktp'=> $file5Name,
-        ]);
-
-        $perijinan_pe = HistoryQuotaModel::create([
-            'company_id'=> $perijinan->id,
-            'nomor_pe'=> $request->nomor_pe,
-            'date_pe'=> $request->date_pe,
-            'company_quota'=> $request->company_quota,
-            'company_quota_used'=> 0,
-            'company_quota_remaining'=> $request->company_quota,
-            'status_quota'=> "Pendafaran",
-            'notes' => "Pengajuan Awal Kuota PE",
+            'created_by'=> $auth_user->id
         ]);
         return redirect()->route('perijinan.index')->with('success', 'Perijinan berhasil Disimpan.');
     }
@@ -177,13 +155,21 @@ class PerijinanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function edit($id)
     {
         $assets = ['perijinan','file'];
-        $data = PerijinanModel::findOrFail($id);
+
+        $data = PerijinanModel::with('pe')->findOrFail($id);
+
         $data_history = PerijinanHistoryModel::where('company_id',$id)->get();
-        $data_history_quota = HistoryQuotaModel::where('company_id',$id)->get();
-        return view('perijinan.tambah', compact('data','id','assets','data_history','data_history_quota'));
+
+        $office_branch = KantorCabang::get();
+
+        $provinces = Provinsi::get();
+
+        $cities = KabupatenKota::get();
+        return view('perijinan.tambah', compact('data','id','assets','data_history','office_branch','provinces','cities'));
     }
 
     /**
@@ -198,34 +184,26 @@ class PerijinanController extends Controller
         $validatedData = Validator::make($request->all(),[
             "nib" => 'required',
             "nomor_et" => 'required',
-            "nomor_pe" => 'required',
             "date_nib" => 'required',
             "date_et" => 'required',
-            "date_pe" => 'required',
-            "company_name" => 'required',
-            "company_quota" => 'required',
-            "company_provincy" => 'required|not_in:0|min:1',
-            "company_city" => 'required|not_in:0|min:1',
+            "npwp" => 'required',
+            "name" => 'required',
+            "province_id" => 'required|not_in:0|min:1',
+            "city_id" => 'required|not_in:0|min:1',
             "company_address" => 'required',
-            "company_factory" => 'required',
-            "company_inspection_office" => 'required',
-            "company_pic" => 'required',
-            "company_position" => 'required',
-            "company_npwp" => 'required',
-            "company_telp" => 'required',
-            "company_hp" => 'required',
-            "company_email" => 'required',
+            "factory_address" => 'required',
+            "branch_office" => 'required',
+            "pic" => 'required',
+            "position" => 'required',
             "status" => 'required',
             'file_et' => 'required|file|mimes:jpg,png,pdf|max:2048',
             'file_pe' => 'required|file|mimes:jpg,png,pdf|max:2048',
             'file_nib' => 'required|file|mimes:jpg,png,pdf|max:2048',
             'file_npwp' => 'required|file|mimes:jpg,png,pdf|max:2048',
             'file_ktp' => 'required|file|mimes:jpg,png,pdf|max:2048',
-            "created_at" => 'required',
-            "updated_at" => 'required'
         ] , [
-            'company_provincy.not_in' => 'tolong pilih provinsi broo',
-            'company_city.not_in' => 'tolong pilih City broo',
+            'province_id.not_in' => 'tolong pilih provinsi broo',
+            'city_id.not_in' => 'tolong pilih City broo',
         ]);
 
         $oldData = PerijinanModel::findOrFail($id);
@@ -239,10 +217,12 @@ class PerijinanController extends Controller
         //check apakah data berubah
         $changes=[];
         $data=[];
+
         foreach($newData as $field => $newValue)
         {
+
             $oldValue = $oldData->$field;
-            if($oldValue !== $newValue){
+            if($oldValue != $newValue){
                 $changes[] = [
                     'field_name' => $field,
                     'old_value' => $oldValue,
@@ -280,21 +260,13 @@ class PerijinanController extends Controller
             return redirect()->route('perijinan.index')->with('info', 'Tidak ada data yang berubah.');
         }
         foreach ($changes as $change) {
-
-            if($change['field_name'] === 'company_quota'){
-                $perijinan_pe = HistoryQuotaModel::create([
-                    'company_id'=> $oldData->id,
-                    'nomor_pe'=> $request->nomor_pe,
-                    'date_pe'=> $request->date_pe,
-                    'company_quota'=> $request->company_quota,
-                    'company_quota_used'=> 0,
-                    'company_quota_remaining'=> $request->company_quota,
-                    'status_quota'=> "Perubahan",
-                    'notes' => $request->perijinan_notes
-                ]);
+            if($change['field_name'] === "branch_office")
+            {
+                $kantor_cabang = KantorCabang::whereIn('id',[$change['old_value'],$change['new_value']])->pluck('name','id')->toArray();
+                $change['old_value'] = $kantor_cabang[$change['old_value']];
+                $change['new_value'] = $kantor_cabang[$change['new_value']];
             }
 
-            // dd($change['old_value']);
             PerijinanHistoryModel::create([
                 'company_id' => $oldData->id,
                 'field' => $change['field_name'],
@@ -316,6 +288,7 @@ class PerijinanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function destroy($id)
     {
         $perijinan = PerijinanModel::findOrFail($id);
@@ -331,5 +304,11 @@ class PerijinanController extends Controller
     public function modal_update(Request $request)
     {
         dd($request);
+    }
+
+    public function detail_pe($id)
+    {
+        $data_pe = PerijinanPEModel::with('pe_detail')->findOrFail($id);
+        return view('perijinan.pe_detail',compact('data_pe'));
     }
 }

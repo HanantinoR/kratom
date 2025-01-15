@@ -8,6 +8,8 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use App\Models\PPBEModel;
+use App\Models\LsModel;
 
 class InatradeDataTable extends DataTable
 {
@@ -22,6 +24,13 @@ class InatradeDataTable extends DataTable
         // dd($request->all());
         return datatables()
             ->eloquent($query)
+            ->editColumn('created_at',function($query){
+                // dd($query);
+                return date('d F Y', strtotime($query->created_at));
+            })
+            ->editColumn('code_date',function($query){
+                return date('d F Y', strtotime($query->code_date));
+            })
             ->editColumn('status', function($query) {
                 $status = 'warning';
                 switch ($query['status']) {
@@ -55,26 +64,47 @@ class InatradeDataTable extends DataTable
      */
     public function query(Inatrade $model)
     {
-        $model = Inatrade::query();
-        $query = $model->newQuery();
+        // $model = Inatrade::query();
+        // $query = $model->newQuery();
 
-        if ($search = request()->get('ppbe_search')) {
-            $query->where('ppbe_number', 'like', "%{$search}%");
-        }
+        // if ($search = request()->get('ppbe_search')) {
+        //     $query->where('ppbe_number', 'like', "%{$search}%");
+        // }
 
-        if ($search = request()->get('company_name_search')) {
-            $query->where('company_name', 'like', "%{$search}%");
-        }
+        // if ($search = request()->get('company_name_search')) {
+        //     $query->where('company_name', 'like', "%{$search}%");
+        // }
 
-        if($search = request()->get('ls_search')){
-            $query->where('ls_number', 'like', "%{$search}%");
-        }
-        
+        // if($search = request()->get('ls_search')){
+        //     $query->where('ls_number', 'like', "%{$search}%");
+        // }
+
         // if($search = request()->get('status_search')){
         //     $query->where('status', 'like', "%{$search}%");
         // }
 
-        return $query;
+        // return $query;
+// ,'ppbe.inspection_office_id',
+                            // 'ppbe.status as ppbe_status','ppbe.created_at','hplps.status as hplps_status'
+        // $model = PPBEModel::join('company','company.id','=','ppbe.company_id')
+        //                 ->leftjoin('hplps','hplps.ppbe_id','=','ppbe.id')
+        //                 ->leftjoin('ls','ls.hplps_id','=','hplps.id')
+        //                 ->leftjoin('moffices','moffices.id','=','ppbe.inspection_office_id')
+        //                 ->select('ppbe.id','hplps.id as hplps_id','ls.id as ls_id','ppbe.code','ppbe.date','company.company_name','ls.status as ls_status',
+        //                             'ls.created_at as tanggal_ls','ls.code_above','moffices.name as kantor_cabang')
+        //                 ->whereIn('hplps.status',array('verified', 'verified_signed_ls','print_ls','accepted_ls'));
+
+        $model = LsModel::where('status','print_ls');
+        $query = $model->newQuery();
+        if ($search = request()->get('ppbe_search')) {
+            $query->where('ppbe.code', 'like', "%{$search}%");
+        }
+
+        if ($search = request()->get('company_name_search')) {
+            $query->where('company.name', 'like', "%{$search}%");
+        }
+        // return $query;
+        return $this->applyScopes($model);
     }
 
     /**
@@ -88,15 +118,15 @@ class InatradeDataTable extends DataTable
                     ->setTableId('dataTable')
                     ->columns($this->getColumns())
                     // ->addAction(['width' => '60px'])
-                    ->ajax([
-                        'url' => route('inatrade.daftar'),
-                        'type' => 'GET',
-                        'data' => 'function(d) {
-                            d.ls_number = $("#ls_search").val();
-                            d.ppbe_number  = $("#ppbe_search").val();
-                            d.company_name_search = $(#"company_name_search").val();
-                        }', // Add custom data here
-                    ])
+                    // ->ajax([
+                    //     'url' => route('inatrade.daftar'),
+                    //     'type' => 'GET',
+                    //     'data' => 'function(d) {
+                    //         d.ls_number = $("#ls_search").val();
+                    //         d.ppbe_number  = $("#ppbe_search").val();
+                    //         d.company_name_search = $(#"company_name_search").val();
+                    //     }', // Add custom data here
+                    // ])
                     ->minifiedAjax()
                     ->dom('<"row align-items-center"<"col-md-2" l><"col-md-6" B><"col-md-4"f>><"table-responsive my-3" rt><"row align-items-center" <"col-md-6" i><"col-md-6" p>><"clear">')
                     ->parameters([
@@ -116,10 +146,10 @@ class InatradeDataTable extends DataTable
             ['data' => 'id', 'name' => 'id', 'title' => 'NO','orderable' => false],
             ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Nama Perusahaan'],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status','searchable'=>false],
-            ['data' => 'ls_number', 'name' => 'ls_number', 'title' => 'Nomor LS'],
-            ['data' => 'ls_publish_date', 'name' => 'ls_publish_date', 'title' => 'Tanggal Terbit LS','orderable' => false],
-            ['data' => 'ppbe_number', 'name' => 'ppbe_number', 'title' => 'Nomor PPBE','searchable'=>false],
-            ['data' => 'ppbe_publish_date', 'name' => 'ppbe_publish_date', 'title' => 'Tanggal Terbit PPBE','searchable'=>false],
+            ['data' => 'code_above', 'name' => 'code_above', 'title' => 'Nomor LS'],
+            ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Tanggal Terbit LS','orderable' => false],
+            ['data' => 'code', 'name' => 'code', 'title' => 'Nomor PPBE','searchable'=>false],
+            ['data' => 'code_date', 'name' => 'date_ppbe', 'title' => 'Tanggal Terbit PPBE','searchable'=>false],
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

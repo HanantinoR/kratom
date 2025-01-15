@@ -18,4 +18,6 @@ return [
     'save' => 'Save',
     'update' => 'Update',
     'cancel'=>'Cancel',
+    'msg_added' => ':name has been added successfully!',
+    'msg_added' => ':name has been updated successfully!',
 ];

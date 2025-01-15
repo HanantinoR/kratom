@@ -1,16 +1,9 @@
 $(document).ready(function(){
-    $('.company_id').select2({
-        allowClear: false
-    });
     $('.fob_currency').select2();
     $('.office_id').select2();
     $('.type_kemasan').select2();
     $('.form_select2').select2();
-
-    $('#company_id').on('select2:open', function() {
-        $('.select2-container').addClass('readonly');
-        console.log($('#company_id').val());
-      });
+    $('.select2').select2();
 
 
     $('#flexCheckDefault3').on('change',function(){

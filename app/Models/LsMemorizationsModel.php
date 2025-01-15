@@ -23,6 +23,7 @@ class LsMemorizationsModel extends Model
         'series_type',
         'tps_merah',
         'tps_hijau',
+        'lock_seal',
         'thread_seal',
     ];
 

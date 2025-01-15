@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Helpers\AuthHelper;
 
 class HomeController extends Controller
 {
@@ -11,8 +12,10 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+
+        $auth_user = AuthHelper::authSession();
         $assets = ['chart', 'animation'];
-        return view('dashboards.dashboard', compact('assets'));
+        return view('dashboards.dashboard', compact('assets','auth_user'));
     }
 
     /*
@@ -154,13 +157,14 @@ class HomeController extends Controller
         return view('errors.maintenance');
     }
 
-    /*
-     * uisheet Page Routs
-     */
-    public function uisheet(Request $request)
+    public function landing_page(Request $request)
+    {
+        return view('landing_page');
+    }
+
+    public function login_page(Request $request)
     {
         return redirect('login');
-        // return view('uisheet');
     }
 
     /*

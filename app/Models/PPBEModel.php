@@ -11,8 +11,9 @@ class PPBEModel extends Model
     protected $table = 'ppbe';
     protected $fillable =[
         'code',
-        'date',
+        'date_ppbe',
         'company_id',
+        'company_pe_id',
         'merk',
         'packing_total',
         'packing_type',
@@ -62,7 +63,8 @@ class PPBEModel extends Model
         'submitted_date',
         'approved_date',
         'assignment_date',
-        'hpl_date'
+        'hpl_date',
+        'ls_date'
     ];
 
     public function getStatusNameAttribute()
@@ -110,6 +112,7 @@ class PPBEModel extends Model
         $result = null;
         if (in_array($this->status, ['print_assignment_letter', 'assignment'])) {
             $assignment = PenugasanModel::where('ppbe_id', $this->id)->orderBy('id', 'desc')->first();
+            // dd($this);
             if ($assignment) $result = date("d-m-Y H:i:s", strtotime($assignment->created_at));
         }
 
@@ -123,6 +126,17 @@ class PPBEModel extends Model
         if (in_array($this->status, ['print_assignment_letter', 'assignment'])) {
             $hplps = HplpsModel::where('ppbe_id', $this->id)->whereIn('status',['hpl_submitted','verified','verified_signed_ls','print_ls','accepted_ls'])->orderBy('id', 'desc')->first();
             if (!empty($hplps)) $result = date("d-m-Y H:i:s", strtotime($hplps->inspection_date_end));
+        }
+
+        return $result;
+    }
+
+    public function getLsDateAttribute()
+    {
+        $result = null;
+        if (in_array($this->status, ['print_assignment_letter', 'assignment'])) {
+            $ls = LsModel::where('ppbe_id', $this->id)->whereIn('status',['verify_ls','print_ls','accepted_ls'])->orderBy('id', 'desc')->first();
+            if (!empty($ls)) $result = date("d-m-Y H:i:s", strtotime($ls->created_date));
         }
 
         return $result;
@@ -184,5 +198,10 @@ class PPBEModel extends Model
     public function hplps()
     {
         return $this->hasOne(HplpsModel::class, 'ppbe_id', 'id');
+    }
+
+    public function pe()
+    {
+        return $this->belongsTo(PerijinanPEModel::class,'company_pe_id');
     }
 }

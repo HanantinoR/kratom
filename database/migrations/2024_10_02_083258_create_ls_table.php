@@ -15,18 +15,18 @@ class CreateLsTable extends Migration
     {
         Schema::create('ls', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ppbe_id')->constrained('ppbe')->onDelete('cascade')->nullable();
-            $table->foreignId('hplps_id')->constrained('hplps')->onDelete('cascade')->nullable();
+            $table->foreignId('ppbe_id')->nullable()->constrained('ppbe')->onDelete('cascade');
+            $table->foreignId('hplps_id')->nullable()->constrained('hplps')->onDelete('cascade');
             $table->string('code')->unique()->nullable();
             $table->string('code_below')->unique()->nullable();
             $table->string('code_above')->unique()->nullable();
             $table->date('code_date')->nullable();
             $table->string('nib');
             $table->string('nomor_et');
-            $table->string('nomor_pe');
+            // $table->string('nomor_pe');
             $table->date('date_nib');
             $table->date('date_et');
-            $table->date('date_pe');
+            // $table->date('date_pe');
             $table->string('destination_port_id')->nullable();//int
             $table->string('loading_port_id')->nullable();//int
             $table->string('origin_port_id')->nullable(); //int

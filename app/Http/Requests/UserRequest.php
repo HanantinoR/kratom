@@ -38,11 +38,10 @@ class UserRequest extends FormRequest
                     'password' => 'required|confirmed|min:8',
                     'email' => 'required|max:191|email|unique:users',
                     'phone_number'=>'max:13',
-                    // 'userProfile.gender' =>  'required',
-                    'userProfile.country' =>  'max:191',
-                    'userProfile.state' =>  'max:191',
-                    'userProfile.city' =>  'max:191',
-                    'userProfile.pin_code' =>  'max:191',
+                    'user_type' => 'required',
+                    'user_sign' => 'required',
+                    'branch_office' => 'required',
+                    // 'company_id'=>'required'
                 ];
                 break;
             case 'patch':
@@ -51,11 +50,9 @@ class UserRequest extends FormRequest
                     'email' => 'required|max:191|email|unique:users,email,'.$user_id,
                     'phone_number'=>'max:13',
                     'password' => 'confirmed|min:8|nullable',
-                    // 'userProfile.gender' =>  'required',
-                    'userProfile.country' =>  'max:191',
-                    'userProfile.state' =>  'max:191',
-                    'userProfile.city' =>  'max:191',
-                    'userProfile.pin_code' =>  'max:191',
+                    'user_type' => 'required',
+                    'user_sign' => 'required',
+                    // 'branch_office' => 'required',
                 ];
                 break;
 
@@ -67,12 +64,13 @@ class UserRequest extends FormRequest
     public function messages()
     {
         return [
-            'userProfile.gender.*'  =>'Gender is required.',
-            'userProfile.dob.*'  =>'DOB is required.',
-            'userProfile.country.*'  =>'Country may not be greater than 191 characters.',
-            'userProfile.state.*'  =>'State may not be greater than 191 characters.',
-            'userProfile.city.*'  =>'City may not be greater than 191 characters.',
-            'userProfile.pin_code.*'  =>'Pincode may not be greater than 191 characters.',
+            'username'  =>'Username belum di isi.',
+            'email'  =>'Email belum di isi.',
+            'phone_number'  =>'Nomor Telephone belum di isi.',
+            'password'  =>'Password belum di isi.',
+            'user_type'  =>'Role belum di pilih.',
+            'user_sign'  =>'Type Penandatangan belum di pilih.',
+            // 'branch_office'  =>'Kantor Cabang belum di pilih.',
         ];
     }
 
