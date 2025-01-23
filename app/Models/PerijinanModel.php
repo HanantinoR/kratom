@@ -33,6 +33,7 @@ class PerijinanModel extends Model
         'file_ktp',
         'created_by',
         'updated_by',
+        'result_et'
     ];
 
     public function histories()

@@ -55,12 +55,23 @@ class MasterCompanyController extends Controller
         $izin = $request->izin;
         $date_nib = $request->date_nib;
         $date_et = $request->date_et;
-        $kode = "A01";
+
         $result_data = $this->check_izin($nib,$npwp,$izin);
         $json_data = json_decode($result_data);
 
-        // if ($json_data->kepatuhan->kode === "A01")
-        if($kode = "A01")
+
+        if($json_data->kode === "R99")
+        {
+            return response()->json([
+                'kode' => $json_data->kode,
+                'message' => $json_data->keterangan,
+                'result' => 'error',
+                'title' => 'Error'
+            ],400);
+        }
+        // $kode = "A01";
+        else if ($json_data->kepatuhan->kode === "A01")
+        // if($kode === "A01")
         {
             //untuk ET
             if(strpos($izin,"ET") !== false) {
@@ -79,8 +90,9 @@ class MasterCompanyController extends Controller
                     'nomor_et'=> $izin,
                     'date_nib'=> $date_nib,
                     'name'=> $json_data->header->nama_perusahaan,
-                    'status' => "pending"
-                    // 'result_et' => $json_data
+                    'name'=> "PT Mantap",
+                    'status' => "pending",
+                    'result_et' => $result_data
                 ]);
 
                 $type_izin =  "et";
@@ -126,7 +138,7 @@ class MasterCompanyController extends Controller
                         'volume_total' => $value->jml_volume,
                         'volume_sisa' => $value->sisa_volume,
                         'volume_tersedia' => $value->avail_volume,
-                        // 'tgl_berlaku' => $value->tgl_berlaku,
+                        'tgl_berlaku' => $value->tgl_berlaku,
                         'terpakai_ls' => $value->terpakai_ls,
                         'booking_ls' => $value->terpakai_booking
                     ]);
@@ -142,22 +154,26 @@ class MasterCompanyController extends Controller
                 'result' => 'success',
                 'title' => 'Success'
             ],200);
+        } else {
+            return response()->json([
+                'kode' => $json_data->header->kode,
+                'message' => $json_data->header->keterangan,
+                'result' => 'error',
+                'title' => 'Error'
+            ],400);
         }
 
-        return response()->json([
-            'kode' => $json_data->kepatuhan->kode,
-            'message' => $json_data->kepatuhan->keterangan,
-            'result' => 'error',
-            'title' => 'Error'
-        ],400);
     }
 
     function check_izin($nib,$npwp,$izin)
     {
-        $curl = curl_init();
 
+        $curl = curl_init();
+        $url_prod = 'https://services.kemendag.go.id/surveyor/1.0/';
+        $url_dev = 'https://services.kemendag.go.id/surveyor/v1.0.dev/';
+        // dd($url.'check_izin');
         curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://services.kemendag.go.id/surveyor/v1.0.dev/check_izin',
+        CURLOPT_URL => $url_prod.'check_izin',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,

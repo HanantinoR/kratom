@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\KabupatenKota;
 use App\Models\Provinsi;
 use App\Helpers\AuthHelper;
+use App\Models\HSLevel;
 
 class PerijinanController extends Controller
 {
@@ -73,10 +74,10 @@ class PerijinanController extends Controller
         ], [
             'province_id.not_in' => 'tolong pilih provinsi broo',
             'city_id.not_in' => 'tolong pilih City broo',
-            'file_et' => 'kurang broo',
-            'file_nib' => 'kurang broo',
-            'file_npwp' => 'mana neeeeh',
-            'file_ktp' => 'kurang broo',
+            'file_et' => 'Harap Masukan File ET',
+            'file_nib' => 'Harap Masukan File NIB',
+            'file_npwp' => 'Harap Masukan File NPWP',
+            'file_ktp' => 'Harap Masukan File KTP',
         ]);
 
             // dd($validatedData);
@@ -310,5 +311,16 @@ class PerijinanController extends Controller
     {
         $data_pe = PerijinanPEModel::with('pe_detail')->findOrFail($id);
         return view('perijinan.pe_detail',compact('data_pe'));
+    }
+
+
+    public function check_hs_pe($id,$company)
+    {
+
+        $hs_levels = HSLevel::where('id',$id)->first();
+        $hs = str_replace(".","",$hs_levels->hs);
+        $pe = PerijinanPEModel::with('pe_detail')->where('company_id',$company)->get();
+
+        dd($id,$company,$pe);
     }
 }

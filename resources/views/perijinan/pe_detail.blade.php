@@ -32,8 +32,8 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="">Tanggal AKhir</label>
-                                <input type="text" name="" id="" class="form-control text-black" value="{{$data_pe->date_end}}" readonly>
+                                <label for="">Tanggal Awal</label>
+                                <input type="text" name="" id="" class="form-control text-black" value="{{$data_pe->date_start}}" readonly>
                             </div>
                         </div>
                         <hr>

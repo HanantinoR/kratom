@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('user_type');
             $table->integer('user_sign');
             $table->integer('branch_office');
-            $table->integer('npp');
+            $table->integer('npp')->nullable();
             $table->string('password');
             $table->string('status');
             $table->rememberToken();

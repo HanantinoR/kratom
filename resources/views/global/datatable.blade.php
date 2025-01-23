@@ -413,6 +413,37 @@
     </div>
 @endif
 
+<div class="modal fade" id="PPBEBatalModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="PPBEBatalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        {!! Form::open(['route' => ['ppbe.cancel'],'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="PPBEBatalModalLabel">PPBE BATAL </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <input type="hidden" name="ppbe_id" id="ppbe_id" class="ppbe_id text-black form-control mb-2">
+                            <input type="text" name="ppbe_code" id="ppbe_code" class="form-control text-black" disabled>
+                        </div>
+                        <div class="col mt-2">
+                            <label for="cancel_notes">Alasan</label>
+                            <textarea namea="cancel_notes" id="cancel_notes" cols="50" rows="2" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="">Simpan</button>
+                </div>
+            </div>
+    {!! Form::close() !!}
+    </div>
+</div>
+
+
+
 <script>
     const assets = @json($assets);
     $(document).ready(function(){
@@ -873,6 +904,11 @@
     {
         $('#ls_id').val(id);
         $('#lsPrintModal').modal('show');
+    }
+
+    function openPPBEBatalModal(id)
+    {
+        $('#PPBEBatalModal').modal('show');
     }
 
     function openCheckLabModal(id)

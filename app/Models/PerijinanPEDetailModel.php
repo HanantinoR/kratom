@@ -19,6 +19,6 @@ class PerijinanPEDetailModel extends Model
         'volume_tersedia',
         'tgl_berlaku',
         'terpakai_ls',
-        'terpakai_ppbe'
+        'booking_ls'
     ];
 }

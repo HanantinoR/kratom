@@ -564,18 +564,9 @@
                     </div>
                     <div class="card-footer">
                         <div class="row justify-content-center">
-                            {{-- <div class="col-md-4">
-                                {{Form::hidden('update_btn','submitted',['class'=>'form-control','id'=>'update_btn','placeholder'=>'Catatan','disabled'])}}
-                            </div>
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-success me-2" id="send_btn" value="submitted">Ajukan PPBE</button>
-                                <button type="submit" class="btn btn-warning me-2" name="update_btn" id="save_btn" value="draft">Simpan</button>
-                                <a href="{{route('ppbe.index')}}" type="button" class="btn btn-danger me-2">Kembali</a>
-                            </div>
-                            <div class="col-md-3">
-                            </div> --}}
                             {{-- {{dd($data)}} --}}
-                            @if ($data->code == "" || in_array($data->status,["submitted","draft"]))
+                            {{-- @if ($data->code == "" || in_array($data->status,["submitted","draft"])) --}}
+                            @if ($data->status === "draft")
                                 <div class="col-md-4">
                                     {{Form::hidden('update_status_value','submitted',['class'=>'form-control','id'=>'update_status_value','placeholder'=>'Catatan','disabled'])}}
                                 </div>

@@ -154,6 +154,7 @@ class PPBEDataTable extends DataTable
             ->addColumn('action',function($query){
                 return view('ppbe.action',[
                     'id' => $query->id,
+                    'code' =>$query->code,
                     'status' => $query->status,
                     'user_type' => auth()->user()->user_type
                 ]);

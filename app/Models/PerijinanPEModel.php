@@ -17,6 +17,7 @@ class PerijinanPEModel extends Model
         'file_pe',
         'created_by',
         'updated_by',
+        'permit_date',
         'date_start',
         'date_end',
         'status'

@@ -50,10 +50,8 @@ $(document).ready(function(){
         const pe_id = $('#pe_id').val();
 
         console.log(pe_id);
-        // $.ajax({
-        //     url:"/data_pe/"+
-        // })
     })
+
     var count = 0
     $('.btn_tambah').click(function(){
         count = count+1;
@@ -191,6 +189,13 @@ $(document).ready(function(){
         var tanggal_packing_list = $('#packing_list_date');
         checkTanggal(tanggal_packing_list);
     });
+
+    $('#barang\\[0\\]\\[nomor_hs\\]').on('change',function(){
+        const hs_id = $('#barang\\[0\\]\\[nomor_hs\\]').val();
+        const company_id = $('#company_id').val();
+        console.log(company_id);
+        checkHSPE(hs_id,company_id);
+    })
 });
 
 
@@ -219,6 +224,20 @@ $(document).ready(function(){
                 }
             });
         }
+    }
+
+    function checkHSPE(hs_id,company_id){
+        $.ajax({
+            url:"/check/pe/hs/"+hs_id+"/"+company_id,
+            method:"GET",
+            data:{
+                hs : hs_id,
+                company : company_id
+            },
+            success:function(response){
+
+            }
+        });
     }
 // querySelector('input[name="inspection_date"]');
     let listwaktu = document.getElementsByClassName('datePicker');

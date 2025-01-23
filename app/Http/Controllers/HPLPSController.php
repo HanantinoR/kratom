@@ -588,8 +588,13 @@ class HPLPSController extends Controller
             "username"=> "superintending"
         ];
 
+
+
+        $url_prod = 'https://services.kemendag.go.id/surveyor/1.0/';
+        $url_dev = 'https://services.kemendag.go.id/surveyor/v1.0.dev/';
+
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://services.kemendag.go.id/surveyor/v1.0.dev/req_alokasi',
+            CURLOPT_URL => $url_prod.'req_alokasi',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -614,7 +619,6 @@ class HPLPSController extends Controller
         // if($result->status != "A01")
         if($kode != "A01")
         {
-            dd($kode);
             return response()->json([
                 'data' => $result->keterangan,
             ],400);

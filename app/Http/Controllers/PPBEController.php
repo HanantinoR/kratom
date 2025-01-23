@@ -334,18 +334,19 @@ class PPBEController extends Controller
                 {
                     if($request->update_status_value === "submitted") {
                         $status = $request->update_status_value;
-                        $status_descript = "Pengajuan Permintaan Barang Eksport";
+                        $status_descript = "Pengajuan Pemeriksaan Barang Eksport";
                         $code = null;
                     } else if($request->update_status_value === "draft") {
                         $status = $request->update_status_value;
                         $status_descript = "Pengajuan sebagai Draft";
                         $code = null ;
+                    } else {
+                        $status = $dataPPBE->status;
+                        $status_descript = "Perubahan Data pada Form Permintaan Pemeriksaan Barang Eksport";
+                        $code = null;
                     }
 
                     $validate = Validator::make($request->all(),[
-                        'ppbe_id' => "required",
-                        'checkbox_data' => "required",
-                        'ppbe_new_status' => "required",
                         'barang.*.nomor_hs' => "required",
                         'barang.*.uraian' => "required",
                         'barang.*.jumlah_total' => "required",

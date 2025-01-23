@@ -58,6 +58,7 @@ Route::group(['middleware'=>'auth'],function() {
         Route::get('pdf_export/{id}',[PPBEController::class,'pdf_export'])->name('ppbe.pdf');
         Route::get('draft_pdf/{id}',[PPBEController::class,'draft_pdf'])->name('ppbe.pdf_draft');
         Route::get('detail/{id}',[PPBEController::class,'detail_ppbe'])->name('ppbe.detail');
+        Route::post('cancel/{id}',[PPBEController::class,'cancel_ppbe'])->name('ppbe.cancel');
     });
 
     //penugasan Module
@@ -106,6 +107,7 @@ Route::group(['middleware'=>'auth'],function() {
     Route::get('data_company/{id}',[MasterCompanyController::class,'getCompany'])->name('data.company');
     Route::post('check/et_pe',[MasterCompanyController::class,'check_et_pe'])->name('perijinan.et_pe');
     Route::get('pe/{id}/detail',[PerijinanController::class,'detail_pe'])->name('perijinan.pe_detail');
+    Route::get('check/pe/hs/{id}/{company}',[PerijinanController::class,'check_hs_pe'])->name('data.hs_pe');
 
     //Inatrade Module
     Route::group(['prefix' => 'inatrade','middleware' => ['auth','role:admin,koordinator_cabang']], function(){

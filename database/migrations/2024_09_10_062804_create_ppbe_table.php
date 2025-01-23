@@ -50,7 +50,7 @@ class CreatePpbeTable extends Migration
             $table->string('stuffing_timezone')->nullable();
             $table->text('stuffing_address')->nullable();
             $table->string('status');
-            $table->string('checkbox_data');
+            $table->string('checkbox_data')->nullable();
             $table->integer('memorize_type');
             $table->integer('memorize_size');
             $table->integer('memorize_total');

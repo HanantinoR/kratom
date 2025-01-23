@@ -50,6 +50,7 @@
                                     </div>
                                     <div class="form-group col-md-6 col-sm-12">
                                         <label for="pe_id" class="form-label">PE</label>
+                                        {{Form::hidden('pe_id',$data_company->pe[0]->id),['class'=> 'form-control text-black','hidden']}}
                                         {{Form::text('pe_name',$data_company->pe[0]->nomor_pe,['class'=> 'form-control text-black','disabled'])}}
                                     </div>
                                 </div>
