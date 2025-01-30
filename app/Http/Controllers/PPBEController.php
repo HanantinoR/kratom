@@ -692,4 +692,34 @@ class PPBEController extends Controller
 
         return response()->json($city);
     }
+
+    public function cancel_ppbe(Request $request)
+    {
+        DB::beginTransaction();
+        $ppbe_id = $request->ppbe_id_reject;
+        $data_ppbe = PPBEModel::findOrFail($ppbe_id);
+
+        $validate = Validator::make($request->all(),[
+            "cancel_notes" => 'required'
+        ],[
+            "cancel_notes.required" => "Alasan masih perlu di isi"
+        ]);
+
+        if($validate->fails())
+        {
+            // dd($validate->errors());
+            return redirect()->route('ppbe.index')
+                ->withErrors($validate)
+                ->withInput();
+        }
+
+        $data_ppbe->update([
+            "notes" => $request->cancel_notes,
+            "status" => "cancel"
+        ]);
+
+        DB::commit();
+        return redirect()->route('ppbe.index')->with('success', 'PPBE Berhasil di Batalkan.');
+        // dd($request);
+    }
 }

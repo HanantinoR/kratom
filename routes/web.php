@@ -58,7 +58,7 @@ Route::group(['middleware'=>'auth'],function() {
         Route::get('pdf_export/{id}',[PPBEController::class,'pdf_export'])->name('ppbe.pdf');
         Route::get('draft_pdf/{id}',[PPBEController::class,'draft_pdf'])->name('ppbe.pdf_draft');
         Route::get('detail/{id}',[PPBEController::class,'detail_ppbe'])->name('ppbe.detail');
-        Route::post('cancel/{id}',[PPBEController::class,'cancel_ppbe'])->name('ppbe.cancel');
+        Route::post('cancel',[PPBEController::class,'cancel_ppbe'])->name('ppbe.cancel');
     });
 
     //penugasan Module

@@ -415,7 +415,7 @@
 
 <div class="modal fade" id="PPBEBatalModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="PPBEBatalModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        {!! Form::open(['route' => ['ppbe.cancel'],'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+        {!! Form::open(['route' => ['ppbe.cancel'],'method' => 'post', 'enctype' => 'multipart/form-data','id'=>'form_ppbe_reject']) !!}
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="PPBEBatalModalLabel">PPBE BATAL </h5>
@@ -424,18 +424,21 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
-                            <input type="hidden" name="ppbe_id" id="ppbe_id" class="ppbe_id text-black form-control mb-2">
+                            <input type="hidden" name="ppbe_id_reject" id="ppbe_id_reject" class="ppbe_id_reject text-black form-control mb-2">
+                            <label for="ppbe_code">Nomor PPBE</label>
                             <input type="text" name="ppbe_code" id="ppbe_code" class="form-control text-black" disabled>
                         </div>
-                        <div class="col mt-2">
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <label for="cancel_notes">Alasan</label>
-                            <textarea namea="cancel_notes" id="cancel_notes" cols="50" rows="2" required></textarea>
+                            <textarea name="cancel_notes" id="cancel_notes" cols="50" rows="2" class="form-control text-black" required></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="">Simpan</button>
+                    <button type="button" class="btn btn-primary" id="reject_button_save">Simpan</button>
                 </div>
             </div>
     {!! Form::close() !!}
@@ -788,6 +791,22 @@
                 }
             })
         });
+
+        $('#reject_button_save').click(function(e){
+            Swal.fire({
+                title: 'Apakah Anda Yakin',
+                text: "Anda ingin mengajukan Form Ini?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, submit it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#form_ppbe_reject').submit();
+                }
+            });
+        })
     });
 
     function deleteData(id){
@@ -906,8 +925,12 @@
         $('#lsPrintModal').modal('show');
     }
 
-    function openPPBEBatalModal(id)
+    function openPPBEBatalModal(id, code)
     {
+
+        var ppbe_code = code ? code : "-" ;
+        $('#ppbe_id_reject').val(id);
+        $('#ppbe_code').val(ppbe_code);
         $('#PPBEBatalModal').modal('show');
     }
 
