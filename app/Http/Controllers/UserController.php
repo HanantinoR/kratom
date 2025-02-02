@@ -133,9 +133,9 @@ class UserController extends Controller
         // dd($request->all());
         $user = User::findOrFail($id);
 
-        $role = Role::find($request->user_type);
-
-        $user->assignRole($role->name);
+        // $role = Role::find();
+        // dd(Role::get());
+        $user->assignRole($request->user_type);
 
         $request['password'] = $request->password != '' ? bcrypt($request->password) : $user->password;
 
@@ -149,7 +149,7 @@ class UserController extends Controller
         }
 
         // user profile data....
-        $user->userProfile->fill($request->userProfile)->update();
+        // $user->userProfile->fill($request->userProfile)->update();
 
         if(auth()->check()){
             return redirect()->route('users.index')->withSuccess(__('global-message.msg_updated',['name' => __('users.title')]));

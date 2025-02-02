@@ -175,17 +175,31 @@
                                     {{ Form::text('userProfile[company_name]', old('userProfile[company_name]'), ['class' => 'form-control', 'required', 'placeholder' => 'Company Name']) }}
                                 </div> --}}
                                 {{-- {{ Form::select('company[name]', $data_company , old('company[name]') ? old('company[name]') : $data ?? 'user', ['class' => 'form-control company_id', 'placeholder' => 'Select Company Name']) }} --}}
-                                <div class="form-group col-md-12 col-sm-12">
-                                    <label class="form-label" for="company_id">Nama Perusahaan: <span class="text-danger">*</span></label>
-                                    <select name="company_id" class="form-control select2" id="company_id" placeholder="Select Company Name">
-                                        <option value="">Select Company Name</option>
-                                        @foreach($data_company as $key => $company)
-                                            <option value="{{ $company->id }}" {{ old('company_id') === $company->id ? 'selected' : '' }}>
-                                                {{ $company->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                @if (isset($id))
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label class="form-label" for="company_id">Nama Perusahaan: <span class="text-danger">*</span></label>
+                                        <select name="company_id" class="form-control select2" id="company_id" placeholder="Select Company Name">
+                                            <option value="">Select Company Name</option>
+                                            @foreach($data_company as $key => $company)
+                                                <option value="{{ $company->id }}" {{ $data->company_id === $company->id ? 'selected' : '' }}>
+                                                    {{ $company->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @else
+                                    <div class="form-group col-md-12 col-sm-12">
+                                        <label class="form-label" for="company_id">Nama Perusahaan: <span class="text-danger">*</span></label>
+                                        <select name="company_id" class="form-control select2" id="company_id" placeholder="Select Company Name">
+                                            <option value="">Select Company Name</option>
+                                            @foreach($data_company as $key => $company)
+                                                <option value="{{ $company->id }}" {{ old('company_id') === $company->id ? 'selected' : '' }}>
+                                                    {{ $company->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
                                 {{-- <div class="form-group col-sm-12">
                                     <label class="form-label" id="country">Country:</label>
                                     {{ Form::text('userProfile[country]', old('userProfile[country]'), ['class' => 'form-control', 'id' => 'country']) }}

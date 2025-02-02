@@ -24,6 +24,11 @@
                     </div>
                 </div>
             </div>
+            {{-- <div class="container">
+                <div class="card">
+                    assad
+                </div>
+            </div> --}}
         </div>
         <div class="container">
             <nav class="nav navbar navbar-expand-lg navbar-light top-1 rounded">
@@ -44,8 +49,8 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-2">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-start">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="" target="_blank">Registration</a>
+                            <li class="nav-item mt-2">
+                                <button type="button" class="btn btn-outline-info btn-icon" aria-current="page" id="regis_btn"  data-bs-toggle="modal" data-bs-target="#regisModal">Registration</button>
                             </li>
                             <li class="nav-item me-3">
                                 {{-- <a class="nav-link" aria-current="page" href="https://templates.iqonic.design/hope-ui/documentation/laravel/dist/main/change-log.html" target="_blank"></a>
@@ -68,3 +73,37 @@
         </div>
     </div>
 </x-app-layout>
+
+<div class="modal fade" id="regisModal" tabindex="-1" aria-labelledby="regisModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-soft-success">
+                <h5 class="modal-title" id="regisModalLabel">Instruksi Registrasi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <p class="text-black"> Untuk Mendapatkan Hak Akses atau Akun Login bisa dengan cara menghungi Kantor Cabang terdekat</p>
+               <p class="text-black">(silahkan Hubungi Nomer Telphone atau Kontak pada bagian bawah Halaman ini)</p>
+               <p class="text-black"> Serta dengan melampirkan :</p>
+               <ul>
+                <li class="text-black">KTP</li>
+                <li class="text-black">ET</li>
+                <li class="text-black">NPWP</li>
+                <li class="text-black">NIB</li>
+               </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function(){
+        $('#regis_btn').click(function(){
+            console.log('a');
+        })
+    });
+</script>

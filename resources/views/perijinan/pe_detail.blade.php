@@ -102,15 +102,15 @@
                                     <th>no</th>
                                     <th>PPBE</th>
                                     <th style="width:15%">LS</th>
-                                    <th style="">Pemakaian PPBE</th>
-                                    <th style="">Pemakaian LS</th>
+                                    <th style="">Request Alokasi</th>
+                                    <th style="">Inatrade</th>
                                     <th style="">Kuota Tersedia</th>
                                     <th style="">Kuota Sisa</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                {{-- <tr>
                                     <td>1</td>
                                     <td>23.25.00001-K</td>
                                     <td>-</td>
@@ -159,7 +159,7 @@
                                     <td>700</td>
                                     <td>1000</td>
                                     <td>LS Batal</td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>

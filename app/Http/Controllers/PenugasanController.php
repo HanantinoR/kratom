@@ -20,7 +20,7 @@ class PenugasanController extends Controller
         $pageTitle = trans('global-message.list_form_title',['form' => trans('penugasan.title')] );
         $auth_user = AuthHelper::authSession();
         $assets = ['data-table','penugasan_list','ppbe_search','company_search'];
-        $users = user::where('status','1')->get();
+        $users = user::where('status','1')->whereIn('user_type',['koordinator_cabang','surveyor'])->get();
         // dd($users);
         $headerAction = '<a href="surat-penugasan" class="btn btn-sm btn-primary me-2" role="button" target="_blank">Print Surat Penugasan</a>
                         <a href="surat-tugas" class="btn btn-sm btn-warning me-2" role="button" target="_blank">Print Surat Tugas</a>';
@@ -99,10 +99,14 @@ class PenugasanController extends Controller
             ->join("users","ppbe_assignment.surveyor_id","=","users.id")
             ->join("company","company.id", "=","ppbe.company_id")
             ->where("ppbe_assignment.id",$id)->get();
+
+        $koordinator = User::where('branch_office',$tugas[0]->inspection_office_id)->where('user_type','koordinator_cabang')->first();
+
         $data =[
             'title' => 'Surat Tugas',
             'content' =>'Surat Tugas',
-            'tugas' => $tugas
+            'tugas' => $tugas,
+            'koordinator' => $koordinator
         ];
         $documentPDF = View::make('penugasan.surat-tugas',['data'=>$data])->render();
 
@@ -124,10 +128,13 @@ class PenugasanController extends Controller
             ->join("ppbe_assignment","ppbe_assignment.ppbe_id", "=", "ppbe.id")
             ->join("users","ppbe_assignment.surveyor_id","=","users.id")
             ->where("ppbe_assignment.id",$id)->get();
+            // dd($penugasan[0]->inspection_office_id);
+        $koordinator = User::where('branch_office',$penugasan[0]->inspection_office_id)->where('user_type','koordinator_cabang')->first();
         $data =[
             'title' => 'Surat Penugasan',
             'content' =>'Penugasan',
-            'penugasan' => $penugasan
+            'penugasan' => $penugasan,
+            'koordinator' => $koordinator
         ];
         $documentPDF = View::make('penugasan.surat-penugasan',['data'=>$data])->render();
 

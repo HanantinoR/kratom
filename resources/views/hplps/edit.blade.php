@@ -1079,7 +1079,6 @@
                                 <a href="{{route('hplps.edit',$id)}}" type="button" class="btn btn-warning me-2" > Perubahan Data</a>
                             @endif --}}
                             <button type="submit" class="btn btn-success me-2" id="save_hpl"> Simpan</button>
-                            <button type="button" class="btn btn-primary me-2" id="send_hpl_btn"> Ajukan</button>
                             <button type="button" class="btn btn-secondary"> Kembali</button>
                         </div>
                     </div>

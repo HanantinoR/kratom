@@ -96,8 +96,7 @@ class HPLPSController extends Controller
     {
         // 172.16.100.219
         // dd($request);
-
-        $data_hplps = HplpsModel::where('ppbe_id',$request->ppbe_id)->count();
+        DB::beginTransaction();
         $auth_user = AuthHelper::authSession();
         $validate = Validator::make($request->all(),[
             'barang.*.nomor_hs' => "required",
@@ -181,11 +180,11 @@ class HPLPSController extends Controller
         ];
 
         try {
-
-            if($data_hplps === 0) {
-                $status = "";
-            } else {
+            $data_hplps = HplpsModel::where('ppbe_id',$request->ppbe_id)->first();
+            if($data_hplps ===  "" || $data_hplps === null || empty($data_hplps)) {
                 $status = "hpl_submitted";
+            } else {
+                $status = $data_hplps->status;
             }
 
             PPBEModel::where('id',$request->ppbe_id)->update($data_update);
@@ -354,7 +353,7 @@ class HPLPSController extends Controller
                     ]);
                 }
             }
-
+            DB::commit();
             return redirect()->route('hplps.daftar')->with('success', 'Pengajuan berhasil Kirim.');
         } catch (\Exception $e) {
             dd($e);
@@ -587,8 +586,6 @@ class HPLPSController extends Controller
             "komoditas"=>$json_goods,
             "username"=> "superintending"
         ];
-
-
 
         $url_prod = 'https://services.kemendag.go.id/surveyor/1.0/';
         $url_dev = 'https://services.kemendag.go.id/surveyor/v1.0.dev/';

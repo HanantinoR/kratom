@@ -194,6 +194,7 @@ class HPLPSDataTable extends DataTable
                     'status' => $query->hplps_status,
                     'lab_id' => $query->lab_id,
                     'booking_id' => $query->booking_id,
+                    'user_type' => auth()->user()->user_type
                 ]);
             })
             ->rawColumns(['action','status','lab_id','is_request']);

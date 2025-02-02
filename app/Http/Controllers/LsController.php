@@ -22,6 +22,7 @@ use App\Models\LsModel;
 use App\Models\LsGoodsModel;
 use App\Models\LsMemorizationsModel;
 use App\Models\BcopsUsageModel;
+use App\Models\User;
 use DB;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -211,15 +212,19 @@ class LsController extends Controller
         "moffices.name as kantor_cabang")
         ->where('code_above',$code_above)->first();
 
+        $koordinator = User::where('branch_office',$ls->inspection_office_id)->where('user_type','koordinator_cabang')->first();
+
         $ls->update(['status'=> 'print_ls']);
 
-        // $qr_code = $this->generateQRCode($ls, $request);
+        $qr_code = $this->generateQRCode($ls, $request);
+        // dd($qr_code);
         $data =[
             'title' => 'LAPORAN SURVEYOR',
             'content' =>'coba',
             'ls' => $ls,
             'user' => $auth_user,
-            // 'qr_code' => $qr_code
+            'qr_code' => $qr_code,
+            'koordinator' => $koordinator
         ];
         $documentPDF = View::make('ls.pdf',['data'=>$data])->render();
         $options = new Options();

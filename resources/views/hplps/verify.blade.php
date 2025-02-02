@@ -828,7 +828,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="verifikasiHPLModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="verifikasiHPLModalLabel">Verifikasi HPLPS</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             {!! Form::model($data, ['route' => ['hplps.update', $id], 'method' => 'PUT' , 'enctype' => 'multipart/form-data','id'=>"form_approval"]) !!}

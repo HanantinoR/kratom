@@ -403,9 +403,9 @@
                 <td colspan="6" style="border-right:none; border-left:none;"></td>
                 <td style="border-left:none;font-weight:bold; text-align:center; margin-bottom: -5px" colspan="4">
                     PT.SUCOFINDO
-                    {{-- <br><img src="{{$data['qr_code']}}" height="50px" width="50px" alt=""> --}}
+                    <br><img src="{{$data['qr_code']}}" height="100px" width="100px" alt="">
                     {{-- <img style="margin-right: 10px" src="{{asset('images/teskotak.jpg')}}" alt=""><br> --}}
-                    <br>{{$data['user']->first_name}} {{$data['user']->last_name}}
+                    <br>{{$data['koordinator']->first_name}} {{$data['koordinator']->last_name}}
                 </td>
             </tr>
 

@@ -66,7 +66,7 @@ class PenugasanDataTable extends DataTable
                         ->leftjoin('company','company.id','=','ppbe.company_id')
                         ->leftjoin('moffices','moffices.id','=','ppbe.inspection_office_id')
                         ->select('ppbe.id','ppbe.company_id','company.id as company_id','ppbe.code','ppbe.date_ppbe','company.name as company_name',
-                            'moffices.name as inspection_office','ppbe.inspection_date');
+                            'moffices.name as inspection_office','ppbe.inspection_date','ppbe.status as status');
         $query = $model->newQuery();
 
         if ($search = request()->get('ppbe_search')) {

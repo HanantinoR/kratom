@@ -170,7 +170,10 @@ class PerijinanController extends Controller
         $provinces = Provinsi::get();
 
         $cities = KabupatenKota::get();
-        return view('perijinan.tambah', compact('data','id','assets','data_history','office_branch','provinces','cities'));
+
+        $auth_user = AuthHelper::authSession();
+
+        return view('perijinan.tambah', compact('data','id','assets','data_history','office_branch','provinces','cities','auth_user'));
     }
 
     /**

@@ -319,11 +319,10 @@ class PPBEController extends Controller
         $auth_user = AuthHelper::authSession();
         $dataPPBE = PPBEModel::with('goods','company')->findOrFail($id);
         $path = 'ppbe_file';
-        // dd($request->ppbe_new_status);
 
         try{
             //check update Status PPBE
-            if(isset($dataPPBE->code)){
+            if(isset($dataPPBE->code) ||$dataPPBE == ""){
                 //kalo PPBE sudah ada Nomornya
                 $code = $dataPPBE->code;
                 $status = $dataPPBE->status;
@@ -443,7 +442,6 @@ class PPBEController extends Controller
                 {
                     $status = "approved";
                     $status_descript = "Pengajuan Diverifikasi";
-
                     $code = $this->generateCode($dataPPBE);
 
                     $data_update['status'] = $status;
@@ -564,18 +562,18 @@ class PPBEController extends Controller
         $yearSubs = substr(date('Y'), 2);
         $office_id = $dataPPBE->inspection_office_id;
         $office = KantorCabang::where('id', $office_id)->first();
-        $last_ppbe = PPBEModel::whereIn('status',['approved', 'assignment', 'print_assignment_letter'])->orderBy('code','desc')->first();
+        $last_ppbe = PPBEModel::whereIn('status',['approved', 'assignment', 'print_assignment_letter'])->where('inspection_office_id',$dataPPBE->inspection_office_id)->orderBy('code','desc')->first();
         // $generateCode = $office->code . '.' . $yearSubs . '.' . str_pad($startNumber, 5, '0', STR_PAD_LEFT);
         // dd($last_ppbe);
+
         if (!$last_ppbe) $startNumber = 1;
         else {
+            $arrCode = explode('.', $last_ppbe->code);
+            $yearPPBE = $arrCode[1];
             if($yearSubs == $yearPPBE)
             {
-                $yearPPBE = $arrCode[1];
-                $arrCode = explode('.', $last_ppbe->code);
-            // $arrCode = explode('.', $last_ppbe->code);
-            $sequenceNo =  $arrCode[2];
-            $startNumber = intval($sequenceNo) + 1;
+                $sequenceNo =  $arrCode[2];
+                $startNumber = intval($sequenceNo) + 1;
             } else {
                 $startNumber = 1;
             }

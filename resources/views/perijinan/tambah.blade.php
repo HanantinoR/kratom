@@ -30,7 +30,12 @@
                             <div class="row" >
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="nib">NIB: <span class="text-danger">*</span></label>
-                                    {{ Form::text('nib', old('nib'), ['class' => 'form-control text-black', 'id' => 'nib', 'placeholder' => 'NIB', 'required']) }}
+                                    {{-- {{dd($auth_user->user_type)}} --}}
+                                    @if ($auth_user->user_type == 'admin')
+                                        {{ Form::text('nib', old('nib'), ['class' => 'form-control text-black', 'id' => 'nib', 'placeholder' => 'NIB', 'required']) }}
+                                    @else
+                                        {{ Form::text('nib', old('nib'), ['class' => 'form-control text-black', 'id' => 'nib', 'placeholder' => 'NIB', 'required','readonly']) }}
+                                    @endif
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="date_nib">Tanggal NIB <span class="text-danger">*</span></label>
@@ -40,7 +45,11 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="nomor_et">Nomor ET: <span class="text-danger">*</span></label>
-                                    {{ Form::text('nomor_et', old('nomor_et'), ['class' => 'form-control text-black', 'id' => 'nomor_et', 'placeholder' => 'Nomor ET', 'required']) }}
+                                    @if ($auth_user->user_type == 'admin')
+                                        {{ Form::text('nomor_et', old('nomor_et'), ['class' => 'form-control text-black', 'id' => 'nomor_et', 'placeholder' => 'Nomor ET', 'required']) }}
+                                    @else
+                                        {{ Form::text('nomor_et', old('nomor_et'), ['class' => 'form-control text-black', 'id' => 'nomor_et', 'placeholder' => 'Nomor ET', 'required','readonly']) }}
+                                    @endif
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="date_et">Tanggal ET <span class="text-danger">*</span></label>
@@ -50,16 +59,20 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="npwp">NPWP:</label>
-                                    {{ Form::text('npwp', old('npwp'), ['class' => 'form-control text-black', 'id' => 'npwp', 'placeholder' => 'Nomor NPWP', 'required']) }}
+                                    @if ($auth_user->user_type == 'admin')
+                                        {{ Form::text('npwp', old('npwp'), ['class' => 'form-control text-black', 'id' => 'npwp', 'placeholder' => 'Nomor NPWP', 'required']) }}
+                                    @else
+                                        {{ Form::text('npwp', old('npwp'), ['class' => 'form-control text-black', 'id' => 'npwp', 'placeholder' => 'Nomor NPWP', 'required','readonly']) }}
+                                    @endif
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="name">Nama Perusahaan: <span class="text-danger">*</span></label>
                                     {{ Form::text('name', null, ['class' => 'form-control text-black', 'id' => 'name', 'placeholder' => 'Nama Perusahaan','required']) }}
                                 </div>
-                                <div class="form-group col-md-6">
+                                {{-- <div class="form-group col-md-6">
                                     <label for="hasil_json" class="form-label">Hasil Check</label>
                                     {{ Form::textarea('hasil_json', old('hasil_json'), ['class' => 'form-control text-black', 'id' => 'hasil_json', 'placeholder' => 'Hasil Check', 'required', 'rows'=>2,'readonly']) }}
-                                </div>
+                                </div> --}}
                             </div>
                             @if (isset($id))
                                 <div class="row">

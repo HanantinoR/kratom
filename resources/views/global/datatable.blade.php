@@ -260,7 +260,7 @@
             {!! Form::open(['route' => ['penugasan.save'],'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="assignmentModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="assignmentModalLabel">Penugasan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     {{ Form::hidden('ppbe_id', old('ppbe_id'), ['class' => 'form-control text-black m-0','id'=>'ppbe_id' ,'placeholder' => 'Nama']) }}
@@ -548,8 +548,6 @@
                     {data : 'action', name : 'action'},
                 ]
             });
-
-
         }
         else if('{{$assets[1]}}' == 'inatrade_list')
         {
@@ -647,6 +645,52 @@
                 $('#'+target+'_status').val("Error").html("Error").removeClass('text-success').addClass('text-danger');
             });
         }
+        else if('{{$assets[1]}}' == 'userlist')
+        {
+            var table = $('#dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('users.index') }}",
+                },
+                columns:[
+                    {data : 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false},
+                    {data : 'full_name', name : 'full_name'},
+                    {data : 'email', name : 'email'},
+                    {data : 'status', name : 'status'},
+                    {data : 'user_role', name : 'user_role'},
+                    {data : 'company.name', name : 'company.name'},
+                    {data : 'action', name : 'action'},
+                ]
+            });
+
+
+        }
+        else if('{{$assets[1]}}' == 'ls_list')
+        {
+            var table = $('#dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('ls.daftar') }}",
+                    // data: function(d) {
+                    //     d.ppbe_search  = $('#ppbe_search').val();
+                    //     d.company_name_search  = $('#company_name_search').val();
+                    // }
+                },
+                columns:[
+                    {data : 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false},
+                    {data : 'status', name : 'status'},
+                    {data : 'code_above', name : 'code_above'},
+                    {data : 'code', name : 'code'},
+                    {data : 'date_ppbe', name : 'date_ppbe'},
+                    {data : 'name', name : 'name'},
+                    {data : 'kantor_cabang', name : 'kantor_cabang'},
+                    {data : 'action', name : 'action', orderable: false, searchable: false }
+                ]
+            });
+        }
+
 
         $("#ppbe_search").on("keyup", function(e) {
             table.draw();

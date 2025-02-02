@@ -19,5 +19,5 @@ return [
     'update' => 'Update',
     'cancel'=>'Cancel',
     'msg_added' => ':name has been added successfully!',
-    'msg_added' => ':name has been updated successfully!',
+    'msg_updated' => ':name has been updated successfully!',
 ];
