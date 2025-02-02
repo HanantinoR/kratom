@@ -87,6 +87,7 @@
                <p class="text-black"> Serta dengan melampirkan :</p>
                <ul>
                 <li class="text-black">KTP</li>
+                <li class="text-black">PE</li>
                 <li class="text-black">ET</li>
                 <li class="text-black">NPWP</li>
                 <li class="text-black">NIB</li>
