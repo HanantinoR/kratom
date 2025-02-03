@@ -148,7 +148,7 @@ $(document).ready(function(){
                     $('#destination_port_id').empty(); // Clear previous options
                     $('#destination_port_id').append('<option value="">Pilih Pelabuhan Tujuan</option>'); // Add default option
                     $.each(response, function(key, value) {
-                        $('#destination_port_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+                        $('#destination_port_id').append('<option value="' + value.id + '">' + value.name + ' / ' + value.code + '</option>');
                     });
                 }
             });

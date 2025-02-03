@@ -289,7 +289,7 @@
                                     <option value="">Pilih Pelabuhan Asal</option>
                                     @foreach($loading_port as $key => $port)
                                         <option value="{{ $port->id }}" {{ old('origin_port_id') === $port->id ? 'selected' : '' }}>
-                                            {{ $port->name }}
+                                            {{ $port->name }} / {{$port->code}}
                                         </option>
                                     @endforeach
                                 </select>
@@ -301,7 +301,7 @@
                                     <option value="">Pilih Pelabuhan Muat</option>
                                     @foreach($loading_port as $key => $port)
                                         <option value="{{ $port->id }}" {{ old('loading_port_id') === $port->id ? 'selected' : '' }}>
-                                            {{ $port->name }}
+                                            {{ $port->name }} / {{$port->code}}
                                         </option>
                                     @endforeach
                                 </select>
