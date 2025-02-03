@@ -40,6 +40,9 @@ class PerijinanController extends Controller
 
     public function create()
     {
+
+        $auth_user = AuthHelper::authSession();
+
         $assets = ['perijinan','file'];
 
         $office_branch = KantorCabang::get();
@@ -50,7 +53,7 @@ class PerijinanController extends Controller
 
         $roles = Role::where('status',1)->get()->pluck('title', 'id');
 
-        return view('perijinan.tambah', compact('roles','assets','office_branch','provinces','cities'));
+        return view('perijinan.tambah', compact('roles','assets','office_branch','provinces','cities','auth_user'));
     }
 
     /**
