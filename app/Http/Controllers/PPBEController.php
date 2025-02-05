@@ -254,6 +254,21 @@ class PPBEController extends Controller
     public function show($id)
     {
         //
+        $assets = ['file','ppbe_detail'];
+        $data = PPBEModel::with('goods','ppbe_history','company')->findOrFail($id);
+        // $data_company = PerijinanModel::where('id',$data->company_id)->get();
+        $hs_levels = HSLevel::get();
+        $data_company = PerijinanModel::get();
+        $data_pe = PerijinanPEModel::where('status','aktif')->get();
+        $office_branch = KantorCabang::get();
+        $provinces = Provinsi::get();
+        $destination_port = PelabuhanTujuan::get();
+        $loading_port = PelabuhanMuat::get();
+        $cities = KabupatenKota::get();
+        $countries = Negara::get();
+        $currencies = MataUang::get();
+        // dd($ppbe);
+        return view('ppbe.detail',compact('assets','data','data_company','data_pe','hs_levels','id','cities', 'countries', 'office_branch', 'provinces', 'destination_port', 'loading_port', 'currencies'));
     }
 
 

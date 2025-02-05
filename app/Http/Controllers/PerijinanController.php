@@ -188,6 +188,7 @@ class PerijinanController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd('b');
         $validatedData = Validator::make($request->all(),[
             "nib" => 'required',
             "nomor_et" => 'required',
@@ -213,80 +214,133 @@ class PerijinanController extends Controller
             'city_id.not_in' => 'tolong pilih City broo',
         ]);
 
-        $oldData = PerijinanModel::findOrFail($id);
         $path = 'perijinan_file';
-
+        $auth_user = AuthHelper::authSession();
+        $oldData = PerijinanModel::findOrFail($id);
         if(!$oldData){
             return redirect()->route('perijinan.index')->with('info', 'Data tidak ditemukan.');
         }
-        //rincian data baru tanpa file
-        $newData = $request->except(['file_et','file_pe','file_nib','file_npwp','file_ktp','_method','_token','perijinan_notes']);
-        //check apakah data berubah
-        $changes=[];
-        $data=[];
 
-        foreach($newData as $field => $newValue)
+        if ($oldData->status === "pending")
         {
-
-            $oldValue = $oldData->$field;
-            if($oldValue != $newValue){
-                $changes[] = [
-                    'field_name' => $field,
-                    'old_value' => $oldValue,
-                    'new_value' => $newValue
-                ];
-                $oldData->$field = $newValue;
-                $data[$field] = $newValue;
-            }
-
-        }
-
-        $newDataFile = ['file_et','file_pe','file_nib','file_npwp','file_ktp'];
-        foreach ($newDataFile as $fileField) {
-            if($request->hasFile($fileField))
+            if($request->hasFile('file_et'))
             {
-                if(Storage::exists($path."/").$oldData->$fileField){
-                    Storage::delete($path.'/' . $oldData->$fileField);
-                }
-                $file = $request->file($fileField);
-                $filename = time()."_".$fileField."_".$file->getClientOriginalName();
-                $file->storeAs($path, $filename);
-
-                //update data
-                $changes[] = [
-                    'field_name' => $fileField,
-                    'old_value' => $oldData->$fileField,
-                    'new_value' => $filename
-                ];
-
-                $data[$fileField] = $filename;
+                // dd('a');
+                $file1 = $request->file('file_et');
+                $file1Name = time() . '_file_et_' . $file1->getClientOriginalName();
+                $file1Path = $file1->storeAs($path, $file1Name, 'local');
             }
-        }
-
-        if(empty($changes)){
-            return redirect()->route('perijinan.index')->with('info', 'Tidak ada data yang berubah.');
-        }
-        foreach ($changes as $change) {
-            if($change['field_name'] === "branch_office")
+            if($request->hasFile('file_nib'))
             {
-                $kantor_cabang = KantorCabang::whereIn('id',[$change['old_value'],$change['new_value']])->pluck('name','id')->toArray();
-                $change['old_value'] = $kantor_cabang[$change['old_value']];
-                $change['new_value'] = $kantor_cabang[$change['new_value']];
+                // dd('b');
+                $file3 = $request->file('file_nib');
+                $file3Name = time() . '_file_nib_' . $file3->getClientOriginalName();
+                $file3Path = $file3->storeAs($path, $file3Name, 'local');
             }
-
-            PerijinanHistoryModel::create([
-                'company_id' => $oldData->id,
-                'field' => $change['field_name'],
-                'old_value' => $change['old_value'],
-                'new_value' => $change['new_value'],
-                'notes' => $request->perijinan_notes
+            if($request->hasFile('file_npwp'))
+            {
+                // dd('b');
+                $file4 = $request->file('file_npwp');
+                $file4Name = time() . '_file_npwp_' . $file4->getClientOriginalName();
+                $file4Path = $file4->storeAs($path, $file4Name, 'local');
+            }
+            if($request->hasFile('file_ktp'))
+            {
+                // dd('b');
+                $file5 = $request->file('file_ktp');
+                $file5Name = time() . '_file_ktp_' . $file5->getClientOriginalName();
+                $file5Path = $file5->storeAs($path, $file5Name, 'local');
+            }
+            // dd('b');
+            $perijinan = PerijinanModel::updateOrCreate(
+                ['nomor_et'=> $request->nomor_et],
+                [
+                'province_id'=> $request->province_id,
+                'city_id'=> $request->city_id,
+                'company_address'=> $request->company_address,
+                'factory_address'=> $request->factory_address,
+                'branch_office'=> $request->branch_office,
+                'pic'=> $request->pic,
+                'position'=> $request->position,
+                'status'=> $request->status,
+                'file_et'=> $file1Name,
+                'file_nib'=> $file3Name,
+                'file_npwp'=> $file4Name,
+                'file_ktp'=> $file5Name,
+                'created_by'=> $auth_user->id
             ]);
+            return redirect()->route('perijinan.index')->with('success', 'Perijinan berhasil Disimpan.');
+        } else {
+            //rincian data baru tanpa file
+            $newData = $request->except(['file_et','file_pe','file_nib','file_npwp','file_ktp','_method','_token','perijinan_notes']);
+            //check apakah data berubah
+            $changes=[];
+            $data=[];
 
+            foreach($newData as $field => $newValue)
+            {
+
+                $oldValue = $oldData->$field;
+                if($oldValue != $newValue){
+                    $changes[] = [
+                        'field_name' => $field,
+                        'old_value' => $oldValue,
+                        'new_value' => $newValue
+                    ];
+                    $oldData->$field = $newValue;
+                    $data[$field] = $newValue;
+                }
+
+            }
+
+            $newDataFile = ['file_et','file_pe','file_nib','file_npwp','file_ktp'];
+            foreach ($newDataFile as $fileField) {
+                if($request->hasFile($fileField))
+                {
+                    if(Storage::exists($path."/").$oldData->$fileField){
+                        Storage::delete($path.'/' . $oldData->$fileField);
+                    }
+                    $file = $request->file($fileField);
+                    $filename = time()."_".$fileField."_".$file->getClientOriginalName();
+                    $file->storeAs($path, $filename);
+
+                    //update data
+                    $changes[] = [
+                        'field_name' => $fileField,
+                        'old_value' => $oldData->$fileField,
+                        'new_value' => $filename
+                    ];
+
+                    $data[$fileField] = $filename;
+                }
+            }
+
+            if(empty($changes)){
+                return redirect()->route('perijinan.index')->with('info', 'Tidak ada data yang berubah.');
+            }
+            foreach ($changes as $change) {
+                if($change['field_name'] === "branch_office")
+                {
+                    $kantor_cabang = KantorCabang::whereIn('id',[$change['old_value'],$change['new_value']])->pluck('name','id')->toArray();
+                    dd($kantor_cabang[$change['old_value']]);
+                    $change['old_value'] = $kantor_cabang[$change['old_value']];
+                    $change['new_value'] = $kantor_cabang[$change['new_value']];
+                }
+
+                PerijinanHistoryModel::create([
+                    'company_id' => $oldData->id,
+                    'field' => $change['field_name'],
+                    'old_value' => $change['old_value'],
+                    'new_value' => $change['new_value'],
+                    'notes' => $request->perijinan_notes
+                ]);
+
+            }
+            $oldData->update($data);
+
+
+            return redirect()->route('perijinan.index')->with('success', 'Perijinan berhasil Dirubah.');
         }
-        $oldData->update($data);
-
-
-        return redirect()->route('perijinan.index')->with('success', 'Perijinan berhasil Dirubah.');
     }
 
     /**

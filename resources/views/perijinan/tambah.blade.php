@@ -31,11 +31,11 @@
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="nib">NIB: <span class="text-danger">*</span></label>
                                     {{-- {{dd($auth_user->user_type)}} --}}
-                                    @if ($auth_user->user_type == 'admin')
+                                    {{-- @if ($auth_user->user_type == 'admin') --}}
                                         {{ Form::text('nib', old('nib'), ['class' => 'form-control text-black', 'id' => 'nib', 'placeholder' => 'NIB', 'required']) }}
-                                    @else
+                                    {{-- @else
                                         {{ Form::text('nib', old('nib'), ['class' => 'form-control text-black', 'id' => 'nib', 'placeholder' => 'NIB', 'required','readonly']) }}
-                                    @endif
+                                    @endif --}}
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="date_nib">Tanggal NIB <span class="text-danger">*</span></label>
@@ -45,11 +45,11 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="nomor_et">Nomor ET: <span class="text-danger">*</span></label>
-                                    @if ($auth_user->user_type == 'admin')
+                                    {{-- @if ($auth_user->user_type == 'admin') --}}
                                         {{ Form::text('nomor_et', old('nomor_et'), ['class' => 'form-control text-black', 'id' => 'nomor_et', 'placeholder' => 'Nomor ET', 'required']) }}
-                                    @else
+                                    {{-- @else
                                         {{ Form::text('nomor_et', old('nomor_et'), ['class' => 'form-control text-black', 'id' => 'nomor_et', 'placeholder' => 'Nomor ET', 'required','readonly']) }}
-                                    @endif
+                                    @endif --}}
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="date_et">Tanggal ET <span class="text-danger">*</span></label>
@@ -59,11 +59,11 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="npwp">NPWP:</label>
-                                    @if ($auth_user->user_type == 'admin')
+                                    {{-- @if ($auth_user->user_type == 'admin') --}}
                                         {{ Form::text('npwp', old('npwp'), ['class' => 'form-control text-black', 'id' => 'npwp', 'placeholder' => 'Nomor NPWP', 'required']) }}
-                                    @else
+                                    {{-- @else
                                         {{ Form::text('npwp', old('npwp'), ['class' => 'form-control text-black', 'id' => 'npwp', 'placeholder' => 'Nomor NPWP', 'required','readonly']) }}
-                                    @endif
+                                    @endif --}}
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="name">Nama Perusahaan: <span class="text-danger">*</span></label>
