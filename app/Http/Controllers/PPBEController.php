@@ -333,16 +333,62 @@ class PPBEController extends Controller
         DB::beginTransaction();
         $auth_user = AuthHelper::authSession();
         $dataPPBE = PPBEModel::with('goods','company')->findOrFail($id);
+        // dd(isset($dataPPBE->code));
         $path = 'ppbe_file';
 
         try{
             //check update Status PPBE
-            if(isset($dataPPBE->code) ||$dataPPBE == ""){
+            if(isset($dataPPBE->code) ||$dataPPBE->code != ""){
                 //kalo PPBE sudah ada Nomornya
                 $code = $dataPPBE->code;
                 $status = $dataPPBE->status;
                 $status_descript = "Perubahan Data";
+
+                $data_update = [
+                    'code' => $code,
+                    'date_ppbe' => $request->date_ppbe,
+                    'company_id' => $request->company_id ,
+                    'merk' => $request->merk ,
+                    'packing_total'=> $request->packing_total,
+                    'packing_type' => $request->packing_type,
+                    'fob_total' => $request->fob_total ,
+                    'fob_currency' => $request->fob_currency ,
+                    'invoice_number' => $request->invoice_number ,
+                    'invoice_date' => $request->invoice_date ,
+                    'packing_list_number' => $request->packing_list_number ,
+                    'packing_list_date' => $request->packing_list_date ,
+                    'buyer_name' => $request->buyer_name ,
+                    'buyer_address' => $request->buyer_address ,
+                    'country_id' => $request->country_id ,
+                    'country_destination_id' => $request->country_destination_id ,
+                    'destination_port_id' => $request->destination_port_id ,
+                    'loading_port_id' => $request->loading_port_id ,
+                    'goods_storage' => $request->goods_storage ,
+                    'inspection_office_id' => $request->inspection_office_id ,
+                    'inspection_date' => $request->inspection_date ,
+                    'inspection_timezone' => $request->inspection_timezone ,
+                    'inspection_address' => $request->inspection_address ,
+                    'inspection_province_id' => $request->inspection_province_id ,
+                    'inspection_city_id' => $request->inspection_city_id ,
+                    'inspection_pic_name' => $request->inspection_pic_name ,
+                    'inspection_pic_phone' => $request->inspection_pic_phone ,
+                    'stuffing_office_id' => $request->stuffing_office_id ,
+                    'stuffing_date' => $request->stuffing_date ,
+                    'stuffing_timezone' => $request->stuffing_timezone ,
+                    'stuffing_address' => $request->stuffing_address ,
+                    'status' => $status,
+                    'memorize_type' => $request->memorize_type,
+                    'memorize_size' => $request->memorize_size,
+                    'memorize_total' => $request->memorize_total,
+                    'memorize_skenario' => $request->memorize_skenario,
+                    'notes' => $request->other_reason,
+                    'updated_by' =>$auth_user->id
+                ];
+
+                $dataPPBE->update($data_update);
+
             } else {
+                // dd('a');
                 // Check Apakah pengajuan atau draft
                 if($request->ppbe_new_status == null || !isset($request->ppbe_new_status))
                 {
@@ -359,7 +405,7 @@ class PPBEController extends Controller
                         $status_descript = "Perubahan Data pada Form Permintaan Pemeriksaan Barang Eksport";
                         $code = null;
                     }
-
+                    // dd($status);
                     $validate = Validator::make($request->all(),[
                         'barang.*.nomor_hs' => "required",
                         'barang.*.uraian' => "required",
@@ -451,6 +497,7 @@ class PPBEController extends Controller
                         'notes' => $request->other_reason,
                         'updated_by' =>$auth_user->id
                     ];
+                    // dd('c');
                 }
                 //Check untuk Verifikasi
                 else if($request->ppbe_new_status === "Disetujui")
@@ -514,7 +561,7 @@ class PPBEController extends Controller
                     $file3Path = $file3->storeAs($path, $file3Name, 'local');
                     $data_update['file_packing_list'] = $file3Name;
                 }
-
+                // dd('a');
                 $dataPPBE->update($data_update);
 
                 if(!empty($request->barang)) {
@@ -560,10 +607,10 @@ class PPBEController extends Controller
                     return redirect()->route('ppbe.index')->with('success', 'Pengajuan berhasil Diverifikasi.');
                 }
 
+
                 DB::commit();
                 return redirect()->route('ppbe.index')->with('success', 'Pengajuan berhasil Dirubah.');
             }
-
 
         } catch (\Exception $e) {
             dd($e);

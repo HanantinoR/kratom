@@ -568,7 +568,7 @@
                             {{-- @if ($data->code == "" || in_array($data->status,["submitted","draft"])) --}}
                             @if ($data->status === "draft")
                                 <div class="col-md-4">
-                                    {{Form::hidden('update_status_value','submitted',['class'=>'form-control','id'=>'update_status_value','placeholder'=>'Catatan','disabled'])}}
+                                    {{Form::text('update_status_value','submitted',['class'=>'form-control','id'=>'update_status_value','placeholder'=>'Catatan','hidden'])}}
                                 </div>
                                 <div class="col-md-6">
                                     <button type="button" class="btn btn-success me-2" id="send_btn" value="submitted">Ajukan PPBE</button>
