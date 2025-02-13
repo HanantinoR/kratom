@@ -387,6 +387,15 @@ class PPBEController extends Controller
 
                 $dataPPBE->update($data_update);
 
+                $ppbe_history = PpbeHistoryModel::create([
+                    'ppbe_id'=> $dataPPBE->id,
+                    'request_id'=> $auth_user->id,
+                    // 'approver_id'=> $auth->id,
+                    'status'=> $status,
+                    'status_description'=> $status_descript,
+                    // 'new_status'=> $request->,
+                    // 'reason'=> $request->,
+                ]);
 
                 DB::commit();
                 return redirect()->route('ppbe.index')->with('success', 'Pengajuan berhasil Dirubah.');

@@ -59,7 +59,7 @@ class MasterCompanyController extends Controller
         $result_data = $this->check_izin($nib,$npwp,$izin);
         $result_json = $result_data->getBody()->getContents();
         $json_data = json_decode($result_json);
-// dd($json_data->kepatuhan);
+        // dd($json_data->kepatuhan);
         if ($json_data !== null )
         {
             if (isset($json_data->kepatuhan) && $json_data->kepatuhan->kode === "A01")
@@ -151,7 +151,7 @@ class MasterCompanyController extends Controller
                     'result' => 'success',
                     'title' => 'Success'
                 ],200);
-            } else if (isset($json_data->kepatuhan) && $json_data->kepatuhan->kode === "B01") {
+            } else if (isset($json_data->kepatuhan) && ($json_data->kepatuhan->kode === "B01" || $json_data->kepatuhan->kode === 'B02')) {
                 return response()->json([
                     'kode' => $json_data->kepatuhan->kode,
                     'message' => $json_data->kepatuhan->keterangan,
@@ -166,7 +166,7 @@ class MasterCompanyController extends Controller
                     'result' => 'error',
                     'title' => 'Error'
                 ],400);
-            } else if($json_data->kode === "R99")
+            } else if($json_data->kode === "R99" )
             {
                 return response()->json([
                     'kode' => $json_data->kode,
@@ -176,7 +176,12 @@ class MasterCompanyController extends Controller
                 ],400);
             }
         } else {
-
+            return response()->json([
+                'kode' => 400,
+                'message' => "Terdapat Error, Harap Hubungi Admin",
+                'result' => 'error',
+                'title' => 'Error'
+            ],400);
         }
     }
 
@@ -231,7 +236,7 @@ class MasterCompanyController extends Controller
             'headers' => $headers,
             'body' => $body,
         ]);
-
+        // dd($response);
         return $response;
     }
 
