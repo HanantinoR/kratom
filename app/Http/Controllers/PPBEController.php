@@ -387,6 +387,10 @@ class PPBEController extends Controller
 
                 $dataPPBE->update($data_update);
 
+
+                DB::commit();
+                return redirect()->route('ppbe.index')->with('success', 'Pengajuan berhasil Dirubah.');
+
             } else {
                 // dd('a');
                 // Check Apakah pengajuan atau draft
