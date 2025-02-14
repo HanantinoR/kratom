@@ -14,9 +14,9 @@ $(document).ready(function(){
     $('#company_id').change(function(){
         const company_id = $(this).find(":selected").val();
         $.ajax({
-            url:"/data_company/"+company_id,
+            url:"/company/"+company_id,
             method:"GET",
-            data:company_id,
+            // data:company_id,
             success:function(response){
                 $('#company_id').val(response.company.id);
                 $('#nib').val(response.company.nib);
@@ -196,6 +196,17 @@ $(document).ready(function(){
         console.log(company_id);
         checkHSPE(hs_id,company_id);
     })
+
+    $('#memorize_type').on('change',function(){
+        var memory_type_val = $(this).val();
+        const memory_size = $('#memorize_size');
+
+        if (memory_type_val === '3'){
+            memory_size.removeAttr('required');
+        } else {
+            memory_size.attr('required');
+        }
+    });
 });
 
 

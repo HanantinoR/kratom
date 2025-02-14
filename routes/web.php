@@ -103,11 +103,11 @@ Route::group(['middleware'=>'auth'],function() {
 
     //perijinan Module
     Route::resource('perijinan',PerijinanController::class);
-    route::post('update/pe/{id}',[PerijinanController::class,'modal_update'])->name('perijinan.update_pe');
-    Route::get('data_company/{id}',[MasterCompanyController::class,'getCompany']);
     Route::post('check/et_pe',[MasterCompanyController::class,'check_et_pe'])->name('perijinan.et_pe');
-    Route::get('pe/{id}/detail',[PerijinanController::class,'detail_pe'])->name('perijinan.pe_detail');
+    Route::get('company/{company_id}',[MasterCompanyController::class,'getCompany']);
     Route::get('check/pe/hs/{id}/{company}',[PerijinanController::class,'check_hs_pe'])->name('data.hs_pe');
+    Route::get('pe/{id}/detail',[PerijinanController::class,'detail_pe'])->name('perijinan.pe_detail');
+    route::post('update/pe/{id}',[PerijinanController::class,'modal_update'])->name('perijinan.update_pe');
 
     //Inatrade Module
     Route::group(['prefix' => 'inatrade','middleware' => ['auth','role:admin,koordinator_cabang']], function(){

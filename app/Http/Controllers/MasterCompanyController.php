@@ -14,12 +14,12 @@ use App\Helpers\AuthHelper;
 
 class MasterCompanyController extends Controller
 {
-    public function getCompany($id)
+    public function getCompany($company_id)
     {
-        // dd($id);
+        // dd($company_id);
         $company = PerijinanModel::with(['pe'=>function($query){
             $query->where('status','aktif');
-        }])->where('id',$id)->first();
+        }])->where('id',$company_id)->first();
 
         return response()->json([
             'company' => $company,
